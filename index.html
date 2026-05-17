@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LOGAT</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#e8001a;--red2:#ff1a30;--orange:#ff6600;--green:#00e066;
+  --glow:rgba(232,0,26,0.4);--oglow:rgba(255,102,0,0.5);--gglow:rgba(0,224,102,0.5);
+  --dim:rgba(232,0,26,0.07);--bg:#050508;--bg2:#09090d;--s1:#0e0e12;--s2:#14141a;
+  --b:#1c1c22;--br:rgba(232,0,26,0.2);--text:#e0e0ee;--mt:#454550;--mt2:#76767f
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden;font-size:14px}
+
+/* Scanline overlay */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9000}
+
+.app{display:grid;grid-template-rows:auto 1fr;height:100vh}
+
+/* ── HEADER ── */
+.header{background:var(--bg);border-bottom:1px solid var(--b);padding:0 16px;position:relative}
+.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,26,0.3),transparent)}
+
+.htop{display:flex;align-items:center;justify-content:space-between;padding:10px 0 7px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:9px;color:var(--red);text-shadow:0 0 12px var(--glow),0 0 30px rgba(232,0,26,0.2);line-height:1}
+.acro{font-size:8px;letter-spacing:1px;color:var(--mt);font-weight:400}
+.acro b{color:var(--red);font-weight:600}
+.hmeta{display:flex;align-items:center;gap:6px}
+.spill{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;border:1px solid var(--b);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mt)}
+.spip{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:pip 2s infinite}
+.spip.off{background:var(--red);box-shadow:0 0 4px var(--red);animation:none}
+@keyframes pip{0%,100%{opacity:1}50%{opacity:.2}}
+.dpill{display:none;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;border:1px solid rgba(0,224,102,.2);background:rgba(0,224,102,.05);font-size:9px;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+.dpill.show{display:flex}
+.winbtn{width:24px;height:24px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;-webkit-app-region:no-drag}
+.winbtn:hover{border-color:var(--red);color:var(--red)}
+.drag{-webkit-app-region:drag;height:38px;position:absolute;top:0;left:110px;right:110px;z-index:20}
+
+/* ── SEARCH ── */
+.search-row{padding:0 0 7px;display:flex;gap:6px}
+.search-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;outline:none;transition:border-color .2s}
+.search-inp:focus{border-color:rgba(232,0,26,.4)}
+.search-inp::placeholder{color:#252528}
+
+/* ── NAV ── */
+.nav{display:flex;gap:3px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.nav::-webkit-scrollbar{display:none}
+.nbtn{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.5px;cursor:pointer;transition:all .15s;white-space:nowrap;text-transform:uppercase;flex-shrink:0}
+.nbtn:hover{border-color:#2a2a30;color:var(--mt2)}
+.nbtn.on{border-color:var(--red);color:var(--red);background:var(--dim)}
+.nbtn.icon-btn{padding:4px 7px}
+.nav-sep{width:1px;height:14px;background:var(--b);flex-shrink:0;margin:0 2px}
+
+/* ── BODY ── */
+.body{display:flex;overflow:hidden;min-height:0}
+.sidebar{width:0;overflow:hidden;transition:width .2s ease;background:var(--bg2);border-right:1px solid var(--b);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar.open{width:190px}
+.sbh{padding:9px 11px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sbtitle{font-size:9px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;font-weight:500}
+.sbnew{width:20px;height:20px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sbnew:hover{border-color:var(--red);color:var(--red)}
+.clist{flex:1;overflow-y:auto;padding:4px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.ci{padding:7px 9px;border-radius:5px;cursor:pointer;transition:background .1s;margin-bottom:1px;position:relative}
+.ci:hover{background:var(--s1)}
+.ci.active{background:var(--dim);border:1px solid var(--br)}
+.cititle{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;padding-right:18px}
+.ci.active .cititle{color:var(--red)}
+.cimeta{font-size:9px;color:var(--mt)}
+.cidel{position:absolute;right:7px;top:7px;background:none;border:none;color:#222226;cursor:pointer;font-size:14px;line-height:1;transition:color .15s}
+.cidel:hover{color:var(--red)}
+
+/* ── PANEL SYSTEM ── */
+.panel{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.panel.hidden{display:none}
+
+/* ── CHAT PANEL ── */
+/* HUD Orb */
+.owrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 10px;flex-shrink:0}
+.hud-orb{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center}
+
+.hud-ring{position:absolute;border-radius:50%;border:1px solid rgba(232,0,26,0.18);animation:ringExpand 3s ease-out infinite}
+.hud-ring-1{width:76px;height:76px;animation-delay:0s}
+.hud-ring-2{width:76px;height:76px;animation-delay:1s;border-color:rgba(232,0,26,0.1)}
+.hud-ring-3{width:76px;height:76px;animation-delay:2s;border-color:rgba(232,0,26,0.06)}
+@keyframes ringExpand{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.95);opacity:0}}
+
+.hud-scan{position:absolute;border-radius:50%;border:1px solid transparent}
+.hud-scan-1{width:96px;height:96px;border-top-color:rgba(232,0,26,0.55);border-right-color:rgba(232,0,26,0.1);animation:scanRot 2.8s linear infinite}
+.hud-scan-2{width:118px;height:118px;border-bottom-color:rgba(232,0,26,0.3);border-left-color:rgba(232,0,26,0.05);animation:scanRot 5s linear infinite reverse}
+@keyframes scanRot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* HUD tick marks */
+.hud-ticks{position:absolute;width:128px;height:128px;border-radius:50%;border:1px solid rgba(232,0,26,0.08)}
+
+/* Orb itself */
+.orb{width:62px;height:62px;border-radius:50%;cursor:pointer;position:relative;
+  background:radial-gradient(circle at 32% 32%,#ff2233 0%,#a00010 45%,#1a0004 100%);
+  box-shadow:0 0 0 1px rgba(232,0,26,.3),0 0 18px rgba(232,0,26,.4),0 0 45px rgba(232,0,26,.12),inset 0 0 18px rgba(0,0,0,.65);
+  transition:all .3s;z-index:2}
+.orb::before{content:'';position:absolute;top:9px;left:12px;width:14px;height:7px;background:radial-gradient(ellipse,rgba(255,255,255,.16),transparent);border-radius:50%;transform:rotate(-25deg)}
+.orb:hover{transform:scale(1.06);box-shadow:0 0 0 1px rgba(232,0,26,.5),0 0 28px rgba(232,0,26,.6),inset 0 0 18px rgba(0,0,0,.65)}
+
+.orb.listening{
+  background:radial-gradient(circle at 32% 32%,#ff8800 0%,#cc3300 45%,#180500 100%);
+  box-shadow:0 0 0 1px rgba(255,102,0,.5),0 0 28px rgba(255,102,0,.6),inset 0 0 18px rgba(0,0,0,.65);
+  animation:opulse .65s ease-in-out infinite}
+.orb.thinking{
+  animation:othink 1.0s ease-in-out infinite}
+.orb.speaking{
+  background:radial-gradient(circle at 32% 32%,#44ff99 0%,#00aa44 45%,#001a0a 100%);
+  box-shadow:0 0 0 1px rgba(0,200,100,.5),0 0 28px rgba(0,200,100,.6),inset 0 0 18px rgba(0,0,0,.65);
+  animation:opulse .5s ease-in-out infinite}
+
+@keyframes opulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes othink{
+  0%,100%{box-shadow:0 0 0 1px rgba(232,0,26,.3),0 0 18px rgba(232,0,26,.4),inset 0 0 18px rgba(0,0,0,.65)}
+  50%{box-shadow:0 0 0 2px rgba(232,0,26,.7),0 0 40px rgba(232,0,26,.85),0 0 70px rgba(232,0,26,.25),inset 0 0 18px rgba(0,0,0,.65)}}
+
+/* Scan rings change color with orb state */
+.hud-orb.orb-listening .hud-ring{border-color:rgba(255,102,0,0.22)}
+.hud-orb.orb-listening .hud-scan-1{border-top-color:rgba(255,102,0,0.7)}
+.hud-orb.orb-listening .hud-scan-2{border-bottom-color:rgba(255,102,0,0.4)}
+.hud-orb.orb-speaking .hud-ring{border-color:rgba(0,224,102,0.22)}
+.hud-orb.orb-speaking .hud-scan-1{border-top-color:rgba(0,224,102,0.7)}
+.hud-orb.orb-speaking .hud-scan-2{border-bottom-color:rgba(0,224,102,0.4)}
+.hud-orb.orb-thinking .hud-ring{border-color:rgba(232,0,26,0.3)}
+
+.olbl{margin-top:8px;font-size:8px;letter-spacing:3px;color:var(--mt);text-transform:uppercase;font-family:'Orbitron',monospace;font-weight:400}
+
+/* Alert */
+.alert{margin:0 14px 6px;padding:9px 12px;background:rgba(232,0,26,.06);border:1px solid rgba(232,0,26,.22);border-radius:7px;font-size:11px;color:#ff5566;line-height:1.7;display:none;flex-shrink:0}
+.alert.show{display:block}
+
+/* Messages */
+.msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 14px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:#1e1e24;border-radius:2px}
+.msg{display:flex;gap:8px;animation:rise .2s ease}
+@keyframes rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:7px;font-weight:700;flex-shrink:0}
+.msg.assistant .av{background:var(--red);color:#fff;box-shadow:0 0 8px var(--glow)}
+.msg.user .av{background:var(--s2);color:var(--mt);border:1px solid var(--b)}
+.bbl{max-width:calc(100% - 42px);padding:9px 13px;font-size:13px;line-height:1.65;border-radius:11px}
+.msg.assistant .bbl{background:var(--s1);border:1px solid var(--br);border-bottom-left-radius:3px}
+.msg.user .bbl{background:var(--s2);border:1px solid var(--b);border-bottom-right-radius:3px;text-align:right}
+.bname{font-size:8px;letter-spacing:2px;margin-bottom:3px;opacity:.3;text-transform:uppercase}
+.msg.assistant .bname{color:var(--red)}
+.msg.user .bname{color:var(--mt)}
+.mchip{display:inline-flex;align-items:center;gap:3px;font-size:8px;padding:2px 7px;background:var(--dim);border:1px solid var(--br);border-radius:4px;color:var(--red);margin-top:5px;letter-spacing:1px}
+
+/* Typing dots */
+.tdots{display:flex;gap:4px;padding:3px 0}
+.td{width:5px;height:5px;border-radius:50%;background:var(--red);opacity:.3;animation:tda 1.2s ease-in-out infinite}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes tda{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-5px);opacity:1}}
+
+/* Input row */
+.irow{flex-shrink:0;padding:9px 14px;border-top:1px solid var(--b);display:flex;gap:6px;align-items:center}
+.inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:22px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 15px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:rgba(232,0,26,.4)}
+.inp::placeholder{color:#252528}
+.ibtn{width:35px;height:35px;border-radius:50%;border:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ibtn.mic{background:var(--s1);border:1px solid var(--b);color:var(--mt)}
+.ibtn.mic:hover{border-color:var(--red);color:var(--red)}
+.ibtn.mic.on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 0 12px var(--oglow);animation:opulse .65s ease-in-out infinite}
+.ibtn.send{background:var(--red);color:#fff;box-shadow:0 0 8px var(--glow)}
+.ibtn.send:hover{background:var(--red2)}
+.ibtn.attach{background:var(--s1);border:1px solid var(--b);color:var(--mt);width:30px;height:30px}
+.ibtn.attach:hover{border-color:rgba(232,0,26,.4);color:var(--red)}
+.ibtn.attach.active{border-color:var(--orange);color:var(--orange);background:rgba(255,102,0,.08)}
+
+
+/* ── APPS PANEL ── */
+.apps-panel-inner{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.panel-heading{font-size:9px;letter-spacing:3px;color:var(--mt2);text-transform:uppercase;margin-bottom:14px;font-family:'Orbitron',monospace;display:flex;align-items:center;justify-content:space-between}
+.apps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.app-tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:8px;border:1px solid var(--b);background:var(--s1);cursor:pointer;transition:all .15s;position:relative;user-select:none}
+.app-tile:hover{border-color:rgba(232,0,26,.25);background:var(--s2)}
+.app-tile:active{transform:scale(.95)}
+.app-icon-gfx{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:700;font-size:16px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);flex-shrink:0}
+.app-tile-name{font-size:9px;color:var(--mt2);text-align:center;letter-spacing:.3px;line-height:1.3;word-break:break-word;max-width:60px}
+.add-app-tile{border-style:dashed;border-color:var(--b);background:transparent;color:var(--mt);flex-direction:row;justify-content:center;gap:6px;padding:14px 6px}
+.add-app-tile:hover{border-color:var(--red);color:var(--red);background:var(--dim)}
+
+/* Context menu */
+.ctx-menu{position:fixed;background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:4px;z-index:8000;box-shadow:0 8px 24px rgba(0,0,0,.6);min-width:120px;display:none}
+.ctx-menu.show{display:block}
+.ctx-item{padding:7px 12px;font-size:12px;border-radius:4px;cursor:pointer;transition:background .1s;color:var(--text)}
+.ctx-item:hover{background:var(--s1)}
+.ctx-item.danger{color:#ff4455}
+.ctx-item.danger:hover{background:rgba(232,0,26,.12)}
+
+/* ── SETTINGS PANEL ── */
+.settings-inner{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.settings-section{margin-bottom:20px;background:var(--s1);border:1px solid var(--b);border-radius:8px;overflow:hidden}
+.settings-section-title{padding:8px 14px;font-size:8px;letter-spacing:2.5px;color:var(--mt2);text-transform:uppercase;border-bottom:1px solid var(--b);font-family:'Orbitron',monospace;background:var(--bg2)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--b)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:12px;color:var(--text)}
+.setting-sublabel{font-size:10px;color:var(--mt);margin-top:1px}
+.toggle-btn{width:40px;height:22px;border-radius:11px;border:1px solid var(--b);background:var(--s2);position:relative;cursor:pointer;transition:all .2s;flex-shrink:0}
+.toggle-btn.on{background:var(--red);border-color:var(--red);box-shadow:0 0 8px var(--glow)}
+.toggle-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.toggle-btn.on .toggle-knob{transform:translateX(18px)}
+.speed-group{display:flex;gap:3px}
+.spd-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s}
+.spd-btn:hover{border-color:#2a2a30;color:var(--mt2)}
+.spd-btn.on{border-color:var(--red);color:var(--red);background:var(--dim)}
+.setting-val{font-size:11px;color:var(--mt2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.setting-action{padding:5px 10px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--mt2);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s}
+.setting-action:hover{border-color:rgba(232,0,26,.3);color:var(--red)}
+.danger-section{margin-bottom:20px;display:flex;flex-direction:column;gap:8px}
+.danger-btn{width:100%;padding:11px 14px;border-radius:7px;border:1px solid rgba(232,0,26,.25);background:rgba(232,0,26,.06);color:#ff4455;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;text-align:left}
+.danger-btn:hover{background:rgba(232,0,26,.12);border-color:rgba(232,0,26,.45)}
+
+.greeting-textarea{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:9px 12px;outline:none;resize:vertical;min-height:60px;transition:border-color .2s}
+.greeting-textarea:focus{border-color:rgba(232,0,26,.4)}
+.greeting-textarea::placeholder{color:#333338}
+svg{pointer-events:none}
+
+/* ── MINI MODE ── */
+#mini-bar{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#050508 0%,#0a0a10 100%);border:1px solid rgba(232,0,26,0.35);border-radius:10px;overflow:hidden;align-items:center;padding:0 12px;gap:10px;-webkit-app-region:drag;z-index:99999}
+#mini-bar.show{display:flex}
+.mini-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:10px;letter-spacing:4px;color:var(--red);text-shadow:0 0 8px var(--glow);-webkit-app-region:no-drag;flex-shrink:0}
+.mini-time{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);letter-spacing:2px;flex-shrink:0}
+.mini-weather{font-size:10px;color:var(--mt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+.mini-wake{font-size:8px;color:var(--mt);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.mini-orb{width:32px;height:32px;border-radius:50%;cursor:pointer;flex-shrink:0;background:radial-gradient(circle at 32% 32%,#ff2233 0%,#a00010 45%,#1a0004 100%);box-shadow:0 0 10px rgba(232,0,26,.4);transition:all .2s;-webkit-app-region:no-drag}
+.mini-orb.listening{background:radial-gradient(circle at 32% 32%,#ff8800 0%,#cc3300 45%,#180500 100%);box-shadow:0 0 14px rgba(255,102,0,.6);animation:opulse .65s ease-in-out infinite}
+.mini-orb.speaking{background:radial-gradient(circle at 32% 32%,#44ff99 0%,#00aa44 45%,#001a0a 100%);box-shadow:0 0 14px rgba(0,200,100,.6);animation:opulse .5s ease-in-out infinite}
+.mini-orb.thinking{animation:othink 1s ease-in-out infinite}
+.mini-expand{width:22px;height:22px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;-webkit-app-region:no-drag;flex-shrink:0}
+.mini-expand:hover{border-color:var(--red);color:var(--red)}
+
+/* ── MARKDOWN ── */
+.bbl pre{background:var(--bg2);border:1px solid var(--b);border-radius:5px;padding:8px 10px;overflow-x:auto;margin:5px 0;font-size:11px;line-height:1.55;display:block}
+.bbl code{background:var(--bg2);border:1px solid rgba(232,0,26,.12);border-radius:3px;padding:1px 5px;font-family:monospace;font-size:11px;color:#e0a060}
+.bbl pre code{background:none;border:none;padding:0;color:#c8c8d8}
+.bbl strong{color:var(--text);font-weight:600}
+.bbl em{color:var(--mt2);font-style:italic}
+.mh1{font-size:13px;font-weight:700;color:var(--text);margin:6px 0 3px;font-family:'Orbitron',monospace;letter-spacing:.5px}
+.mh2{font-size:12px;font-weight:600;color:var(--text);margin:5px 0 2px}
+.mh3{font-size:12px;font-weight:500;color:var(--mt2);margin:4px 0 2px}
+.mli{padding-left:14px;position:relative;margin:2px 0;line-height:1.5}
+.mli::before{content:'›';position:absolute;left:3px;color:var(--red);font-size:12px}
+
+/* ── TASKS PANEL ── */
+.tasks-inner{flex:1;overflow-y:auto;padding:12px 14px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.task-add-row{display:flex;gap:6px;margin-bottom:12px}
+.task-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;outline:none;transition:border-color .2s}
+.task-inp:focus{border-color:rgba(232,0,26,.4)}
+.task-inp::placeholder{color:#252528}
+.task-add-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
+.task-add-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.task-group-label{font-size:8px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;margin:8px 0 5px;font-family:'Orbitron',monospace}
+.task-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:1px solid var(--b);background:var(--s1);margin-bottom:4px;transition:background .1s}
+.task-item:hover{background:var(--s2)}
+.task-item.done{opacity:.45}
+.task-check{width:16px;height:16px;border-radius:3px;border:1px solid var(--b);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.task-check.on{background:var(--green);border-color:var(--green);box-shadow:0 0 5px var(--gglow)}
+.task-text{flex:1;font-size:12px;color:var(--text);line-height:1.4}
+.task-item.done .task-text{text-decoration:line-through;color:var(--mt)}
+.task-del{background:none;border:none;color:#252528;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;transition:color .15s;flex-shrink:0}
+.task-del:hover{color:#ff4455}
+.task-empty{padding:24px;text-align:center;font-size:11px;color:#333;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="drag"></div>
+<div class="header">
+  <div class="htop">
+    <div class="brand">
+      <div class="logo">LOGAT</div>
+      <div class="acro"><b>M</b>ukunth's <b>O</b>bviously <b>G</b>reat <b>A</b>t <b>T</b>hings</div>
+    </div>
+    <div class="hmeta">
+      <div class="dpill" id="dpill"><span id="dlbl">SSD</span></div>
+      <div class="spill"><div class="spip off" id="pip"></div><span id="slbl">offline</span></div>
+      <button class="winbtn" onclick="ipc('minimize')">—</button>
+      <button class="winbtn" onclick="ipc('hide')">✕</button>
+    </div>
+  </div>
+  <div class="search-row" id="searchRow">
+    <input class="search-inp" id="searchInp" placeholder="Search chats... (Cmd+K)" autocomplete="off"/>
+  </div>
+  <div class="nav">
+    <button class="nbtn on" id="nb-chats" onclick="showChatPanel()">
+      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats
+    </button>
+    <button class="nbtn" id="nb-all" onclick="setMode('all')">All</button>
+    <div id="modeNav" style="display:flex;gap:3px"></div>
+    <button class="nbtn" id="nb-tasks" onclick="showTasksPanel()">Tasks</button>
+    <div class="nav-sep"></div>
+    <button class="nbtn icon-btn" id="nb-apps" onclick="showAppsPanel()" title="App Launcher">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    </button>
+    <button class="nbtn icon-btn" id="nb-settings" onclick="showSettingsPanel()" title="Settings">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="nav-sep"></div>
+    <button class="nbtn icon-btn" onclick="enterMini()" title="Mini mode">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
+    </button>
+    <button class="nbtn on" id="nb-voice" onclick="toggleVoiceBtn()">Voice</button>
+  </div>
+</div>
+
+<div class="body">
+  <div class="sidebar open" id="sb">
+    <div class="sbh">
+      <span class="sbtitle">History</span>
+      <button class="sbnew" onclick="newChat()" title="New chat (Cmd+N)">
+        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+    <div class="clist" id="clist"></div>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="panel" id="chat-panel">
+    <div class="owrap">
+      <div class="hud-orb" id="hudOrb">
+        <div class="hud-ticks"></div>
+        <div class="hud-ring hud-ring-1"></div>
+        <div class="hud-ring hud-ring-2"></div>
+        <div class="hud-ring hud-ring-3"></div>
+        <div class="hud-scan hud-scan-1"></div>
+        <div class="hud-scan hud-scan-2"></div>
+        <div class="orb" id="orb" onclick="orbClick()"></div>
+      </div>
+      <div class="olbl" id="olbl">tap to speak</div>
+    </div>
+    <div class="alert" id="alert"></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="irow">
+      <input class="inp" type="text" id="inp" placeholder="Message LOGAT..." autocomplete="off"/>
+      <button class="ibtn attach" id="pdfBtn" onclick="attachPDF()" title="Upload PDF">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </button>
+      <button class="ibtn attach" id="imgBtn" onclick="attachImage()" title="Analyze schematic / image">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="ibtn mic" id="micBtn" onclick="toggleMic()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+      </button>
+      <button class="ibtn send" onclick="send()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- APPS PANEL -->
+  <div class="panel hidden" id="apps-panel">
+    <div class="apps-panel-inner">
+      <div class="panel-heading">
+        App Launcher
+        <span style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif">Right-click to remove</span>
+      </div>
+      <div class="apps-grid" id="appsGrid"></div>
+    </div>
+  </div>
+
+  <!-- TASKS PANEL -->
+  <div class="panel hidden" id="tasks-panel">
+    <div class="tasks-inner">
+      <div class="panel-heading" style="margin-bottom:12px">
+        Tasks
+        <span id="taskCount" style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif"></span>
+      </div>
+      <div class="task-add-row">
+        <input class="task-inp" id="taskInp" placeholder="Add a task..." autocomplete="off"/>
+        <button class="task-add-btn" onclick="addTask()">+ Add</button>
+      </div>
+      <div id="taskList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="panel hidden" id="settings-panel">
+    <div class="settings-inner">
+      <div class="panel-heading" style="margin-bottom:16px">Settings</div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Voice</div>
+        <div class="setting-row">
+          <div><div class="setting-label">Voice Output</div></div>
+          <button class="toggle-btn on" id="voiceToggle" onclick="toggleVoiceSetting()">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label">Speed</div>
+          <div class="speed-group">
+            <button class="spd-btn" id="spd-slow" onclick="setVoiceSpeed(0.85)">Slow</button>
+            <button class="spd-btn on" id="spd-normal" onclick="setVoiceSpeed(1.15)">Normal</button>
+            <button class="spd-btn" id="spd-fast" onclick="setVoiceSpeed(1.45)">Fast</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Custom Greeting</div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <div class="setting-sublabel" style="color:var(--mt2)">Added to LOGAT's startup briefing every time</div>
+          <textarea class="greeting-textarea" id="customGreetingTA" placeholder="e.g. Remind me to check the lawn schedule. The mower is in for service this week." oninput="saveCustomGreeting()"></textarea>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Double Clap</div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Opens App</div>
+            <div class="setting-sublabel">Two claps within 1 second</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="setting-val" id="clapAppName">LOGAT</span>
+            <button class="setting-action" onclick="changeClapApp()">Change</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Topics</div>
+        <div id="modesSettings"></div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">AI Model</div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <div class="setting-sublabel" style="color:var(--mt2)">Choose which Ollama model to use</div>
+          <div id="modelBtns" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Storage</div>
+        <div class="setting-row">
+          <div class="setting-label">Location</div>
+          <span class="setting-val" id="storageLocLabel">~/.logat</span>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Data</div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <button class="danger-btn" onclick="exportChatAction()">Export Current Chat</button>
+          <button class="danger-btn" onclick="clearMemoryAction()">Clear All Memory</button>
+          <button class="danger-btn" onclick="clearChatsAction()">Clear All Chats</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mini mode bar -->
+<div id="mini-bar">
+  <div class="mini-logo">LOG</div>
+  <div class="mini-time" id="miniTime">12:00 AM</div>
+  <div class="mini-weather" id="miniWeather"></div>
+  <div style="flex:1"></div>
+  <div class="mini-wake" id="miniWakeLabel">say: hey logat</div>
+  <div class="mini-orb" id="miniOrb" onclick="miniOrbClick()" title="Tap to speak"></div>
+  <button class="mini-expand" onclick="exitMini()" title="Expand">
+    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+  </button>
+</div>
+
+<!-- Context menu -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-item danger" id="ctxRemove" onclick="ctxRemoveApp()">Remove App</div>
+</div>
+
+<script>
+const { ipcRenderer } = require('electron');
+const OLLAMA = 'http://127.0.0.1:11434';
+let MODEL = 'llama3';
+
+const BASE = `You are LOGAT — Mukunth's personal AI assistant. Mukunth runs a lawn care business and works on robotics projects.
+
+Always call Mukunth "buddy" — never "Mukunth" in conversation. Talk like a sharp, confident AI companion. Short sentences. Conversational. No bullet point lists unless absolutely needed. No "Certainly!" or "Great question!" — just talk. Be direct, warm, and a little dry. When you know the answer, give it fast.
+
+When you learn something important about buddy worth remembering long-term, end your reply with:
+REMEMBER: [the fact]
+Only for genuinely useful long-term facts.`;
+
+
+// ── State ──
+let mode = 'all', listening = false, online = false;
+let history = [], curId = null, memory = [];
+let mediaRec = null, audioChunks = [];
+let sbOpen = true, searchQ = '';
+let currentPanel = 'chat';
+let pinnedApps = [];
+let tasks = [];
+let settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
+let ctxTargetIndex = -1;
+let storageInfo = null;
+let retryInterval = null;
+let checkingOllama = false;
+// Auto-listen mode
+let autoListenMode = false;
+let autoListenEndTime = 0;
+let autoListenCountdown = null;
+// Wake word
+let wakeWordRecognition = null;
+let wakeWordActive = false;
+// Mini mode
+let miniMode = false;
+let miniClockInterval = null;
+let lastWeatherStr = '';
+
+// ── DOM refs ──
+const msgsEl = document.getElementById('msgs');
+const inpEl = document.getElementById('inp');
+const orbEl = document.getElementById('orb');
+const hudOrb = document.getElementById('hudOrb');
+const olbl = document.getElementById('olbl');
+const micBtn = document.getElementById('micBtn');
+const pip = document.getElementById('pip');
+const slbl = document.getElementById('slbl');
+const alertEl = document.getElementById('alert');
+const sb = document.getElementById('sb');
+const clist = document.getElementById('clist');
+const searchInp = document.getElementById('searchInp');
+const ctxMenu = document.getElementById('ctxMenu');
+
+function ipc(ch) { ipcRenderer.send(ch); }
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', e => {
+  if (e.metaKey && e.key === 'n') { e.preventDefault(); newChat(); }
+  if (e.metaKey && e.key === 'k') { e.preventDefault(); searchInp.focus(); }
+  if (e.metaKey && e.key === 't') { e.preventDefault(); showTasksPanel(); }
+  if (e.key === 'Escape') { searchInp.value = ''; searchQ = ''; renderChatList(); hideCtxMenu(); }
+});
+searchInp.addEventListener('input', e => { searchQ = e.target.value.toLowerCase(); renderChatList(); });
+
+// ── Panel navigation ──
+function hideAllPanels() {
+  ['chat-panel','apps-panel','settings-panel','tasks-panel'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+}
+
+function setActiveNav(...ids) {
+  ['nb-chats','nb-apps','nb-settings','nb-tasks'].forEach(id => document.getElementById(id)?.classList.remove('on'));
+  ids.forEach(id => document.getElementById(id)?.classList.add('on'));
+}
+
+function showChatPanel() {
+  currentPanel = 'chat';
+  hideAllPanels();
+  document.getElementById('chat-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = '';
+  sb.classList.toggle('open', sbOpen);
+  setActiveNav('nb-chats');
+  renderChatList();
+}
+
+function showAppsPanel() {
+  currentPanel = 'apps';
+  hideAllPanels();
+  document.getElementById('apps-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-apps');
+  renderAppsGrid();
+}
+
+function showSettingsPanel() {
+  currentPanel = 'settings';
+  hideAllPanels();
+  document.getElementById('settings-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-settings');
+  renderSettingsPanel();
+}
+
+function showTasksPanel() {
+  currentPanel = 'tasks';
+  hideAllPanels();
+  document.getElementById('tasks-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-tasks');
+  renderTaskList();
+  setTimeout(() => document.getElementById('taskInp')?.focus(), 50);
+}
+
+// ── Mode ──
+function setMode(m) {
+  mode = m;
+  document.getElementById('nb-all')?.classList.toggle('on', m === 'all');
+  (settings.modes || []).forEach(x => {
+    document.getElementById('nb-' + x.id)?.classList.toggle('on', x.id === m);
+  });
+  if (currentPanel !== 'chat') showChatPanel();
+}
+
+function renderModeNav() {
+  const container = document.getElementById('modeNav');
+  if (!container) return;
+  container.innerHTML = '';
+  (settings.modes || []).forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'nbtn' + (mode === m.id ? ' on' : '');
+    btn.id = 'nb-' + m.id;
+    btn.textContent = m.name;
+    btn.onclick = () => setMode(m.id);
+    container.appendChild(btn);
+  });
+}
+
+function renderModesSettings() {
+  const container = document.getElementById('modesSettings');
+  if (!container) return;
+  const modes = settings.modes || [];
+  let html = modes.length ? modes.map(m => `
+    <div class="setting-row">
+      <div style="flex:1;min-width:0">
+        <div class="setting-label">${m.name}</div>
+        ${m.desc ? `<div class="setting-sublabel" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px">${m.desc}</div>` : ''}
+      </div>
+      <button class="setting-action" onclick="deleteMode('${m.id}')">Remove</button>
+    </div>`).join('') : `<div style="padding:10px 14px;font-size:11px;color:#333">No topics yet — add one below.</div>`;
+  html += `<div class="setting-row" style="flex-direction:column;align-items:stretch;gap:6px">
+    <input class="greeting-textarea" id="modeNameInp" placeholder="Topic name  (e.g. Cooking)" style="min-height:auto;padding:6px 10px;font-size:12px;resize:none"/>
+    <textarea class="greeting-textarea" id="modeDescInp" placeholder="Focus prompt (optional) — e.g. Be an expert chef and give practical, no-nonsense recipe advice." style="min-height:52px"></textarea>
+    <button class="task-add-btn" style="align-self:flex-end" onclick="addMode()">+ Add Topic</button>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function addMode() {
+  const name = document.getElementById('modeNameInp')?.value.trim();
+  if (!name) return;
+  const desc = document.getElementById('modeDescInp')?.value.trim() || '';
+  const id = 'mode_' + Date.now();
+  if (!settings.modes) settings.modes = [];
+  settings.modes.push({ id, name, desc });
+  saveSettings(); renderModesSettings(); renderModeNav();
+}
+
+function deleteMode(id) {
+  settings.modes = (settings.modes || []).filter(m => m.id !== id);
+  if (mode === id) { mode = 'all'; document.getElementById('nb-all')?.classList.add('on'); }
+  saveSettings(); renderModesSettings(); renderModeNav();
+}
+
+// ── Voice toggle ──
+function toggleVoiceBtn() {
+  settings.voiceOn = !settings.voiceOn;
+  syncVoiceUI();
+  saveSettings();
+}
+
+function toggleVoiceSetting() {
+  settings.voiceOn = !settings.voiceOn;
+  syncVoiceUI();
+  saveSettings();
+}
+
+function syncVoiceUI() {
+  const tog = document.getElementById('voiceToggle');
+  if (tog) tog.classList.toggle('on', settings.voiceOn);
+  const nb = document.getElementById('nb-voice');
+  nb.textContent = settings.voiceOn ? 'Voice ON' : 'Voice OFF';
+  nb.classList.toggle('on', settings.voiceOn);
+  if (!settings.voiceOn) {
+    window.speechSynthesis.cancel();
+    setOrb('');
+  }
+}
+
+function setVoiceSpeed(s) {
+  settings.voiceSpeed = s;
+  ['slow','normal','fast'].forEach(k => document.getElementById('spd-' + k)?.classList.remove('on'));
+  if (s <= 0.9) document.getElementById('spd-slow')?.classList.add('on');
+  else if (s >= 1.35) document.getElementById('spd-fast')?.classList.add('on');
+  else document.getElementById('spd-normal')?.classList.add('on');
+  saveSettings();
+}
+
+// ── Settings persistence ──
+async function loadSettingsFromDisk() {
+  const saved = await ipcRenderer.invoke('load-settings');
+  settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [], ...saved };
+  if (!Array.isArray(settings.modes)) settings.modes = [];
+  MODEL = settings.model || 'llama3';
+  renderModeNav();
+  syncVoiceUI();
+  setVoiceSpeed(settings.voiceSpeed || 1.15);
+  const n = document.getElementById('clapAppName');
+  if (n) n.textContent = settings.clapApp || 'LOGAT';
+}
+
+async function saveSettings() {
+  await ipcRenderer.invoke('save-settings', settings);
+}
+
+async function renderSettingsPanel() {
+  syncVoiceUI();
+  setVoiceSpeed(settings.voiceSpeed || 1.15);
+  const n = document.getElementById('clapAppName');
+  if (n) n.textContent = settings.clapApp || 'LOGAT';
+  if (storageInfo) {
+    document.getElementById('storageLocLabel').textContent =
+      storageInfo.isExternal ? ('SSD: ' + storageInfo.driveName) : '~/.logat (local)';
+  }
+  const ta = document.getElementById('customGreetingTA');
+  if (ta) ta.value = settings.customGreeting || '';
+  renderModesSettings();
+  renderModelSelector();
+}
+
+async function renderModelSelector() {
+  const container = document.getElementById('modelBtns');
+  if (!container) return;
+  container.innerHTML = '<span style="font-size:10px;color:var(--mt)">Loading...</span>';
+  try {
+    const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    const models = (d.models || []).map(m => m.name);
+    if (!models.length) { container.innerHTML = '<span style="font-size:10px;color:var(--mt)">No models found</span>'; return; }
+    container.innerHTML = '';
+    models.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'spd-btn' + (m === MODEL ? ' on' : '');
+      btn.textContent = m;
+      btn.style.cssText = 'max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      btn.onclick = () => {
+        MODEL = m; settings.model = m; saveSettings();
+        container.querySelectorAll('.spd-btn').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+      };
+      container.appendChild(btn);
+    });
+  } catch(_) { container.innerHTML = '<span style="font-size:10px;color:var(--mt)">Ollama offline</span>'; }
+}
+
+async function exportChatAction() {
+  if (!history.length) { addMsg('assistant', 'Nothing to export yet.'); showChatPanel(); return; }
+  const title = (history.find(m => m.role === 'user')?.content?.substring(0, 40) || 'logat-chat').replace(/[^a-z0-9 ]/gi, '-');
+  const lines = history.map(m => `[${m.role.toUpperCase()}]\n${m.content}`).join('\n\n---\n\n');
+  const text = `LOGAT Chat Export\n${'='.repeat(40)}\n${new Date().toLocaleString()}\n\n${lines}`;
+  const ok = await ipcRenderer.invoke('export-chat', { title, text });
+  if (ok) { addMsg('assistant', 'Chat exported to Desktop.'); showChatPanel(); }
+}
+
+function saveCustomGreeting() {
+  const ta = document.getElementById('customGreetingTA');
+  if (ta) { settings.customGreeting = ta.value; saveSettings(); }
+}
+
+async function changeClapApp() {
+  const result = await ipcRenderer.invoke('pick-app');
+  if (!result) return;
+  settings.clapApp = result.name;
+  settings.clapAppPath = result.path;
+  const n = document.getElementById('clapAppName');
+  if (n) n.textContent = result.name;
+  saveSettings();
+}
+
+async function clearMemoryAction() {
+  if (!confirm('Clear all memory? This cannot be undone.')) return;
+  await ipcRenderer.invoke('clear-all-memory');
+  memory = [];
+  addMsg('assistant', 'Memory cleared.');
+  showChatPanel();
+}
+
+async function clearChatsAction() {
+  if (!confirm('Delete ALL chats? This cannot be undone.')) return;
+  await ipcRenderer.invoke('clear-all-chats');
+  newChat();
+  showChatPanel();
+}
+
+// ── Apps grid ──
+function appColor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  const hue = Math.abs(h) % 360;
+  return `hsl(${hue},55%,38%)`;
+}
+
+function appInitial(name) {
+  return name.substring(0, 2).toUpperCase();
+}
+
+async function loadAppsFromDisk() {
+  const data = await ipcRenderer.invoke('load-apps');
+  pinnedApps = data.apps || [];
+}
+
+async function saveApps() {
+  await ipcRenderer.invoke('save-apps', { apps: pinnedApps });
+}
+
+function renderAppsGrid() {
+  const grid = document.getElementById('appsGrid');
+  grid.innerHTML = '';
+  pinnedApps.forEach((app, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'app-tile';
+    tile.innerHTML = `<div class="app-icon-gfx" style="background:${appColor(app.name)}">${appInitial(app.name)}</div><div class="app-tile-name">${app.name}</div>`;
+    tile.addEventListener('click', () => ipcRenderer.invoke('launch-app', app.path));
+    tile.addEventListener('contextmenu', e => { e.preventDefault(); showCtxMenu(e.clientX, e.clientY, i); });
+    grid.appendChild(tile);
+  });
+  // Add button
+  const add = document.createElement('div');
+  add.className = 'app-tile add-app-tile';
+  add.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span style="font-size:10px">Add App</span>`;
+  add.addEventListener('click', addApp);
+  grid.appendChild(add);
+}
+
+async function addApp() {
+  const result = await ipcRenderer.invoke('pick-app');
+  if (!result) return;
+  if (pinnedApps.some(a => a.path === result.path)) return;
+  pinnedApps.push({ name: result.name, path: result.path });
+  await saveApps();
+  renderAppsGrid();
+}
+
+function showCtxMenu(x, y, index) {
+  ctxTargetIndex = index;
+  ctxMenu.style.left = x + 'px';
+  ctxMenu.style.top = y + 'px';
+  ctxMenu.classList.add('show');
+}
+
+function hideCtxMenu() {
+  ctxMenu.classList.remove('show');
+  ctxTargetIndex = -1;
+}
+
+async function ctxRemoveApp() {
+  if (ctxTargetIndex < 0) return;
+  pinnedApps.splice(ctxTargetIndex, 1);
+  hideCtxMenu();
+  await saveApps();
+  renderAppsGrid();
+}
+
+document.addEventListener('click', e => { if (!ctxMenu.contains(e.target)) hideCtxMenu(); });
+
+// ── Tasks ──
+async function loadTasks() {
+  const d = await ipcRenderer.invoke('load-tasks');
+  tasks = d.tasks || [];
+}
+async function saveTasks() { await ipcRenderer.invoke('save-tasks', { tasks }); }
+
+function addTask() {
+  const inp = document.getElementById('taskInp');
+  const text = inp.value.trim();
+  if (!text) return;
+  tasks.unshift({ id: 't_' + Date.now(), text, done: false, created: Date.now() });
+  inp.value = '';
+  saveTasks(); renderTaskList();
+}
+
+function toggleTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (t) { t.done = !t.done; saveTasks(); renderTaskList(); }
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(x => x.id !== id);
+  saveTasks(); renderTaskList();
+}
+
+function taskHTML(t) {
+  const check = t.done
+    ? `<svg width="9" height="9" fill="none" stroke="#050508" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+    : '';
+  return `<div class="task-item${t.done ? ' done' : ''}">
+    <div class="task-check${t.done ? ' on' : ''}" onclick="toggleTask('${t.id}')">${check}</div>
+    <div class="task-text">${t.text}</div>
+    <button class="task-del" onclick="deleteTask('${t.id}')">×</button>
+  </div>`;
+}
+
+function renderTaskList() {
+  const list = document.getElementById('taskList');
+  if (!list) return;
+  const open = tasks.filter(t => !t.done);
+  const done = tasks.filter(t => t.done);
+  const tc = document.getElementById('taskCount');
+  if (tc) tc.textContent = open.length ? `${open.length} open` : tasks.length ? 'all done' : '';
+  if (!tasks.length) { list.innerHTML = '<div class="task-empty">No tasks yet.</div>'; return; }
+  let html = '';
+  if (open.length) { html += '<div class="task-group-label">Open</div>' + open.map(taskHTML).join(''); }
+  if (done.length) { html += '<div class="task-group-label" style="margin-top:10px">Done</div>' + done.map(taskHTML).join(''); }
+  list.innerHTML = html;
+}
+
+// ── Markdown renderer ──
+function md(text) {
+  // stash code blocks so newlines inside them are preserved
+  const pres = [];
+  let t = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  t = t.replace(/```[^\n]*\n?([\s\S]*?)```/g, (_, c) => {
+    const i = pres.length;
+    pres.push(`<pre><code>${c.trim()}</code></pre>`);
+    return `\x00PRE${i}\x00`;
+  });
+  t = t.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+  t = t.replace(/^### (.+)$/gm, '<div class="mh3">$1</div>');
+  t = t.replace(/^## (.+)$/gm, '<div class="mh2">$1</div>');
+  t = t.replace(/^# (.+)$/gm, '<div class="mh1">$1</div>');
+  t = t.replace(/^[ \t]*[-*] (.+)$/gm, '<div class="mli">$1</div>');
+  t = t.replace(/^[ \t]*\d+\. (.+)$/gm, '<div class="mli">$1</div>');
+  t = t.replace(/\n/g, '<br>');
+  pres.forEach((p, i) => { t = t.replace(`\x00PRE${i}\x00`, p); });
+  return t;
+}
+
+// ── Chat functions ──
+async function renderChatList() {
+  const chats = await ipcRenderer.invoke('list-chats');
+  clist.innerHTML = '';
+  const filtered = searchQ ? chats.filter(c => c.title.toLowerCase().includes(searchQ)) : chats;
+  if (!filtered.length) {
+    clist.innerHTML = `<div style="padding:14px;font-size:11px;color:#333;text-align:center">${searchQ ? 'No results' : 'No chats yet'}</div>`;
+    return;
+  }
+  filtered.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'ci' + (c.id === curId ? ' active' : '');
+    const dt = new Date(c.date).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    d.innerHTML = `<button class="cidel" onclick="delChat('${c.id}',event)">×</button><div class="cititle">${c.title}</div><div class="cimeta">${dt} · ${c.messageCount} msgs</div>`;
+    d.addEventListener('click', () => loadChat(c.id));
+    clist.appendChild(d);
+  });
+}
+
+async function loadChat(id) {
+  const data = await ipcRenderer.invoke('load-chat', id);
+  if (!data) return;
+  curId = id; history = data.messages || [];
+  msgsEl.innerHTML = '';
+  history.forEach(m => renderMsg(m.role, m.content));
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  renderChatList();
+}
+
+async function delChat(id, e) {
+  e.stopPropagation();
+  await ipcRenderer.invoke('delete-chat', id);
+  if (id === curId) newChat();
+  else renderChatList();
+}
+
+function newChat() {
+  curId = 'chat_' + Date.now();
+  history = []; msgsEl.innerHTML = '';
+  addMsg('assistant', "Hey, what do you need?");
+  renderChatList();
+  if (currentPanel !== 'chat') showChatPanel();
+}
+
+async function saveChat() {
+  if (!curId || !history.length) return;
+  const title = history.find(m => m.role === 'user')?.content?.substring(0, 45) || 'Untitled';
+  await ipcRenderer.invoke('save-chat', { id: curId, title, messages: history, savedAt: Date.now() });
+  renderChatList();
+}
+
+async function loadMem() {
+  const d = await ipcRenderer.invoke('load-memory');
+  memory = d.facts || [];
+}
+
+async function saveMem() { await ipcRenderer.invoke('save-memory', { facts: memory }); }
+
+function addFact(f) {
+  if (!f || memory.some(x => x.toLowerCase() === f.toLowerCase())) return;
+  memory.push(f); saveMem();
+}
+
+async function checkStorage() {
+  storageInfo = await ipcRenderer.invoke('get-storage');
+  const pill = document.getElementById('dpill');
+  if (storageInfo.isExternal) { document.getElementById('dlbl').textContent = storageInfo.driveName; pill.classList.add('show'); }
+  else pill.classList.remove('show');
+}
+
+async function getMorningBriefing() {
+  const now = new Date();
+  const h = now.getHours();
+  const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  let weather = '', humidity = '', feelsLike = '', headlines = [], stocks = [];
+
+  await Promise.allSettled([
+    fetch('https://wttr.in/?format=j1', { signal: AbortSignal.timeout(5000) })
+      .then(r => r.json())
+      .then(d => {
+        const c = d.current_condition?.[0];
+        if (c) {
+          const desc  = c.weatherDesc?.[0]?.value || '';
+          const temp  = c.temp_F;
+          const feels = c.FeelsLikeF;
+          const hum   = c.humidity;
+          weather   = `${desc}, ${temp}°F`;
+          feelsLike = feels ? `feels like ${feels}°F` : '';
+          humidity  = hum  ? `humidity ${hum}%`       : '';
+          lastWeatherStr = weather;
+        }
+      }).catch(() => {}),
+
+    fetch('https://feeds.bbci.co.uk/news/rss.xml', { signal: AbortSignal.timeout(5000) })
+      .then(r => r.text())
+      .then(xml => {
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        headlines = Array.from(doc.querySelectorAll('item title')).slice(0, 4).map(el => el.textContent.trim());
+      }).catch(() => {}),
+
+    Promise.all(['^GSPC', '^IXIC', '^DJI'].map(sym =>
+      fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1d`, { signal: AbortSignal.timeout(5000) })
+        .then(r => r.json())
+        .then(d => {
+          const m = d.chart?.result?.[0]?.meta;
+          if (!m) return;
+          const chg = ((m.regularMarketPrice - m.chartPreviousClose) / m.chartPreviousClose * 100).toFixed(2);
+          const label = sym === '^GSPC' ? 'S&P 500' : sym === '^IXIC' ? 'Nasdaq' : 'Dow Jones';
+          stocks.push(`${label} ${parseFloat(chg) > 0 ? '▲' : '▼'}${Math.abs(parseFloat(chg)).toFixed(2)}%`);
+        }).catch(() => {})
+    ))
+  ]);
+
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const session = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+
+  let msg = `${greet}, buddy. All systems online. The time is ${timeStr} on ${dateStr}.`;
+
+  // Weather block
+  if (weather) {
+    let wx = `Current conditions: ${weather}`;
+    if (feelsLike) wx += `, ${feelsLike}`;
+    if (humidity)  wx += `, ${humidity}`;
+    msg += `<br>${wx}.`;
+    // Context tip based on weather
+    if (weather.toLowerCase().includes('rain') || weather.toLowerCase().includes('storm'))
+      msg += ` Heads up — weather could affect your lawn jobs today.`;
+    else if (parseInt(weather.match(/(\d+)°F/)?.[1] || '70') > 90)
+      msg += ` It's a hot one out there. Stay hydrated on the job.`;
+  }
+
+  // Market block
+  if (stocks.length) msg += `<br>Markets this ${session}: ${stocks.join(' · ')}.`;
+
+  // News block
+  if (headlines.length) {
+    msg += `<br>Top headlines — ${headlines[0]}.`;
+    if (headlines[1]) msg += ` Also in the news: ${headlines[1]}.`;
+  }
+
+  // Memory block
+  if (memory.length) {
+    msg += `<br>I've got ${memory.length} thing${memory.length !== 1 ? 's' : ''} saved in memory for you.`;
+  }
+
+  // Custom greeting note
+  if (settings.customGreeting && settings.customGreeting.trim()) {
+    msg += `<br>${settings.customGreeting.trim()}`;
+  }
+
+  msg += `<br>Auto-listen is on for two minutes — go ahead, buddy, what are we working on?`;
+  return msg;
+}
+
+function startOfflineRetry() {
+  if (retryInterval) return;
+  retryInterval = setInterval(async () => {
+    if (online) { clearInterval(retryInterval); retryInterval = null; return; }
+    await checkOllama();
+  }, 30000);
+}
+
+async function checkOllama() {
+  if (checkingOllama) return;
+  checkingOllama = true;
+  try {
+    const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    const found = (d.models || []).find(m => m.name.includes('llama') || m.name === MODEL);
+    if (!found) throw new Error('no model');
+    if (retryInterval) { clearInterval(retryInterval); retryInterval = null; }
+    online = true; pip.classList.remove('off'); slbl.textContent = 'online'; alertEl.classList.remove('show');
+    const briefingEl = addMsg('assistant', 'Initializing...');
+    const briefing = await getMorningBriefing();
+    briefingEl.querySelector('.txt').innerHTML = briefing;
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+    speak(briefing, () => startAutoListenMode());
+  } catch(e) {
+    online = false; pip.classList.add('off'); slbl.textContent = 'offline'; alertEl.classList.add('show');
+    alertEl.innerHTML = 'Ollama not running. Open Terminal:<br><b>ollama serve</b><br>Retrying every 30s automatically.';
+    startOfflineRetry();
+  } finally {
+    checkingOllama = false;
+  }
+}
+
+// ── Render ──
+function renderMsg(role, text) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  const content = role === 'assistant' ? md(text) : text.replace(/\n/g,'<br>');
+  d.innerHTML = `<div class="av">${role === 'assistant' ? 'LOG' : 'MU'}</div><div class="bbl"><div class="bname">${role === 'assistant' ? 'LOGAT' : 'MUKUNTH'}</div><span class="txt">${content}</span></div>`;
+  msgsEl.appendChild(d); return d;
+}
+
+function addMsg(role, text) { const d = renderMsg(role, text); msgsEl.scrollTop = msgsEl.scrollHeight; return d; }
+
+function showTyping() {
+  const d = document.createElement('div'); d.id = 'typing'; d.className = 'msg assistant';
+  d.innerHTML = `<div class="av">LOG</div><div class="bbl"><div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+  msgsEl.appendChild(d); msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+function rmTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+// ── Orb state ──
+function setOrb(s) {
+  orbEl.className = 'orb' + (s ? ' ' + s : '');
+  hudOrb.className = 'hud-orb' + (s ? ' orb-' + s : '');
+  document.getElementById('miniOrb').className = 'mini-orb' + (s ? ' ' + s : '');
+  if (!autoListenMode) {
+    const idle = wakeWordActive ? 'say: hey logat' : 'tap to speak';
+    olbl.textContent = s === 'listening' ? 'listening...' : s === 'thinking' ? 'processing...' : s === 'speaking' ? 'speaking...' : idle;
+  }
+  const wl = document.getElementById('miniWakeLabel');
+  if (wl) wl.textContent = wakeWordActive ? 'say: hey logat' : 'tap orb';
+}
+
+// ── Voice ──
+async function speak(text, onDone) {
+  if (!settings.voiceOn) { setOrb(''); if (onDone) onDone(); return; }
+  window.speechSynthesis.cancel();
+
+  // Wait for voices to be ready (critical on first startup in Electron)
+  await waitForVoices();
+
+  const clean = text
+    .replace(/<br>/g, '. ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/REMEMBER:.*$/m, '')
+    .replace(/[*#`▲▼·]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, 900);
+
+  const u = new SpeechSynthesisUtterance(clean);
+  u.rate   = settings.voiceSpeed || 1.05;
+  u.pitch  = 0.82;   // lower = deeper = more Jarvis
+  u.volume = 1.0;
+
+  // Jarvis voice priority — Daniel (British male) is the best macOS option
+  const preferred = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
+  const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+  let pick = null;
+  for (const name of preferred) {
+    pick = voices.find(v => v.name === name);
+    if (pick) break;
+  }
+  if (!pick) pick = voices.find(v => v.lang === 'en-GB' && v.localService);
+  if (!pick) pick = voices.find(v => v.lang.startsWith('en') && v.localService);
+  if (!pick) pick = voices.find(v => v.lang.startsWith('en'));
+  if (pick) u.voice = pick;
+
+  setOrb('speaking');
+
+  u.onend = () => {
+    setOrb('');
+    if (onDone) { onDone(); return; }
+    if (autoListenMode && !listening) { setTimeout(() => { if (autoListenMode) startMic(); }, 600); return; }
+    setTimeout(startWakeWordDetection, 500);
+  };
+  u.onerror = (ev) => {
+    // 'interrupted' is normal (cancel called), skip re-triggering
+    if (ev.error === 'interrupted') return;
+    setOrb('');
+    if (onDone) onDone();
+    else setTimeout(startWakeWordDetection, 500);
+  };
+  window.speechSynthesis.speak(u);
+}
+
+// ── Auto-listen mode (2 min on startup) ──
+function startAutoListenMode() {
+  stopWakeWordDetection();
+  autoListenMode = true;
+  autoListenEndTime = Date.now() + 120000;
+
+  autoListenCountdown = setInterval(() => {
+    const rem = autoListenEndTime - Date.now();
+    if (rem <= 0) { stopAutoListenMode(); return; }
+    const m = Math.floor(rem / 60000);
+    const s = String(Math.floor((rem % 60000) / 1000)).padStart(2, '0');
+    const base = orbEl.classList.contains('listening') ? 'listening' :
+                 orbEl.classList.contains('speaking')  ? 'speaking'  :
+                 orbEl.classList.contains('thinking')  ? 'processing': 'ready';
+    olbl.textContent = `${base} · ${m}:${s}`;
+  }, 1000);
+
+  setTimeout(() => { if (autoListenMode && !listening && !window.speechSynthesis.speaking) startMic(); }, 300);
+}
+
+function stopAutoListenMode() {
+  autoListenMode = false;
+  if (autoListenCountdown) { clearInterval(autoListenCountdown); autoListenCountdown = null; }
+  if (listening) stopMic();
+  setOrb('');
+  speak("Auto-listen off. Say hey LOGAT anytime to wake me.", () => startWakeWordDetection());
+}
+
+// ── Wake word detection ("Hey LOGAT") ──
+function startWakeWordDetection() {
+  if (autoListenMode || listening || wakeWordActive) return;
+  if (!('webkitSpeechRecognition' in window)) return;
+  wakeWordActive = true;
+  wakeWordRecognition = new webkitSpeechRecognition();
+  wakeWordRecognition.continuous = true;
+  wakeWordRecognition.interimResults = true;
+  wakeWordRecognition.lang = 'en-US';
+  wakeWordRecognition.onresult = (event) => {
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript.toLowerCase();
+      if (t.includes('hey logat') || t.includes('hey log at') || t.includes('logat') || t.includes('log at')) {
+        handleWakeWord(); break;
+      }
+    }
+  };
+  wakeWordRecognition.onend = () => {
+    wakeWordActive = false;
+    if (!autoListenMode && !listening) setTimeout(startWakeWordDetection, 1000);
+  };
+  wakeWordRecognition.onerror = (e) => {
+    wakeWordActive = false;
+    if (e.error !== 'aborted' && !autoListenMode && !listening) setTimeout(startWakeWordDetection, 2000);
+  };
+  try {
+    wakeWordRecognition.start();
+    setOrb(''); // triggers label refresh to "say: hey logat"
+  } catch(e) { wakeWordActive = false; }
+}
+
+function stopWakeWordDetection() {
+  wakeWordActive = false;
+  if (wakeWordRecognition) { try { wakeWordRecognition.abort(); } catch(e) {} wakeWordRecognition = null; }
+  setOrb(''); // refresh label back to "tap to speak"
+}
+
+function handleWakeWord() {
+  stopWakeWordDetection();
+  if (autoListenMode || listening) return;
+  speak('Yes?', () => { if (!autoListenMode) startMic(); });
+}
+
+// ── Mini mode ──
+function enterMini() {
+  miniMode = true;
+  document.querySelector('.app').style.display = 'none';
+  document.body.style.background = 'transparent';
+  document.getElementById('mini-bar').classList.add('show');
+  ipc('enter-mini');
+  updateMiniWeather();
+  miniClockInterval = setInterval(() => {
+    document.getElementById('miniTime').textContent =
+      new Date().toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  }, 1000);
+  document.getElementById('miniTime').textContent =
+    new Date().toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+}
+
+function exitMini() {
+  miniMode = false;
+  document.getElementById('mini-bar').classList.remove('show');
+  document.querySelector('.app').style.display = '';
+  document.body.style.background = '';
+  ipc('exit-mini');
+  if (miniClockInterval) { clearInterval(miniClockInterval); miniClockInterval = null; }
+}
+
+function updateMiniWeather() {
+  document.getElementById('miniWeather').textContent = lastWeatherStr || '';
+}
+
+function miniOrbClick() {
+  if (listening) stopMic();
+  else { stopWakeWordDetection(); startMic(); }
+}
+
+// ── PDF attachment ────────────────────────────────────────────────────────────
+async function attachPDF() {
+  const btn = document.getElementById('pdfBtn');
+  btn.classList.add('active');
+  try {
+    const result = await ipcRenderer.invoke('read-pdf');
+    btn.classList.remove('active');
+    if (!result) return; // cancelled
+    if (!result.ok) {
+      if (result.error === 'PDFTOTEXT_NOT_FOUND') {
+        addMsg('assistant', 'I need pdftotext to read PDFs. Install it with:<br><b>brew install poppler</b><br>Then try again.');
+        speak("I need a tool called pdftotext to read PDFs. Install it with Homebrew, then try again.");
+      } else {
+        addMsg('assistant', `Couldn't read that PDF: ${result.error}`);
+      }
+      return;
+    }
+    const preview = result.text.length > 200 ? result.text.substring(0, 200) + '…' : result.text;
+    addMsg('user', `📄 <b>${result.name}</b><br><span style="font-size:11px;color:var(--mt2)">${preview}</span>`);
+    const prompt = `The user has uploaded a PDF named "${result.name}". Here is the extracted content:\n\n${result.text}\n\nPlease analyze it, summarize the key points, and let buddy know if there's anything important or actionable.`;
+    setOrb('thinking'); showTyping();
+    await sendRaw(prompt);
+  } catch(e) {
+    btn.classList.remove('active');
+    addMsg('assistant', 'PDF read failed: ' + e.message);
+  }
+}
+
+// ── Image / Schematic analyzer ────────────────────────────────────────────────
+async function attachImage() {
+  const btn = document.getElementById('imgBtn');
+  btn.classList.add('active');
+  try {
+    const result = await ipcRenderer.invoke('read-image');
+    btn.classList.remove('active');
+    if (!result) return; // cancelled
+    if (!result.ok) { addMsg('assistant', 'Could not read that image: ' + result.error); return; }
+
+    addMsg('user', `🔌 <b>${result.name}</b> — analyzing schematic…`);
+    setOrb('thinking'); showTyping();
+
+    // Try llava (vision model) first
+    const visionBody = {
+      model: 'llava',
+      stream: true,
+      messages: [{
+        role: 'user',
+        content: 'You are an expert electronics and robotics engineer. Analyze this schematic or image in detail. Identify all components, connections, voltages, and signal paths. Explain what the circuit or system does, how it works, and flag anything unusual or potentially wrong. Be thorough and technical.',
+        images: [result.b64]
+      }]
+    };
+    let res;
+    try {
+      res = await fetch(`${OLLAMA}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(visionBody)
+      });
+      if (!res.ok) throw new Error('llava not available');
+    } catch(_) {
+      // llava not installed — fall back to text description request
+      rmTyping();
+      addMsg('assistant', 'I need the llava vision model to analyze schematics.<br>Install it with:<br><b>ollama pull llava</b><br>Then try again.');
+      speak("I need the llava vision model to read schematics. Install it by running ollama pull llava in Terminal, then try again, buddy.");
+      return;
+    }
+
+    rmTyping();
+    const msgEl = addMsg('assistant', '');
+    const txtEl = msgEl.querySelector('.txt');
+    setOrb('thinking');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullReply = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
+      for (const line of lines) {
+        try {
+          const j = JSON.parse(line);
+          if (j.message?.content) {
+            fullReply += j.message.content;
+            txtEl.innerHTML = md(fullReply);
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+          }
+        } catch(e) {}
+      }
+    }
+    setOrb('');
+    history.push({ role: 'assistant', content: fullReply });
+    await saveChat();
+    speak(fullReply);
+  } catch(e) {
+    document.getElementById('imgBtn').classList.remove('active');
+    addMsg('assistant', 'Image analysis failed: ' + e.message);
+  }
+}
+
+// ── Raw prompt sender (for PDF / image inject) ────────────────────────────────
+async function sendRaw(promptText) {
+  if (!online) { rmTyping(); addMsg('assistant', 'LOGAT is offline. Start ollama first.'); return; }
+  try {
+    const messages = [
+      { role: 'system', content: buildPrompt() },
+      ...history,
+      { role: 'user', content: promptText }
+    ];
+    const res = await fetch(`${OLLAMA}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, stream: true, messages })
+    });
+    if (!res.ok) throw new Error('status ' + res.status);
+    rmTyping();
+    const msgEl = addMsg('assistant', '');
+    const txtEl = msgEl.querySelector('.txt');
+    setOrb('thinking');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullReply = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
+      for (const line of lines) {
+        try {
+          const j = JSON.parse(line);
+          if (j.message?.content) {
+            fullReply += j.message.content;
+            txtEl.innerHTML = md(fullReply);
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+          }
+        } catch(e) {}
+      }
+    }
+    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
+    if (rm) { addFact(rm[1].trim()); fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim(); txtEl.innerHTML = md(fullReply); }
+    setOrb('');
+    history.push({ role: 'assistant', content: fullReply });
+    if (history.length > 40) history = history.slice(-40);
+    await saveChat();
+    speak(fullReply);
+  } catch(err) {
+    rmTyping(); setOrb(''); online = false; pip.classList.add('off');
+    addMsg('assistant', 'Lost connection. Run ollama serve in Terminal.');
+  }
+}
+
+// ── AI ──
+function buildPrompt() {
+  let p = BASE;
+  if (mode !== 'all' && settings.modes) {
+    const m = settings.modes.find(x => x.id === mode);
+    if (m) p += `\n\nRight now buddy is in ${m.name} mode.${m.desc ? ' ' + m.desc : ''}`;
+  }
+  if (memory.length > 0) p += '\n\nWhat you know about buddy:\n' + memory.map((f, i) => `${i+1}. ${f}`).join('\n');
+  return p;
+}
+
+async function send(userText) {
+  const text = userText || inpEl.value.trim();
+  if (!text) return;
+  if (!online) { await checkOllama(); if (!online) return; }
+  inpEl.value = '';
+  addMsg('user', text);
+  history.push({ role: 'user', content: text });
+  setOrb('thinking'); showTyping();
+
+  try {
+    const res = await fetch(`${OLLAMA}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL, stream: true, messages: [{ role: 'system', content: buildPrompt() }, ...history] })
+    });
+    if (!res.ok) throw new Error('status ' + res.status);
+    rmTyping();
+    const msgEl = addMsg('assistant', '');
+    const txtEl = msgEl.querySelector('.txt');
+    setOrb('thinking');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullReply = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
+      for (const line of lines) {
+        try {
+          const j = JSON.parse(line);
+          if (j.message?.content) {
+            fullReply += j.message.content;
+            txtEl.innerHTML = md(fullReply);
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+          }
+        } catch(e) {}
+      }
+    }
+    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
+    if (rm) {
+      addFact(rm[1].trim());
+      fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim();
+      txtEl.innerHTML = md(fullReply);
+      const chip = document.createElement('div');
+      chip.className = 'mchip'; chip.textContent = '⬡ REMEMBERED';
+      msgEl.querySelector('.bbl').appendChild(chip);
+    }
+    setOrb('');
+    history.push({ role: 'assistant', content: fullReply });
+    if (history.length > 40) history = history.slice(-40);
+    await saveChat();
+    speak(fullReply);
+  } catch(err) {
+    rmTyping(); setOrb(''); online = false; pip.classList.add('off');
+    addMsg('assistant', 'Lost connection. Run ollama serve in Terminal then tap the orb.');
+  }
+}
+
+function orbClick() { if (!online) { checkOllama(); return; } toggleMic(); }
+async function toggleMic() { if (listening) { stopMic(); return; } startMic(); }
+
+// ── Mic with silence detection ──
+async function startMic() {
+  stopWakeWordDetection();
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+
+    // Silence detection setup
+    const audioCtx = new AudioContext();
+    await audioCtx.resume(); // AudioContext starts suspended in Electron — must resume
+    const source = audioCtx.createMediaStreamSource(stream);
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    source.connect(analyser);
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    let silenceTimer = null;
+    let recordStart = Date.now();
+    const MIN_RECORD_MS = 600;
+    const SILENCE_THRESHOLD = 14;
+    const SILENCE_DURATION = 1500;
+
+    const checkSilence = () => {
+      if (!listening) return;
+      analyser.getByteFrequencyData(dataArray);
+      const rms = Math.sqrt(dataArray.reduce((s, v) => s + v * v, 0) / dataArray.length);
+      if (rms < SILENCE_THRESHOLD && Date.now() - recordStart > MIN_RECORD_MS) {
+        if (!silenceTimer) silenceTimer = setTimeout(() => { if (listening) stopMic(); }, SILENCE_DURATION);
+      } else {
+        if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
+      }
+      requestAnimationFrame(checkSilence);
+    };
+
+    mediaRec = new MediaRecorder(stream);
+    mediaRec.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRec.onstop = async () => {
+      if (silenceTimer) clearTimeout(silenceTimer);
+      try { audioCtx.close(); } catch(e) {}
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const b64 = reader.result.split(',')[1];
+        setOrb('thinking'); olbl.textContent = 'transcribing...';
+        const result = await ipcRenderer.invoke('transcribe-audio', b64);
+        setOrb('');
+        if (result.ok && result.text) send(result.text);
+        else if (result.error === 'WHISPER_NOT_FOUND') addMsg('assistant', 'Whisper not found. Run: pip3 install openai-whisper');
+        else addMsg('assistant', 'Could not transcribe. Try again.');
+      };
+      reader.readAsDataURL(blob);
+    };
+
+    mediaRec.start();
+    listening = true;
+    setOrb('listening');
+    micBtn.classList.add('on');
+    checkSilence();
+  } catch(e) { addMsg('assistant', 'Mic error: ' + e.message); }
+}
+
+function stopMic() {
+  if (mediaRec && mediaRec.state !== 'inactive') mediaRec.stop();
+  listening = false; micBtn.classList.remove('on');
+}
+
+// ── Clap detection ──
+let clapLastTime = 0, clapCount = 0, clapInterval = null;
+
+async function startClapDetection() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new AudioContext();
+    await ctx.resume(); // AudioContext starts suspended in Electron — must resume
+    const source = ctx.createMediaStreamSource(stream);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0;
+    source.connect(analyser);
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    const THRESHOLD = 160; // lower = more sensitive; raise if false positives
+    const COOLDOWN = 200;  // min ms between detected claps
+
+    clapInterval = setInterval(() => {
+      if (listening) return;
+      analyser.getByteFrequencyData(data);
+      // Use high-frequency peak (claps are transient broadband bursts)
+      let peak = 0;
+      for (let i = 0; i < data.length; i++) if (data[i] > peak) peak = data[i];
+      const now = Date.now();
+      if (peak > THRESHOLD && now - clapLastTime > COOLDOWN) {
+        clapLastTime = now;
+        clapCount++;
+        // Flash orb white briefly as clap feedback
+        orbEl.style.filter = 'brightness(2.5)';
+        setTimeout(() => { orbEl.style.filter = ''; }, 80);
+        if (clapCount === 1) {
+          setTimeout(() => { clapCount = 0; }, 1000);
+        } else if (clapCount >= 2) {
+          clapCount = 0;
+          handleDoubleClap();
+        }
+      }
+    }, 20);
+  } catch(e) {
+    console.warn('Clap detection unavailable:', e.message);
+  }
+}
+
+function handleDoubleClap() {
+  if (settings.clapAppPath) {
+    ipcRenderer.invoke('launch-app', settings.clapAppPath);
+  } else {
+    ipc('show-window');
+  }
+}
+
+inpEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) send(); });
+
+// ── Voice pre-loading (Electron starts with empty voice list) ─────────────────
+let cachedVoices = [];
+let voicesReady = false;
+const voiceReadyCallbacks = [];
+
+function onVoicesLoaded() {
+  cachedVoices = window.speechSynthesis.getVoices();
+  if (cachedVoices.length && !voicesReady) {
+    voicesReady = true;
+    voiceReadyCallbacks.forEach(r => r());
+    voiceReadyCallbacks.length = 0;
+  }
+}
+
+function waitForVoices() {
+  if (voicesReady || cachedVoices.length) return Promise.resolve();
+  return new Promise(resolve => {
+    voiceReadyCallbacks.push(resolve);
+    setTimeout(resolve, 3000); // hard fallback after 3s
+  });
+}
+
+window.speechSynthesis.onvoiceschanged = onVoicesLoaded;
+// Trigger early so voices load as fast as possible
+cachedVoices = window.speechSynthesis.getVoices();
+if (cachedVoices.length) voicesReady = true;
+
+// ── Init ──
+document.getElementById('taskInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+
+setTimeout(async () => {
+  await loadMem();
+  await loadSettingsFromDisk();
+  await loadAppsFromDisk();
+  await loadTasks();
+  await checkStorage();
+  curId = 'chat_' + Date.now();
+  await checkOllama();          // speaks briefing → auto-listen starts inside
+  renderChatList();
+  startClapDetection();
+  startWakeWordDetection();     // active from launch; auto-listen will pause it when it starts
+  setInterval(checkStorage, 30000);
+}, 800);
+</script>
+</body>
+</html>

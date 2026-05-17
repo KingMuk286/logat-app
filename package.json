@@ -1,0 +1,28 @@
+{
+  "name": "logat",
+  "version": "1.0.0",
+  "description": "LOGAT - Mukunth's AI Assistant",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.mukunth.logat",
+    "productName": "LOGAT",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [{"target": "dir", "arch": ["arm64"]}],
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "title": "LOGAT",
+      "window": {"width": 540, "height": 380}
+    },
+    "files": ["main.js", "index.html", "package.json"]
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^24.0.0"
+  }
+}

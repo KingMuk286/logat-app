@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -x LOGAT)",
+      "Bash(rm -rf /Applications/LOGAT.app)",
+      "Bash(cp -r \"/Users/mukunthanurradhavenkat/Desktop/Calude Stuff/logat-app/dist/LOGAT-darwin-arm64/LOGAT.app\" /Applications/)",
+      "Bash(open /Applications/LOGAT.app)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

@@ -408,7 +408,7 @@ svg{pointer-events:none}
         <div class="settings-section-title">Custom Greeting</div>
         <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
           <div class="setting-sublabel" style="color:var(--mt2)">Added to LOGAT's startup briefing every time</div>
-          <textarea class="greeting-textarea" id="customGreetingTA" placeholder="e.g. Remind me to check the lawn schedule. The mower is in for service this week." oninput="saveCustomGreeting()"></textarea>
+          <textarea class="greeting-textarea" id="customGreetingTA" placeholder="e.g. Remind me to review my schedule. I have a big meeting this week." oninput="saveCustomGreeting()"></textarea>
         </div>
       </div>
 
@@ -482,9 +482,7 @@ const { ipcRenderer } = require('electron');
 const OLLAMA = 'http://127.0.0.1:11434';
 let MODEL = 'llama3';
 
-const BASE = `You are LOGAT — Mukunth's personal AI assistant. Mukunth runs a lawn care business and works on robotics projects.
-
-Always call Mukunth "buddy" — never "Mukunth" in conversation. Talk like a sharp, confident AI companion. Short sentences. Conversational. No bullet point lists unless absolutely needed. No "Certainly!" or "Great question!" — just talk. Be direct, warm, and a little dry. When you know the answer, give it fast.
+const BASE = `You are LOGAT — a personal AI assistant. Always call the user "buddy" — never by name in conversation. Talk like a sharp, confident AI companion. Short sentences. Conversational. No bullet point lists unless absolutely needed. No "Certainly!" or "Great question!" — just talk. Be direct, warm, and a little dry. When you know the answer, give it fast.
 
 When you learn something important about buddy worth remembering long-term, end your reply with:
 REMEMBER: [the fact]
@@ -1055,7 +1053,7 @@ async function getMorningBriefing() {
     msg += `<br>${wx}.`;
     // Context tip based on weather
     if (weather.toLowerCase().includes('rain') || weather.toLowerCase().includes('storm'))
-      msg += ` Heads up — weather could affect your lawn jobs today.`;
+      msg += ` Heads up — it's a rough one out there today.`;
     else if (parseInt(weather.match(/(\d+)°F/)?.[1] || '70') > 90)
       msg += ` It's a hot one out there. Stay hydrated on the job.`;
   }
@@ -1351,7 +1349,7 @@ async function attachImage() {
       stream: true,
       messages: [{
         role: 'user',
-        content: 'You are an expert electronics and robotics engineer. Analyze this schematic or image in detail. Identify all components, connections, voltages, and signal paths. Explain what the circuit or system does, how it works, and flag anything unusual or potentially wrong. Be thorough and technical.',
+        content: 'You are an expert analyst. Analyze this image in detail — identify all key elements, explain what you see, describe how things connect or relate, and flag anything unusual or worth noting. Be thorough.',
         images: [result.b64]
       }]
     };

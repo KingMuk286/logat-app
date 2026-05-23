@@ -482,9 +482,9 @@ const { ipcRenderer } = require('electron');
 const OLLAMA = 'http://127.0.0.1:11434';
 let MODEL = 'llama3';
 
-const BASE = `You are LOGAT — a personal AI assistant. Always call the user "buddy" — never by name in conversation. Talk like a sharp, confident AI companion. Short sentences. Conversational. No bullet point lists unless absolutely needed. No "Certainly!" or "Great question!" — just talk. Be direct, warm, and a little dry. When you know the answer, give it fast.
+const BASE = `You are LOGAT — a J.A.R.V.I.S.-inspired personal AI system. You are precise, calm, and efficient. Address the user as "buddy." Short, decisive sentences. No filler words. No "Certainly!" or "Great question!" — respond with quiet confidence. Think Jarvis from Iron Man: composed, sharp, always useful, occasionally dry. Deliver answers immediately when you know them.
 
-When you learn something important about buddy worth remembering long-term, end your reply with:
+When you learn something worth remembering long-term, end your reply with:
 REMEMBER: [the fact]
 Only for genuinely useful long-term facts.`;
 
@@ -497,11 +497,12 @@ let sbOpen = true, searchQ = '';
 let currentPanel = 'chat';
 let pinnedApps = [];
 let tasks = [];
-let settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
+let settings = { voiceOn: true, voiceSpeed: 0.95, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
 let ctxTargetIndex = -1;
 let storageInfo = null;
 let retryInterval = null;
 let checkingOllama = false;
+let hasBriefed = false;
 // Auto-listen mode
 let autoListenMode = false;
 let autoListenEndTime = 0;
@@ -974,7 +975,6 @@ async function saveChat() {
   if (!curId || !history.length) return;
   const title = history.find(m => m.role === 'user')?.content?.substring(0, 45) || 'Untitled';
   await ipcRenderer.invoke('save-chat', { id: curId, title, messages: history, savedAt: Date.now() });
-  renderChatList();
 }
 
 async function loadMem() {
@@ -1099,11 +1099,17 @@ async function checkOllama() {
     if (!found) throw new Error('no model');
     if (retryInterval) { clearInterval(retryInterval); retryInterval = null; }
     online = true; pip.classList.remove('off'); slbl.textContent = 'online'; alertEl.classList.remove('show');
-    const briefingEl = addMsg('assistant', 'Initializing...');
-    const briefing = await getMorningBriefing();
-    briefingEl.querySelector('.txt').innerHTML = briefing;
-    msgsEl.scrollTop = msgsEl.scrollHeight;
-    speak(briefing, () => startAutoListenMode());
+    if (!hasBriefed) {
+      hasBriefed = true;
+      const briefingEl = addMsg('assistant', 'Initializing...');
+      const briefing = await getMorningBriefing();
+      briefingEl.querySelector('.txt').innerHTML = briefing;
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+      speak(briefing, () => startAutoListenMode());
+    } else {
+      addMsg('assistant', 'Systems restored. Back online, buddy.');
+      speak('Systems restored. Back online, buddy.');
+    }
   } catch(e) {
     online = false; pip.classList.add('off'); slbl.textContent = 'offline'; alertEl.classList.add('show');
     alertEl.innerHTML = 'Ollama not running. Open Terminal:<br><b>ollama serve</b><br>Retrying every 30s automatically.';
@@ -1153,17 +1159,18 @@ async function speak(text, onDone) {
   await waitForVoices();
 
   const clean = text
-    .replace(/<br>/g, '. ')
+    .replace(/<br>/g, ' ')
     .replace(/<[^>]*>/g, '')
     .replace(/REMEMBER:.*$/m, '')
     .replace(/[*#`▲▼·]/g, '')
+    .replace(/\.{2,}/g, '.')
     .replace(/\s+/g, ' ')
     .trim()
     .substring(0, 900);
 
   const u = new SpeechSynthesisUtterance(clean);
-  u.rate   = settings.voiceSpeed || 1.05;
-  u.pitch  = 0.82;   // lower = deeper = more Jarvis
+  u.rate   = settings.voiceSpeed || 0.95;
+  u.pitch  = 0.75;   // deep Jarvis-style
   u.volume = 1.0;
 
   // Jarvis voice priority — Daniel (British male) is the best macOS option
@@ -1237,7 +1244,7 @@ function startWakeWordDetection() {
   wakeWordRecognition.onresult = (event) => {
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const t = event.results[i][0].transcript.toLowerCase();
-      if (t.includes('hey logat') || t.includes('hey log at') || t.includes('logat') || t.includes('log at')) {
+      if (t.includes('hey logat') || t.includes('hey log at')) {
         handleWakeWord(); break;
       }
     }
@@ -1340,7 +1347,7 @@ async function attachImage() {
     if (!result) return; // cancelled
     if (!result.ok) { addMsg('assistant', 'Could not read that image: ' + result.error); return; }
 
-    addMsg('user', `🔌 <b>${result.name}</b> — analyzing schematic…`);
+    addMsg('user', `🖼 <b>${result.name}</b> — analyzing image…`);
     setOrb('thinking'); showTyping();
 
     // Try llava (vision model) first
@@ -1385,12 +1392,13 @@ async function attachImage() {
           const j = JSON.parse(line);
           if (j.message?.content) {
             fullReply += j.message.content;
-            txtEl.innerHTML = md(fullReply);
+            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
             msgsEl.scrollTop = msgsEl.scrollHeight;
           }
         } catch(e) {}
       }
     }
+    txtEl.innerHTML = md(fullReply);
     setOrb('');
     history.push({ role: 'assistant', content: fullReply });
     await saveChat();
@@ -1432,12 +1440,13 @@ async function sendRaw(promptText) {
           const j = JSON.parse(line);
           if (j.message?.content) {
             fullReply += j.message.content;
-            txtEl.innerHTML = md(fullReply);
+            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
             msgsEl.scrollTop = msgsEl.scrollHeight;
           }
         } catch(e) {}
       }
     }
+    txtEl.innerHTML = md(fullReply);
     const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
     if (rm) { addFact(rm[1].trim()); fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim(); txtEl.innerHTML = md(fullReply); }
     setOrb('');
@@ -1448,6 +1457,7 @@ async function sendRaw(promptText) {
   } catch(err) {
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
     addMsg('assistant', 'Lost connection. Run ollama serve in Terminal.');
+    startOfflineRetry();
   }
 }
 
@@ -1494,12 +1504,13 @@ async function send(userText) {
           const j = JSON.parse(line);
           if (j.message?.content) {
             fullReply += j.message.content;
-            txtEl.innerHTML = md(fullReply);
+            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
             msgsEl.scrollTop = msgsEl.scrollHeight;
           }
         } catch(e) {}
       }
     }
+    txtEl.innerHTML = md(fullReply);
     const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
     if (rm) {
       addFact(rm[1].trim());
@@ -1515,8 +1526,10 @@ async function send(userText) {
     await saveChat();
     speak(fullReply);
   } catch(err) {
+    history.pop();
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
     addMsg('assistant', 'Lost connection. Run ollama serve in Terminal then tap the orb.');
+    startOfflineRetry();
   }
 }
 

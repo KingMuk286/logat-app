@@ -1294,8 +1294,14 @@ async function checkOllama() {
   try {
     const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(4000) });
     const d = await r.json();
-    const found = (d.models || []).find(m => m.name.includes('llama') || m.name === MODEL);
-    if (!found) throw new Error('no model');
+    const available = (d.models || []).map(m => m.name);
+    if (!available.length) throw new Error('no models installed');
+    // Auto-select a model if the current one isn't available
+    if (!available.includes(MODEL)) {
+      MODEL = available[0];
+      settings.model = MODEL;
+      saveSettings();
+    }
     if (retryInterval) { clearInterval(retryInterval); retryInterval = null; }
     online = true; pip.classList.remove('off'); slbl.textContent = 'online'; alertEl.classList.remove('show');
     if (!hasBriefed) {
@@ -1350,15 +1356,17 @@ function setOrb(s) {
 }
 
 // ── Voice ──
+let speakResumeInterval = null;
+
 async function speak(text, onDone) {
   if (!settings.voiceOn) { setOrb(''); if (onDone) onDone(); return; }
   window.speechSynthesis.cancel();
+  if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
 
-  // Wait for voices to be ready (critical on first startup in Electron)
   await waitForVoices();
 
   const clean = text
-    .replace(/<br>/g, ' ')
+    .replace(/<br>/gi, ' ')
     .replace(/<[^>]*>/g, '')
     .replace(/REMEMBER:.*$/m, '')
     .replace(/[*#`▲▼·]/g, '')
@@ -1367,19 +1375,17 @@ async function speak(text, onDone) {
     .trim()
     .substring(0, 900);
 
+  if (!clean) { setOrb(''); if (onDone) onDone(); return; }
+
   const u = new SpeechSynthesisUtterance(clean);
-  u.rate   = settings.voiceSpeed || 0.95;
-  u.pitch  = 0.75;   // deep Jarvis-style
+  u.rate   = settings.voiceSpeed || 1.05;
+  u.pitch  = 0.75;
   u.volume = 1.0;
 
-  // Jarvis voice priority — Daniel (British male) is the best macOS option
   const preferred = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
   const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
   let pick = null;
-  for (const name of preferred) {
-    pick = voices.find(v => v.name === name);
-    if (pick) break;
-  }
+  for (const name of preferred) { pick = voices.find(v => v.name === name); if (pick) break; }
   if (!pick) pick = voices.find(v => v.lang === 'en-GB' && v.localService);
   if (!pick) pick = voices.find(v => v.lang.startsWith('en') && v.localService);
   if (!pick) pick = voices.find(v => v.lang.startsWith('en'));
@@ -1387,20 +1393,31 @@ async function speak(text, onDone) {
 
   setOrb('speaking');
 
-  u.onend = () => {
+  // Electron/Chrome bug: long utterances stall — resume() every 10s prevents freeze
+  speakResumeInterval = setInterval(() => {
+    if (window.speechSynthesis.speaking) window.speechSynthesis.resume();
+    else { clearInterval(speakResumeInterval); speakResumeInterval = null; }
+  }, 10000);
+
+  const finish = () => {
+    if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
     setOrb('');
     if (onDone) { onDone(); return; }
     if (autoListenMode && !listening) { setTimeout(() => { if (autoListenMode) startMic(); }, 600); return; }
     setTimeout(startWakeWordDetection, 500);
   };
+
+  u.onend = finish;
   u.onerror = (ev) => {
-    // 'interrupted' is normal (cancel called), skip re-triggering
+    if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
     if (ev.error === 'interrupted') return;
     setOrb('');
     if (onDone) onDone();
     else setTimeout(startWakeWordDetection, 500);
   };
-  window.speechSynthesis.speak(u);
+
+  // 50ms gap after cancel() prevents dropped-utterance bug in Electron
+  setTimeout(() => window.speechSynthesis.speak(u), 50);
 }
 
 // ── Auto-listen mode (2 min on startup) ──
@@ -1454,7 +1471,9 @@ function startWakeWordDetection() {
   };
   wakeWordRecognition.onerror = (e) => {
     wakeWordActive = false;
-    if (e.error !== 'aborted' && !autoListenMode && !listening) setTimeout(startWakeWordDetection, 2000);
+    if (e.error === 'aborted' || autoListenMode || listening) return;
+    // no-speech is normal silence; restart quickly. Other errors get a longer backoff.
+    setTimeout(startWakeWordDetection, e.error === 'no-speech' ? 500 : 2000);
   };
   try {
     wakeWordRecognition.start();
@@ -1549,29 +1568,15 @@ async function attachImage() {
     addMsg('user', `🖼 <b>${result.name}</b> — analyzing image…`);
     setOrb('thinking'); showTyping();
 
-    // Try llava (vision model) first
-    const visionBody = {
-      model: 'llava',
-      stream: true,
-      messages: [{
-        role: 'user',
-        content: 'You are an expert analyst. Analyze this image in detail — identify all key elements, explain what you see, describe how things connect or relate, and flag anything unusual or worth noting. Be thorough.',
-        images: [result.b64]
-      }]
-    };
-    let res;
+    // Verify llava is installed before streaming
     try {
-      res = await fetch(`${OLLAMA}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(visionBody)
-      });
-      if (!res.ok) throw new Error('llava not available');
+      const check = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(3000) });
+      const d = await check.json();
+      if (!(d.models || []).some(m => m.name.startsWith('llava'))) throw new Error('not installed');
     } catch(_) {
-      // llava not installed — fall back to text description request
       rmTyping();
-      addMsg('assistant', 'I need the llava vision model to analyze schematics.<br>Install it with:<br><b>ollama pull llava</b><br>Then try again.');
-      speak("I need the llava vision model to read schematics. Install it by running ollama pull llava in Terminal, then try again, buddy.");
+      addMsg('assistant', 'I need the llava vision model to analyze images.<br>Install it with:<br><b>ollama pull llava</b><br>Then try again.');
+      speak("I need the llava vision model. Install it by running ollama pull llava in Terminal, then try again, buddy.");
       return;
     }
 
@@ -1579,24 +1584,14 @@ async function attachImage() {
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
     setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
+    const visionMessages = [{
+      role: 'user',
+      content: 'You are an expert analyst. Analyze this image in detail — identify all key elements, explain what you see, describe how things connect or relate, and flag anything unusual or worth noting. Be thorough.',
+      images: [result.b64]
+    }];
+    const fullReply = await streamOllamaChat(visionMessages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    }, 'llava');
     txtEl.innerHTML = md(fullReply);
     setOrb('');
     history.push({ role: 'assistant', content: fullReply });
@@ -1608,56 +1603,62 @@ async function attachImage() {
   }
 }
 
-// ── Raw prompt sender (for PDF / image inject) ────────────────────────────────
+// ── Raw prompt sender (for PDF inject) ───────────────────────────────────────
 async function sendRaw(promptText) {
   if (!online) { rmTyping(); addMsg('assistant', 'LOGAT is offline. Start ollama first.'); return; }
   try {
-    const messages = [
-      { role: 'system', content: buildPrompt() },
-      ...history,
-      { role: 'user', content: promptText }
-    ];
-    const res = await fetch(`${OLLAMA}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, stream: true, messages })
-    });
-    if (!res.ok) throw new Error('status ' + res.status);
+    const messages = [{ role: 'system', content: buildPrompt() }, ...history, { role: 'user', content: promptText }];
     rmTyping();
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
     setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
-    txtEl.innerHTML = md(fullReply);
-    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
-    if (rm) { addFact(rm[1].trim()); fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim(); txtEl.innerHTML = md(fullReply); }
+    let raw = await streamOllamaChat(messages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    });
+    raw = extractMemory(raw, null);
+    txtEl.innerHTML = md(raw);
     setOrb('');
-    history.push({ role: 'assistant', content: fullReply });
+    history.push({ role: 'assistant', content: raw });
     if (history.length > 40) history = history.slice(-40);
     await saveChat();
-    speak(fullReply);
+    speak(raw);
   } catch(err) {
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
     addMsg('assistant', 'Lost connection. Run ollama serve in Terminal.');
     startOfflineRetry();
   }
+}
+
+// ── Shared Ollama chat streaming ──────────────────────────────────────────────
+async function streamOllamaChat(messages, onChunk, model) {
+  const res = await fetch(`${OLLAMA}/api/chat`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: model || MODEL, stream: true, messages })
+  });
+  if (!res.ok) throw new Error('status ' + res.status);
+  const reader = res.body.getReader(); const dec = new TextDecoder();
+  let full = '';
+  while (true) {
+    const { done, value } = await reader.read(); if (done) break;
+    for (const line of dec.decode(value).split('\n').filter(l => l.trim())) {
+      try { const j = JSON.parse(line); if (j.message?.content) { full += j.message.content; if (onChunk) onChunk(full); } } catch(_) {}
+    }
+  }
+  return full;
+}
+
+// Apply a REMEMBER fact from a reply; returns cleaned text
+function extractMemory(fullReply, msgEl) {
+  const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
+  if (!rm) return fullReply;
+  addFact(rm[1].trim());
+  const clean = fullReply.replace(/REMEMBER:\s*.+/im, '').trim();
+  if (msgEl) {
+    const chip = document.createElement('div');
+    chip.className = 'mchip'; chip.textContent = '⬡ REMEMBERED';
+    msgEl.querySelector('.bbl').appendChild(chip);
+  }
+  return clean;
 }
 
 // ── AI ──
@@ -1679,51 +1680,21 @@ async function send(userText) {
   addMsg('user', text);
   history.push({ role: 'user', content: text });
   setOrb('thinking'); showTyping();
-
   try {
-    const res = await fetch(`${OLLAMA}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, stream: true, messages: [{ role: 'system', content: buildPrompt() }, ...history] })
-    });
-    if (!res.ok) throw new Error('status ' + res.status);
+    const messages = [{ role: 'system', content: buildPrompt() }, ...history];
     rmTyping();
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
-    setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
-    txtEl.innerHTML = md(fullReply);
-    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
-    if (rm) {
-      addFact(rm[1].trim());
-      fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim();
-      txtEl.innerHTML = md(fullReply);
-      const chip = document.createElement('div');
-      chip.className = 'mchip'; chip.textContent = '⬡ REMEMBERED';
-      msgEl.querySelector('.bbl').appendChild(chip);
-    }
+    let raw = await streamOllamaChat(messages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    });
+    raw = extractMemory(raw, msgEl);
+    txtEl.innerHTML = md(raw);
     setOrb('');
-    history.push({ role: 'assistant', content: fullReply });
+    history.push({ role: 'assistant', content: raw });
     if (history.length > 40) history = history.slice(-40);
     await saveChat();
-    speak(fullReply);
+    speak(raw);
   } catch(err) {
     history.pop();
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
@@ -1854,26 +1825,18 @@ function handleDoubleClap() {
 
 inpEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) send(); });
 
-// ── Shared Ollama streaming utility ──────────────────────────────────────────
+// ── Shared query helper for Research / Docs AI ────────────────────────────────
 async function queryOllamaCollect(prompt, liveEl) {
-  let text = '';
   try {
-    const res = await fetch(`${OLLAMA}/api/chat`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, stream: true, messages: [{ role: 'user', content: prompt }] })
-    });
-    const reader = res.body.getReader(); const decoder = new TextDecoder();
-    while (true) {
-      const { done, value } = await reader.read(); if (done) break;
-      for (const line of decoder.decode(value).split('\n').filter(l => l.trim())) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) { text += j.message.content; if (liveEl) liveEl.innerHTML = md(text); }
-        } catch(_) {}
-      }
-    }
-  } catch(e) { text = `[Error: ${e.message}]`; if (liveEl) liveEl.textContent = text; }
-  return text;
+    return await streamOllamaChat(
+      [{ role: 'user', content: prompt }],
+      liveEl ? full => { liveEl.innerHTML = md(full); } : null
+    );
+  } catch(e) {
+    const err = `[Error: ${e.message}]`;
+    if (liveEl) liveEl.textContent = err;
+    return err;
+  }
 }
 
 // ── Panel show functions ──────────────────────────────────────────────────────
@@ -2050,26 +2013,23 @@ async function runComparison() {
   const resB = document.getElementById('compareResB');
   const timA = document.getElementById('timingA');
   const timB = document.getElementById('timingB');
-  resA.innerHTML = '<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
-  resB.innerHTML = '<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  const cols = document.querySelectorAll('.compare-col-label');
+
+  // Update labels before running so the user sees which model is which
+  if (cols[0]) cols[0].childNodes[0].textContent = modelA.split(':')[0].toUpperCase() + ' ';
+  if (cols[1]) cols[1].childNodes[0].textContent = modelB.split(':')[0].toUpperCase() + ' ';
   timA.textContent = timB.textContent = '';
-  // Update col labels with model names
-  resA.previousElementSibling.querySelector('.compare-col-label') && (resA.previousElementSibling.querySelector('div').childNodes[0].textContent = modelA.toUpperCase());
+  const dots = '<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  resA.innerHTML = resB.innerHTML = dots;
 
   const runModel = async (model, resEl, timEl) => {
-    const t0 = Date.now(); resEl.innerHTML = ''; let text = '';
+    const t0 = Date.now(); resEl.innerHTML = '';
     try {
-      const res = await fetch(`${OLLAMA}/api/chat`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model, stream: true, messages: [{ role: 'user', content: prompt }] })
-      });
-      const reader = res.body.getReader(); const dec = new TextDecoder();
-      while (true) {
-        const { done, value } = await reader.read(); if (done) break;
-        for (const line of dec.decode(value).split('\n').filter(l => l.trim())) {
-          try { const j = JSON.parse(line); if (j.message?.content) { text += j.message.content; resEl.innerHTML = md(text); } } catch(_) {}
-        }
-      }
+      await streamOllamaChat(
+        [{ role: 'user', content: prompt }],
+        full => { resEl.innerHTML = md(full); },
+        model
+      );
     } catch(e) { resEl.textContent = `Error: ${e.message}`; }
     timEl.textContent = ((Date.now() - t0) / 1000).toFixed(1) + 's';
   };
@@ -2078,11 +2038,6 @@ async function runComparison() {
     runModel(modelA, resA, timA),
     runModel(modelB, resB, timB)
   ]);
-
-  // Update col labels
-  const cols = document.querySelectorAll('.compare-col-label');
-  if (cols[0]) { cols[0].childNodes[0].textContent = modelA.split(':')[0].toUpperCase() + ' '; }
-  if (cols[1]) { cols[1].childNodes[0].textContent = modelB.split(':')[0].toUpperCase() + ' '; }
 
   compareRunning = false;
   btn.textContent = 'Compare'; btn.disabled = false;

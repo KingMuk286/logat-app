@@ -388,6 +388,34 @@ function createTray() {
   );
 }
 
+// ── IPC: Notes ────────────────────────────────────────────────────────────────
+ipcMain.handle('load-notes', () => {
+  try {
+    const f = path.join(LOCAL_DIR, 'notes.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (_) {}
+  return { notes: [] };
+});
+
+ipcMain.handle('save-notes', (_, data) => {
+  try { fs.writeFileSync(path.join(LOCAL_DIR, 'notes.json'), JSON.stringify(data, null, 2)); return true; }
+  catch (_) { return false; }
+});
+
+// ── IPC: Documents ────────────────────────────────────────────────────────────
+ipcMain.handle('load-docs', () => {
+  try {
+    const f = path.join(LOCAL_DIR, 'documents.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (_) {}
+  return { docs: [] };
+});
+
+ipcMain.handle('save-docs', (_, data) => {
+  try { fs.writeFileSync(path.join(LOCAL_DIR, 'documents.json'), JSON.stringify(data, null, 2)); return true; }
+  catch (_) { return false; }
+});
+
 // ── App lifecycle ─────────────────────────────────────────────────────────────
 app.whenReady().then(async () => {
   await requestMic();

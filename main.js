@@ -7,7 +7,8 @@ process.env.PATH = [
 
 const {
   app, BrowserWindow, ipcMain, Tray, Menu,
-  nativeImage, systemPreferences, shell, dialog, screen, globalShortcut
+  nativeImage, systemPreferences, shell, dialog, screen, globalShortcut,
+  clipboard, desktopCapturer, Notification
 } = require('electron');
 const path = require('path');
 const fs   = require('fs');
@@ -414,6 +415,115 @@ ipcMain.handle('load-docs', () => {
 ipcMain.handle('save-docs', (_, data) => {
   try { fs.writeFileSync(path.join(LOCAL_DIR, 'documents.json'), JSON.stringify(data, null, 2)); return true; }
   catch (_) { return false; }
+});
+
+// ── IPC: Screenshot ───────────────────────────────────────────────────────────
+ipcMain.handle('take-screenshot', async () => {
+  try {
+    const sources = await desktopCapturer.getSources({
+      types: ['screen'], thumbnailSize: { width: 1920, height: 1080 }
+    });
+    if (!sources.length) return { ok: false, error: 'No screen source found' };
+    const b64 = sources[0].thumbnail.toPNG().toString('base64');
+    return { ok: true, b64, mime: 'image/png' };
+  } catch(e) { return { ok: false, error: e.message }; }
+});
+
+// ── IPC: System stats ─────────────────────────────────────────────────────────
+ipcMain.handle('get-system-stats', () => {
+  try {
+    const cpus = os.cpus();
+    let totalIdle = 0, totalTick = 0;
+    cpus.forEach(cpu => {
+      for (const t in cpu.times) totalTick += cpu.times[t];
+      totalIdle += cpu.times.idle;
+    });
+    const cpuPct = Math.round((1 - totalIdle / totalTick) * 100);
+    const free = os.freemem(), total = os.totalmem();
+    const ramPct = Math.round((1 - free / total) * 100);
+    const ramFreeGB = (free / 1e9).toFixed(1);
+    const ramTotalGB = (total / 1e9).toFixed(1);
+    const platform = os.platform();
+    const uptime = os.uptime();
+    return { ok: true, cpuPct, ramPct, ramFreeGB, ramTotalGB, platform, uptime };
+  } catch(e) { return { ok: false, error: e.message }; }
+});
+
+// ── IPC: Clipboard ────────────────────────────────────────────────────────────
+ipcMain.handle('read-clipboard', () => {
+  try { return { ok: true, text: clipboard.readText() }; }
+  catch(e) { return { ok: false, text: '' }; }
+});
+
+// ── IPC: Shell execution ──────────────────────────────────────────────────────
+ipcMain.handle('exec-shell', async (_, cmd) => {
+  const choice = await dialog.showMessageBox(mainWindow, {
+    type: 'warning', buttons: ['Run', 'Cancel'], defaultId: 1,
+    title: 'Execute Command', message: 'Run this shell command?', detail: cmd
+  });
+  if (choice.response !== 0) return { ok: false, error: 'Cancelled by user' };
+  return new Promise(resolve => {
+    exec(cmd, { timeout: 30000 }, (err, stdout, stderr) => {
+      if (err) resolve({ ok: false, error: err.message, output: stderr });
+      else resolve({ ok: true, output: (stdout || stderr || '(no output)').trim().substring(0, 3000) });
+    });
+  });
+});
+
+// ── IPC: Process list ─────────────────────────────────────────────────────────
+ipcMain.handle('get-processes', () => new Promise(resolve => {
+  const cmd = process.platform === 'darwin'
+    ? "ps aux -r | head -21"
+    : "ps aux --sort=-%cpu | head -21";
+  exec(cmd, { timeout: 10000 }, (err, stdout) => {
+    if (err) { resolve({ ok: false, processes: [] }); return; }
+    const lines = stdout.trim().split('\n').slice(1);
+    const processes = lines.map(line => {
+      const parts = line.trim().split(/\s+/);
+      return {
+        pid: parts[1],
+        cpu: parseFloat(parts[2]) || 0,
+        mem: parseFloat(parts[3]) || 0,
+        name: parts.slice(10).join(' ').substring(0, 35) || parts[10] || '?'
+      };
+    }).filter(p => p.pid && p.name);
+    resolve({ ok: true, processes: processes.slice(0, 18) });
+  });
+}));
+
+ipcMain.handle('kill-process', async (_, pid) => {
+  const choice = await dialog.showMessageBox(mainWindow, {
+    type: 'warning', buttons: ['Kill', 'Cancel'], defaultId: 1,
+    title: 'Kill Process', message: `Terminate process ${pid}?`
+  });
+  if (choice.response !== 0) return false;
+  return new Promise(resolve => { exec(`kill ${pid}`, err => resolve(!err)); });
+});
+
+// ── IPC: Reminders ────────────────────────────────────────────────────────────
+ipcMain.handle('load-reminders', () => {
+  try {
+    const f = path.join(LOCAL_DIR, 'reminders.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (_) {}
+  return { reminders: [] };
+});
+
+ipcMain.handle('save-reminders', (_, data) => {
+  try { fs.writeFileSync(path.join(LOCAL_DIR, 'reminders.json'), JSON.stringify(data, null, 2)); return true; }
+  catch (_) { return false; }
+});
+
+ipcMain.handle('show-notification', (_, { title, body }) => {
+  try {
+    if (Notification.isSupported()) new Notification({ title, body }).show();
+    return true;
+  } catch(_) { return false; }
+});
+
+// ── IPC: Open external URL ────────────────────────────────────────────────────
+ipcMain.handle('open-url', (_, url) => {
+  try { shell.openExternal(url); return true; } catch(_) { return false; }
 });
 
 // ── App lifecycle ─────────────────────────────────────────────────────────────

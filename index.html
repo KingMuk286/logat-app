@@ -220,6 +220,56 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .greeting-textarea{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:9px 12px;outline:none;resize:vertical;min-height:60px;transition:border-color .2s}
 .greeting-textarea:focus{border-color:rgba(232,0,26,.4)}
 .greeting-textarea::placeholder{color:#333338}
+/* ── SYSTEM PANEL ── */
+.system-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.stat-card{padding:12px 14px;border-radius:8px;border:1px solid var(--b);background:var(--s1);margin-bottom:8px}
+.stat-card-title{font-size:8px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;font-family:'Orbitron',monospace;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.stat-row:last-child{margin-bottom:0}
+.stat-label{font-size:10px;color:var(--mt2);width:36px;flex-shrink:0}
+.stat-bar-outer{flex:1;height:5px;background:var(--b);border-radius:3px;overflow:hidden}
+.stat-bar-inner{height:100%;border-radius:3px;transition:width .6s ease}
+.stat-bar-inner.cpu{background:var(--red)}
+.stat-bar-inner.ram{background:var(--orange)}
+.stat-bar-inner.disk{background:#0088ee}
+.stat-val{font-size:10px;color:var(--mt);width:38px;text-align:right;flex-shrink:0}
+.sys-section-title{font-size:8px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;font-family:'Orbitron',monospace;margin:12px 0 7px;display:flex;align-items:center;justify-content:space-between}
+.proc-table{width:100%;border-collapse:collapse;font-size:10px}
+.proc-table th{text-align:left;color:var(--mt);font-weight:400;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:4px 6px;border-bottom:1px solid var(--b)}
+.proc-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text);vertical-align:middle}
+.proc-table tr:hover td{background:var(--s2)}
+.proc-name{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proc-kill{padding:2px 6px;border-radius:3px;border:1px solid var(--b);background:transparent;color:var(--mt);font-size:8px;cursor:pointer;transition:all .12s}
+.proc-kill:hover{border-color:#ff4455;color:#ff4455}
+.clip-item{padding:7px 10px;border-radius:5px;border:1px solid var(--b);background:var(--s1);margin-bottom:4px;font-size:11px;color:var(--text);cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:8px}
+.clip-item:hover{background:var(--s2);border-color:rgba(232,0,26,.2)}
+.clip-item-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clip-copy-lbl{font-size:9px;color:var(--mt);flex-shrink:0;opacity:0;transition:opacity .15s}
+.clip-item:hover .clip-copy-lbl{opacity:1}
+
+/* ── REMINDERS PANEL ── */
+.reminders-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.reminder-add-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.reminder-inp{flex:1;min-width:120px;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;outline:none;transition:border-color .2s}
+.reminder-inp:focus{border-color:rgba(232,0,26,.4)}
+.reminder-inp::placeholder{color:#252528}
+.reminder-time-sel{background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;outline:none;cursor:pointer;-webkit-appearance:none;flex-shrink:0}
+.reminder-item{padding:10px 12px;border-radius:7px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;display:flex;align-items:center;gap:10px;transition:background .1s}
+.reminder-item:hover{background:var(--s2)}
+.reminder-item.fired{border-color:rgba(0,224,102,.15);opacity:.5}
+.reminder-icon{font-size:14px;flex-shrink:0}
+.reminder-info{flex:1;min-width:0}
+.reminder-text{font-size:12px;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reminder-meta{font-size:9px;color:var(--mt)}
+.reminder-del{background:none;border:none;color:#252528;cursor:pointer;font-size:16px;line-height:1;transition:color .15s;flex-shrink:0}
+.reminder-del:hover{color:#ff4455}
+
+/* ── FOCUS MODE OVERLAY ── */
+#focusBanner{display:none;position:fixed;top:0;left:0;right:0;z-index:9500;background:rgba(0,224,102,.07);border-bottom:1px solid rgba(0,224,102,.25);padding:4px 14px;font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;font-family:'Orbitron',monospace;text-align:center}
+#focusBanner.show{display:block}
+
+/* ── SHELL RESULT IN CHAT ── */
+.shell-result{font-family:monospace;font-size:11px;background:var(--bg2);border:1px solid var(--b);border-radius:5px;padding:8px 10px;margin-top:4px;overflow-x:auto;white-space:pre;color:#c8c8d8;max-height:200px}
 svg{pointer-events:none}
 
 /* ── MINI MODE ── */
@@ -395,6 +445,8 @@ svg{pointer-events:none}
     <button class="nbtn" id="nb-compare" onclick="showComparePanel()">Compare</button>
     <button class="nbtn" id="nb-docs" onclick="showDocsPanel()">Docs</button>
     <button class="nbtn" id="nb-cookbook" onclick="showCookbookPanel()">Cookbook</button>
+    <button class="nbtn" id="nb-system" onclick="showSystemPanel()">System</button>
+    <button class="nbtn" id="nb-reminders" onclick="showRemindersPanel()">Reminders</button>
     <div class="nav-sep"></div>
     <button class="nbtn icon-btn" id="nb-apps" onclick="showAppsPanel()" title="App Launcher">
       <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -444,6 +496,15 @@ svg{pointer-events:none}
       </button>
       <button class="ibtn attach" id="imgBtn" onclick="attachImage()" title="Analyze schematic / image">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="ibtn attach" id="screenBtn" onclick="captureScreen()" title="Screenshot → AI analysis">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </button>
+      <button class="ibtn attach" id="stopBtn" onclick="stopSpeech()" title="Stop speaking">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+      </button>
+      <button class="ibtn attach" id="searchBtn" onclick="searchFromInput()" title="Search the web">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <button class="ibtn mic" id="micBtn" onclick="toggleMic()">
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
@@ -502,6 +563,37 @@ svg{pointer-events:none}
             <button class="spd-btn" id="spd-fast" onclick="setVoiceSpeed(1.45)">Fast</button>
           </div>
         </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Voice Persona</div>
+            <div class="setting-sublabel">JARVIS (male) or FRIDAY (female)</div>
+          </div>
+          <div class="speed-group">
+            <button class="spd-btn on" id="vgender-jarvis" onclick="setVoiceGender('jarvis')">JARVIS</button>
+            <button class="spd-btn" id="vgender-friday" onclick="setVoiceGender('friday')">FRIDAY</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Hold-to-Record</div>
+            <div class="setting-sublabel">Hold Space bar to record, release to send</div>
+          </div>
+          <button class="toggle-btn" id="holdRecordToggle" onclick="toggleHoldRecord()">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Idle Timeout</div>
+            <div class="setting-sublabel">Mins of silence before returning to wake-word</div>
+          </div>
+          <div class="speed-group">
+            <button class="spd-btn" id="idle-1" onclick="setIdleTimeout(1)">1m</button>
+            <button class="spd-btn on" id="idle-5" onclick="setIdleTimeout(5)">5m</button>
+            <button class="spd-btn" id="idle-10" onclick="setIdleTimeout(10)">10m</button>
+            <button class="spd-btn" id="idle-off" onclick="setIdleTimeout(0)">Off</button>
+          </div>
+        </div>
       </div>
 
       <div class="settings-section">
@@ -523,6 +615,33 @@ svg{pointer-events:none}
             <span class="setting-val" id="clapAppName">LOGAT</span>
             <button class="setting-action" onclick="changeClapApp()">Change</button>
           </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Focus Mode</div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Focus Mode</div>
+            <div class="setting-sublabel">Block distractions, suppress non-reminder notifications</div>
+          </div>
+          <button class="toggle-btn" id="focusToggle" onclick="toggleFocusMode()">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Quick Actions</div>
+        <div class="setting-row">
+          <div class="setting-label">Web Search</div>
+          <div class="speed-group">
+            <button class="spd-btn on" id="se-ddg" onclick="setSearchEngine('ddg')">DuckDuckGo</button>
+            <button class="spd-btn" id="se-google" onclick="setSearchEngine('google')">Google</button>
+          </div>
+        </div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:6px">
+          <div class="setting-sublabel" style="color:var(--mt2)">Chat commands: "search for X", "youtube X", "email to X"</div>
         </div>
       </div>
 
@@ -654,6 +773,54 @@ svg{pointer-events:none}
     </div>
   </div>
 
+  <!-- SYSTEM PANEL -->
+  <div class="panel hidden" id="system-panel">
+    <div class="system-inner">
+      <div class="panel-heading" style="margin-bottom:10px">System Monitor
+        <button class="setting-action" onclick="refreshSystemStats()">Refresh</button>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Resources</div>
+        <div id="statBars"><div style="font-size:10px;color:var(--mt)">Loading…</div></div>
+      </div>
+      <div class="sys-section-title">Clipboard History
+        <button class="setting-action" onclick="clearClipHistory()">Clear</button>
+      </div>
+      <div id="clipList"><div style="font-size:11px;color:#333;padding:4px 0">Nothing copied yet.</div></div>
+      <div class="sys-section-title">Active Processes
+        <button class="setting-action" onclick="refreshProcesses()">Refresh</button>
+      </div>
+      <div id="procList"><div style="font-size:11px;color:#333;padding:4px 0">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- REMINDERS PANEL -->
+  <div class="panel hidden" id="reminders-panel">
+    <div class="reminders-inner">
+      <div class="panel-heading" style="margin-bottom:12px">Reminders
+        <span id="reminderCount" style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif"></span>
+      </div>
+      <div class="reminder-add-row">
+        <input class="reminder-inp" id="reminderInp" placeholder="Remind me to…" autocomplete="off"/>
+        <select class="reminder-time-sel" id="reminderTimeSel">
+          <option value="300000">5 min</option>
+          <option value="600000">10 min</option>
+          <option value="1800000">30 min</option>
+          <option value="3600000">1 hr</option>
+          <option value="7200000">2 hr</option>
+          <option value="14400000">4 hr</option>
+          <option value="28800000">8 hr</option>
+          <option value="86400000">Tomorrow</option>
+        </select>
+        <button class="task-add-btn" onclick="addReminder()">+ Add</button>
+      </div>
+      <div id="reminderList"></div>
+    </div>
+  </div>
+
+  <!-- Focus mode banner (fixed top) -->
+  <div id="focusBanner">⬡ FOCUS MODE ACTIVE — MINIMIZING DISTRACTIONS</div>
+
 <!-- Mini mode bar -->
 <div id="mini-bar">
   <div class="mini-logo">LOG</div>
@@ -739,13 +906,15 @@ searchInp.addEventListener('input', e => { searchQ = e.target.value.toLowerCase(
 // ── Panel navigation ──
 function hideAllPanels() {
   ['chat-panel','apps-panel','settings-panel','tasks-panel',
-   'research-panel','compare-panel','docs-panel','notes-panel','cookbook-panel']
+   'research-panel','compare-panel','docs-panel','notes-panel','cookbook-panel',
+   'system-panel','reminders-panel']
     .forEach(id => document.getElementById(id)?.classList.add('hidden'));
 }
 
 function setActiveNav(...ids) {
   ['nb-chats','nb-apps','nb-settings','nb-tasks',
-   'nb-research','nb-compare','nb-docs','nb-notes','nb-cookbook']
+   'nb-research','nb-compare','nb-docs','nb-notes','nb-cookbook',
+   'nb-system','nb-reminders']
     .forEach(id => document.getElementById(id)?.classList.remove('on'));
   ids.forEach(id => document.getElementById(id)?.classList.add('on'));
 }
@@ -894,8 +1063,15 @@ async function loadSettingsFromDisk() {
   renderModeNav();
   syncVoiceUI();
   setVoiceSpeed(settings.voiceSpeed || 1.15);
+  syncVoiceGenderUI();
+  syncHoldRecordUI();
+  syncIdleTimeoutUI();
+  syncFocusModeUI();
+  searchEngine = settings.searchEngine || 'ddg';
+  setSearchEngine(searchEngine);
   const n = document.getElementById('clapAppName');
   if (n) n.textContent = settings.clapApp || 'LOGAT';
+  if (settings.holdRecord) attachHoldRecord();
 }
 
 async function saveSettings() {
@@ -905,6 +1081,11 @@ async function saveSettings() {
 async function renderSettingsPanel() {
   syncVoiceUI();
   setVoiceSpeed(settings.voiceSpeed || 1.15);
+  syncVoiceGenderUI();
+  syncHoldRecordUI();
+  syncIdleTimeoutUI();
+  syncFocusModeUI();
+  setSearchEngine(settings.searchEngine || 'ddg');
   const n = document.getElementById('clapAppName');
   if (n) n.textContent = settings.clapApp || 'LOGAT';
   if (storageInfo) {
@@ -1355,6 +1536,17 @@ function setOrb(s) {
   if (wl) wl.textContent = wakeWordActive ? 'say: hey logat' : 'tap orb';
 }
 
+// ── Voice gender picker ───────────────────────────────────────────────────────
+function pickVoice(voices) {
+  const gender = settings.voiceGender || 'jarvis';
+  const malePrefs   = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
+  const femalePrefs = ['Samantha', 'Victoria', 'Karen', 'Serena', 'Ava', 'Allison', 'Google US English Female'];
+  const prefs = gender === 'friday' ? femalePrefs : malePrefs;
+  for (const name of prefs) { const v = voices.find(x => x.name === name); if (v) return v; }
+  if (gender === 'friday') return voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('male'));
+  return voices.find(v => v.lang === 'en-GB' && v.localService) || voices.find(v => v.lang.startsWith('en'));
+}
+
 // ── Voice ──
 let speakResumeInterval = null;
 
@@ -1382,13 +1574,8 @@ async function speak(text, onDone) {
   u.pitch  = 0.75;
   u.volume = 1.0;
 
-  const preferred = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
   const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
-  let pick = null;
-  for (const name of preferred) { pick = voices.find(v => v.name === name); if (pick) break; }
-  if (!pick) pick = voices.find(v => v.lang === 'en-GB' && v.localService);
-  if (!pick) pick = voices.find(v => v.lang.startsWith('en') && v.localService);
-  if (!pick) pick = voices.find(v => v.lang.startsWith('en'));
+  const pick = pickVoice(voices);
   if (pick) u.voice = pick;
 
   setOrb('speaking');
@@ -1675,8 +1862,10 @@ function buildPrompt() {
 async function send(userText) {
   const text = userText || inpEl.value.trim();
   if (!text) return;
+  if (detectChatIntent(text)) { inpEl.value = ''; return; }
   if (!online) { await checkOllama(); if (!online) return; }
   inpEl.value = '';
+  resetIdleTimer();
   addMsg('user', text);
   history.push({ role: 'user', content: text });
   setOrb('thinking'); showTyping();
@@ -2318,8 +2507,347 @@ window.speechSynthesis.onvoiceschanged = onVoicesLoaded;
 cachedVoices = window.speechSynthesis.getVoices();
 if (cachedVoices.length) voicesReady = true;
 
+// ── Screenshot / Vision ──
+async function captureScreen() {
+  try {
+    const b64 = await ipc('take-screenshot');
+    if (!b64) { addMsg('assistant', 'Screenshot failed.'); return; }
+    addMsg('user', '[screenshot attached]');
+    const bubble = addMsg('assistant', '…');
+    const payload = {
+      model: settings.model || 'llava',
+      messages: [
+        { role: 'user', content: 'Describe what you see on the screen.', images: [b64] }
+      ]
+    };
+    const res = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, stream: true })
+    });
+    let text = '';
+    const reader = res.body.getReader();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = new TextDecoder().decode(value).split('\n').filter(Boolean);
+      for (const line of lines) {
+        try {
+          const j = JSON.parse(line);
+          if (j.message?.content) { text += j.message.content; bubble.innerHTML = md(text); }
+        } catch {}
+      }
+    }
+    speak(text);
+    await saveChat();
+  } catch (e) { addMsg('assistant', 'Screenshot error: ' + e.message); }
+}
+
+// ── Streaming Ollama ──
+async function streamOllamaChat(messages, bubble) {
+  const res = await fetch('http://localhost:11434/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: settings.model || 'mistral', messages, stream: true })
+  });
+  let text = '';
+  const reader = res.body.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const lines = new TextDecoder().decode(value).split('\n').filter(Boolean);
+    for (const line of lines) {
+      try {
+        const j = JSON.parse(line);
+        if (j.message?.content) { text += j.message.content; bubble.innerHTML = md(text); }
+      } catch {}
+    }
+  }
+  return text;
+}
+
+// ── Stop Speech ──
+function stopSpeech() { window.speechSynthesis.cancel(); }
+
+// ── Search Engine ──
+let searchEngine = 'ddg';
+function setSearchEngine(e) {
+  searchEngine = e;
+  document.querySelectorAll('.se-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('se-' + e)?.classList.add('active');
+  if (settings) { settings.searchEngine = e; saveSettingsToDisk(); }
+}
+function searchFromInput() {
+  const q = inpEl.value.trim() || document.getElementById('researchQ')?.value?.trim();
+  if (q) searchWeb(q);
+}
+function searchWeb(q) {
+  const url = searchEngine === 'google'
+    ? 'https://www.google.com/search?q=' + encodeURIComponent(q)
+    : 'https://duckduckgo.com/?q=' + encodeURIComponent(q);
+  ipc('open-url', url);
+}
+function searchYoutube(q) { ipc('open-url', 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q)); }
+function openEmail() { ipc('open-url', 'mailto:'); }
+
+// ── Intent Detection ──
+function detectChatIntent(text) {
+  const t = text.toLowerCase().trim();
+  if (/^(search|find|look up|google)\s+(.+)/.test(t)) {
+    const q = t.replace(/^(search|find|look up|google)\s+/, '');
+    searchWeb(q);
+    return true;
+  }
+  if (/^(youtube|play)\s+(.+)/.test(t)) {
+    const q = t.replace(/^(youtube|play)\s+/, '');
+    searchYoutube(q);
+    return true;
+  }
+  if (/^open\s+(email|mail|gmail)/.test(t)) { openEmail(); return true; }
+  return false;
+}
+
+// ── Shell Exec ──
+async function execShellCommand(cmd) {
+  try {
+    const result = await ipc('exec-shell', cmd);
+    addMsg('assistant', '<div class="shell-result"><code>' + (result || '(no output)') + '</code></div>');
+  } catch (e) { addMsg('assistant', 'Shell error: ' + e.message); }
+}
+
+// ── Voice Gender ──
+function setVoiceGender(g) {
+  settings.voiceGender = g;
+  syncVoiceGenderUI();
+  saveSettingsToDisk();
+}
+function syncVoiceGenderUI() {
+  const g = settings.voiceGender || 'jarvis';
+  document.querySelectorAll('.vgender-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('vgender-' + g)?.classList.add('active');
+}
+
+// ── Hold-to-Record ──
+function toggleHoldRecord() {
+  settings.holdRecord = !settings.holdRecord;
+  syncHoldRecordUI();
+  saveSettingsToDisk();
+  if (settings.holdRecord) attachHoldRecord(); else detachHoldRecord();
+}
+function syncHoldRecordUI() {
+  const tog = document.getElementById('holdRecordToggle');
+  if (tog) tog.checked = !!settings.holdRecord;
+}
+function attachHoldRecord() {
+  document.removeEventListener('keydown', holdKeyDown);
+  document.removeEventListener('keyup', holdKeyUp);
+  document.addEventListener('keydown', holdKeyDown);
+  document.addEventListener('keyup', holdKeyUp);
+}
+function detachHoldRecord() {
+  document.removeEventListener('keydown', holdKeyDown);
+  document.removeEventListener('keyup', holdKeyUp);
+}
+let _holdActive = false;
+function holdKeyDown(e) {
+  if (e.code === 'Space' && !e.repeat && document.activeElement === document.body) {
+    e.preventDefault();
+    if (!_holdActive) { _holdActive = true; startListen(); }
+  }
+}
+function holdKeyUp(e) {
+  if (e.code === 'Space' && _holdActive) {
+    _holdActive = false;
+    stopListening();
+  }
+}
+
+// ── Idle Timeout ──
+let _idleTimer = null;
+function setIdleTimeout(mins) {
+  settings.idleTimeout = mins;
+  syncIdleTimeoutUI();
+  saveSettingsToDisk();
+  resetIdleTimer();
+}
+function resetIdleTimer() {
+  if (_idleTimer) clearTimeout(_idleTimer);
+  const m = parseInt(settings.idleTimeout) || 0;
+  if (m > 0) _idleTimer = setTimeout(() => { window.speechSynthesis.cancel(); }, m * 60000);
+}
+function syncIdleTimeoutUI() {
+  const v = String(settings.idleTimeout || 'off');
+  document.querySelectorAll('.idle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('idle-' + v)?.classList.add('active');
+}
+
+// ── Focus Mode ──
+function toggleFocusMode() {
+  settings.focusMode = !settings.focusMode;
+  syncFocusModeUI();
+  saveSettingsToDisk();
+}
+function syncFocusModeUI() {
+  const tog = document.getElementById('focusToggle');
+  if (tog) tog.checked = !!settings.focusMode;
+  const banner = document.getElementById('focusBanner');
+  if (banner) banner.classList.toggle('hidden', !settings.focusMode);
+}
+
+// ── System Panel ──
+async function showSystemPanel() {
+  hideAllPanels();
+  document.getElementById('system-panel')?.classList.remove('hidden');
+  setActiveNav('nb-system');
+  await refreshSystemStats();
+  await refreshProcesses();
+  startClipPolling();
+}
+async function refreshSystemStats() {
+  const stats = await ipc('get-system-stats');
+  if (!stats) return;
+  const pct = Math.round((1 - stats.freeMem / stats.totalMem) * 100);
+  const upH = Math.floor(stats.uptime / 3600);
+  const upM = Math.floor((stats.uptime % 3600) / 60);
+  const el = document.getElementById('statBars');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-row"><span>CPU Cores</span><span>${stats.cpuCount}</span></div>
+      <div class="stat-row"><span>CPU Model</span><span>${stats.cpuModel}</span></div>
+      <div class="stat-row"><span>RAM Used</span><span>${pct}%</span></div>
+      <div class="stat-bar-outer"><div class="stat-bar-inner" style="width:${pct}%"></div></div>
+      <div class="stat-row"><span>Uptime</span><span>${upH}h ${upM}m</span></div>
+    </div>`;
+}
+async function refreshProcesses() {
+  const procs = await ipc('get-processes');
+  if (!procs) return;
+  const el = document.getElementById('procList');
+  if (!el) return;
+  el.innerHTML = '<table class="proc-table"><tr><th>PID</th><th>CPU%</th><th>MEM%</th><th>Command</th><th></th></tr>' +
+    procs.slice(0, 20).map(p =>
+      `<tr><td>${p.pid}</td><td>${p.cpu}</td><td>${p.mem}</td><td>${p.cmd}</td>
+       <td><button onclick="killProcess(${p.pid})">Kill</button></td></tr>`
+    ).join('') + '</table>';
+}
+async function killProcess(pid) {
+  await ipc('kill-process', pid);
+  await refreshProcesses();
+}
+
+// ── Clipboard History ──
+let _clipHistory = [];
+let _clipLast = '';
+let _clipPollTimer = null;
+function startClipPolling() {
+  if (_clipPollTimer) return;
+  _clipPollTimer = setInterval(async () => {
+    const txt = await ipc('read-clipboard');
+    if (txt && txt !== _clipLast) {
+      _clipLast = txt;
+      _clipHistory.unshift({ text: txt, ts: Date.now() });
+      if (_clipHistory.length > 20) _clipHistory.pop();
+      renderClipHistory();
+    }
+  }, 2000);
+}
+function renderClipHistory() {
+  const el = document.getElementById('clipList');
+  if (!el) return;
+  el.innerHTML = _clipHistory.length
+    ? _clipHistory.map((c, i) =>
+        `<div class="clip-item"><span>${c.text.slice(0, 60)}${c.text.length > 60 ? '…' : ''}</span>
+         <small>${timeAgo(c.ts)}</small>
+         <button onclick="copyClipItem(${i})">Copy</button></div>`
+      ).join('')
+    : '<p style="opacity:.5;text-align:center">No clipboard history yet</p>';
+}
+function copyClipItem(i) {
+  if (_clipHistory[i]) navigator.clipboard.writeText(_clipHistory[i].text);
+}
+function clearClipHistory() { _clipHistory = []; renderClipHistory(); }
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  return Math.floor(s / 3600) + 'h ago';
+}
+
+// ── Reminders ──
+let _reminders = [];
+async function loadReminders() {
+  try {
+    const data = await ipc('load-reminders');
+    _reminders = data || [];
+    _reminders.forEach(r => { if (!r.fired) scheduleReminder(r); });
+    renderReminderList();
+  } catch {}
+}
+async function saveReminders() {
+  await ipc('save-reminders', _reminders);
+}
+function addReminder() {
+  const inp = document.getElementById('reminderInp');
+  const sel = document.getElementById('reminderTimeSel');
+  if (!inp || !sel) return;
+  const text = inp.value.trim();
+  const mins = parseInt(sel.value) || 5;
+  if (!text) return;
+  const r = { id: Date.now(), text, mins, at: Date.now() + mins * 60000, fired: false };
+  _reminders.push(r);
+  scheduleReminder(r);
+  saveReminders();
+  renderReminderList();
+  inp.value = '';
+}
+function deleteReminder(id) {
+  _reminders = _reminders.filter(r => r.id !== id);
+  saveReminders();
+  renderReminderList();
+}
+function scheduleReminder(r) {
+  const delay = r.at - Date.now();
+  if (delay <= 0 || r.fired) return;
+  setTimeout(async () => {
+    r.fired = true;
+    await saveReminders();
+    await ipc('show-notification', { title: 'LOGAT Reminder', body: r.text });
+    speak('Reminder: ' + r.text);
+    renderReminderList();
+  }, delay);
+}
+function renderReminderList() {
+  const el = document.getElementById('reminderList');
+  if (!el) return;
+  const pending = _reminders.filter(r => !r.fired);
+  el.innerHTML = pending.length
+    ? pending.map(r =>
+        `<div class="reminder-item">
+          <span>${r.text}</span>
+          <small>${timeUntil(r.at)}</small>
+          <button onclick="deleteReminder(${r.id})">✕</button>
+        </div>`
+      ).join('')
+    : '<p style="opacity:.5;text-align:center">No pending reminders</p>';
+}
+function timeUntil(ts) {
+  const s = Math.floor((ts - Date.now()) / 1000);
+  if (s <= 0) return 'now';
+  if (s < 60) return 'in ' + s + 's';
+  if (s < 3600) return 'in ' + Math.floor(s / 60) + 'm';
+  return 'in ' + Math.floor(s / 3600) + 'h';
+}
+function showRemindersPanel() {
+  hideAllPanels();
+  document.getElementById('reminders-panel')?.classList.remove('hidden');
+  setActiveNav('nb-reminders');
+  renderReminderList();
+}
+
 // ── Init ──
 document.getElementById('taskInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+document.getElementById('reminderInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addReminder(); });
 
 setTimeout(async () => {
   await loadMem();
@@ -2328,12 +2856,14 @@ setTimeout(async () => {
   await loadTasks();
   await loadNotes();
   await loadDocs();
+  await loadReminders();
   await checkStorage();
   curId = 'chat_' + Date.now();
   await checkOllama();          // speaks briefing → auto-listen starts inside
   renderChatList();
   startClapDetection();
   startWakeWordDetection();     // active from launch; auto-listen will pause it when it starts
+  startClipPolling();
   setInterval(checkStorage, 30000);
 }, 800);
 </script>

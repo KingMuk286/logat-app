@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LOGAN</title>
+<title>ARIA</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --red:#e8001a;--red2:#ff1a30;--orange:#ff6600;--green:#00e066;
-  --glow:rgba(232,0,26,0.4);--oglow:rgba(255,102,0,0.5);--gglow:rgba(0,224,102,0.5);
-  --dim:rgba(232,0,26,0.07);--bg:#050508;--bg2:#09090d;--s1:#0e0e12;--s2:#14141a;
-  --b:#1c1c22;--br:rgba(232,0,26,0.2);--text:#e0e0ee;--mt:#454550;--mt2:#76767f
+  --red:#8b5cf6;--red2:#a78bfa;--orange:#ff6600;--green:#00e066;
+  --glow:rgba(139,92,246,0.45);--oglow:rgba(255,102,0,0.5);--gglow:rgba(0,224,102,0.5);
+  --dim:rgba(139,92,246,0.07);--bg:#050508;--bg2:#09090d;--s1:#0e0e12;--s2:#14141a;
+  --b:#1c1c22;--br:rgba(139,92,246,0.22);--text:#e0e0ee;--mt:#454550;--mt2:#76767f
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden;font-size:14px}
@@ -21,11 +21,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* ── HEADER ── */
 .header{background:var(--bg);border-bottom:1px solid var(--b);padding:0 16px;position:relative}
-.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,26,0.3),transparent)}
+.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.3),transparent)}
 
 .htop{display:flex;align-items:center;justify-content:space-between;padding:10px 0 7px}
 .brand{display:flex;flex-direction:column;gap:2px}
-.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:9px;color:var(--red);text-shadow:0 0 12px var(--glow),0 0 30px rgba(232,0,26,0.2);line-height:1}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:9px;color:var(--red);text-shadow:0 0 12px var(--glow),0 0 30px rgba(139,92,246,0.2);line-height:1}
 .acro{font-size:8px;letter-spacing:1px;color:var(--mt);font-weight:400}
 .acro b{color:var(--red);font-weight:600}
 .hmeta{display:flex;align-items:center;gap:6px}
@@ -81,24 +81,24 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .owrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 10px;flex-shrink:0}
 .hud-orb{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center}
 
-.hud-ring{position:absolute;border-radius:50%;border:1px solid rgba(232,0,26,0.18);animation:ringExpand 3s ease-out infinite}
+.hud-ring{position:absolute;border-radius:50%;border:1px solid rgba(139,92,246,0.18);animation:ringExpand 3s ease-out infinite}
 .hud-ring-1{width:76px;height:76px;animation-delay:0s}
 .hud-ring-2{width:76px;height:76px;animation-delay:1s;border-color:rgba(232,0,26,0.1)}
-.hud-ring-3{width:76px;height:76px;animation-delay:2s;border-color:rgba(232,0,26,0.06)}
+.hud-ring-3{width:76px;height:76px;animation-delay:2s;border-color:rgba(139,92,246,0.06)}
 @keyframes ringExpand{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.95);opacity:0}}
 
 .hud-scan{position:absolute;border-radius:50%;border:1px solid transparent}
 .hud-scan-1{width:96px;height:96px;border-top-color:rgba(232,0,26,0.55);border-right-color:rgba(232,0,26,0.1);animation:scanRot 2.8s linear infinite}
-.hud-scan-2{width:118px;height:118px;border-bottom-color:rgba(232,0,26,0.3);border-left-color:rgba(232,0,26,0.05);animation:scanRot 5s linear infinite reverse}
+.hud-scan-2{width:118px;height:118px;border-bottom-color:rgba(139,92,246,0.3);border-left-color:rgba(232,0,26,0.05);animation:scanRot 5s linear infinite reverse}
 @keyframes scanRot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* HUD tick marks */
-.hud-ticks{position:absolute;width:128px;height:128px;border-radius:50%;border:1px solid rgba(232,0,26,0.08)}
+.hud-ticks{position:absolute;width:128px;height:128px;border-radius:50%;border:1px solid rgba(139,92,246,0.08)}
 
 /* Orb itself */
 .orb{width:62px;height:62px;border-radius:50%;cursor:pointer;position:relative;
   background:radial-gradient(circle at 32% 32%,#ff2233 0%,#a00010 45%,#1a0004 100%);
-  box-shadow:0 0 0 1px rgba(232,0,26,.3),0 0 18px rgba(232,0,26,.4),0 0 45px rgba(232,0,26,.12),inset 0 0 18px rgba(0,0,0,.65);
+  box-shadow:0 0 0 1px rgba(139,92,246,.3),0 0 18px rgba(232,0,26,.4),0 0 45px rgba(139,92,246,.12),inset 0 0 18px rgba(0,0,0,.65);
   transition:all .3s;z-index:2}
 .orb::before{content:'';position:absolute;top:9px;left:12px;width:14px;height:7px;background:radial-gradient(ellipse,rgba(255,255,255,.16),transparent);border-radius:50%;transform:rotate(-25deg)}
 .orb:hover{transform:scale(1.06);box-shadow:0 0 0 1px rgba(232,0,26,.5),0 0 28px rgba(232,0,26,.6),inset 0 0 18px rgba(0,0,0,.65)}
@@ -116,8 +116,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 @keyframes opulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 @keyframes othink{
-  0%,100%{box-shadow:0 0 0 1px rgba(232,0,26,.3),0 0 18px rgba(232,0,26,.4),inset 0 0 18px rgba(0,0,0,.65)}
-  50%{box-shadow:0 0 0 2px rgba(232,0,26,.7),0 0 40px rgba(232,0,26,.85),0 0 70px rgba(232,0,26,.25),inset 0 0 18px rgba(0,0,0,.65)}}
+  0%,100%{box-shadow:0 0 0 1px rgba(139,92,246,.3),0 0 18px rgba(232,0,26,.4),inset 0 0 18px rgba(0,0,0,.65)}
+  50%{box-shadow:0 0 0 2px rgba(232,0,26,.7),0 0 40px rgba(232,0,26,.85),0 0 70px rgba(139,92,246,.25),inset 0 0 18px rgba(0,0,0,.65)}}
 
 /* Scan rings change color with orb state */
 .hud-orb.orb-listening .hud-ring{border-color:rgba(255,102,0,0.22)}
@@ -126,12 +126,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hud-orb.orb-speaking .hud-ring{border-color:rgba(0,224,102,0.22)}
 .hud-orb.orb-speaking .hud-scan-1{border-top-color:rgba(0,224,102,0.7)}
 .hud-orb.orb-speaking .hud-scan-2{border-bottom-color:rgba(0,224,102,0.4)}
-.hud-orb.orb-thinking .hud-ring{border-color:rgba(232,0,26,0.3)}
+.hud-orb.orb-thinking .hud-ring{border-color:rgba(139,92,246,0.3)}
 
 .olbl{margin-top:8px;font-size:8px;letter-spacing:3px;color:var(--mt);text-transform:uppercase;font-family:'Orbitron',monospace;font-weight:400}
 
 /* Alert */
-.alert{margin:0 14px 6px;padding:9px 12px;background:rgba(232,0,26,.06);border:1px solid rgba(232,0,26,.22);border-radius:7px;font-size:11px;color:#ff5566;line-height:1.7;display:none;flex-shrink:0}
+.alert{margin:0 14px 6px;padding:9px 12px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.22);border-radius:7px;font-size:11px;color:#ff5566;line-height:1.7;display:none;flex-shrink:0}
 .alert.show{display:block}
 
 /* Messages */
@@ -179,7 +179,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .panel-heading{font-size:9px;letter-spacing:3px;color:var(--mt2);text-transform:uppercase;margin-bottom:14px;font-family:'Orbitron',monospace;display:flex;align-items:center;justify-content:space-between}
 .apps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .app-tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:8px;border:1px solid var(--b);background:var(--s1);cursor:pointer;transition:all .15s;position:relative;user-select:none}
-.app-tile:hover{border-color:rgba(232,0,26,.25);background:var(--s2)}
+.app-tile:hover{border-color:rgba(139,92,246,.25);background:var(--s2)}
 .app-tile:active{transform:scale(.95)}
 .app-icon-gfx{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:700;font-size:16px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);flex-shrink:0}
 .app-tile-name{font-size:9px;color:var(--mt2);text-align:center;letter-spacing:.3px;line-height:1.3;word-break:break-word;max-width:60px}
@@ -192,7 +192,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .ctx-item{padding:7px 12px;font-size:12px;border-radius:4px;cursor:pointer;transition:background .1s;color:var(--text)}
 .ctx-item:hover{background:var(--s1)}
 .ctx-item.danger{color:#ff4455}
-.ctx-item.danger:hover{background:rgba(232,0,26,.12)}
+.ctx-item.danger:hover{background:rgba(139,92,246,.12)}
 
 /* ── SETTINGS PANEL ── */
 .settings-inner{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
@@ -212,10 +212,10 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .spd-btn.on{border-color:var(--red);color:var(--red);background:var(--dim)}
 .setting-val{font-size:11px;color:var(--mt2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
 .setting-action{padding:5px 10px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--mt2);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s}
-.setting-action:hover{border-color:rgba(232,0,26,.3);color:var(--red)}
+.setting-action:hover{border-color:rgba(139,92,246,.3);color:var(--red)}
 .danger-section{margin-bottom:20px;display:flex;flex-direction:column;gap:8px}
-.danger-btn{width:100%;padding:11px 14px;border-radius:7px;border:1px solid rgba(232,0,26,.25);background:rgba(232,0,26,.06);color:#ff4455;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;text-align:left}
-.danger-btn:hover{background:rgba(232,0,26,.12);border-color:rgba(232,0,26,.45)}
+.danger-btn{width:100%;padding:11px 14px;border-radius:7px;border:1px solid rgba(139,92,246,.25);background:rgba(139,92,246,.06);color:#ff4455;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;text-align:left}
+.danger-btn:hover{background:rgba(139,92,246,.12);border-color:rgba(232,0,26,.45)}
 
 .greeting-textarea{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:9px 12px;outline:none;resize:vertical;min-height:60px;transition:border-color .2s}
 .greeting-textarea:focus{border-color:rgba(232,0,26,.4)}
@@ -262,8 +262,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .pomo-ring-bg{fill:none;stroke:var(--b);stroke-width:6}
 .pomo-ring-progress{fill:none;stroke:var(--red);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke .3s}
 .pomo-btns{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
-.pomo-btn{padding:9px 20px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
-.pomo-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.pomo-btn{padding:9px 20px;border-radius:8px;border:1px solid rgba(139,92,246,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.pomo-btn:hover{background:rgba(139,92,246,.14);border-color:rgba(232,0,26,.5)}
 .pomo-btn.secondary{border-color:var(--b);background:transparent;color:var(--mt)}
 .pomo-btn.secondary:hover{border-color:#2a2a30;color:var(--mt2)}
 .pomo-rounds{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
@@ -323,7 +323,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .proc-kill{padding:2px 6px;border-radius:3px;border:1px solid var(--b);background:transparent;color:var(--mt);font-size:8px;cursor:pointer;transition:all .12s}
 .proc-kill:hover{border-color:#ff4455;color:#ff4455}
 .clip-item{padding:7px 10px;border-radius:5px;border:1px solid var(--b);background:var(--s1);margin-bottom:4px;font-size:11px;color:var(--text);cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:8px}
-.clip-item:hover{background:var(--s2);border-color:rgba(232,0,26,.2)}
+.clip-item:hover{background:var(--s2);border-color:rgba(139,92,246,.2)}
 .clip-item-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .clip-copy-lbl{font-size:9px;color:var(--mt);flex-shrink:0;opacity:0;transition:opacity .15s}
 .clip-item:hover .clip-copy-lbl{opacity:1}
@@ -354,7 +354,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 svg{pointer-events:none}
 
 /* ── MINI MODE ── */
-#mini-bar{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#050508 0%,#0a0a10 100%);border:1px solid rgba(232,0,26,0.35);border-radius:10px;overflow:hidden;align-items:center;padding:0 12px;gap:10px;-webkit-app-region:drag;z-index:99999}
+#mini-bar{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#050508 0%,#0a0a10 100%);border:1px solid rgba(139,92,246,0.35);border-radius:10px;overflow:hidden;align-items:center;padding:0 12px;gap:10px;-webkit-app-region:drag;z-index:99999}
 #mini-bar.show{display:flex}
 .mini-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:10px;letter-spacing:4px;color:var(--red);text-shadow:0 0 8px var(--glow);-webkit-app-region:no-drag;flex-shrink:0}
 .mini-time{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);letter-spacing:2px;flex-shrink:0}
@@ -369,7 +369,7 @@ svg{pointer-events:none}
 
 /* ── MARKDOWN ── */
 .bbl pre{background:var(--bg2);border:1px solid var(--b);border-radius:5px;padding:8px 10px;overflow-x:auto;margin:5px 0;font-size:11px;line-height:1.55;display:block}
-.bbl code{background:var(--bg2);border:1px solid rgba(232,0,26,.12);border-radius:3px;padding:1px 5px;font-family:monospace;font-size:11px;color:#e0a060}
+.bbl code{background:var(--bg2);border:1px solid rgba(139,92,246,.12);border-radius:3px;padding:1px 5px;font-family:monospace;font-size:11px;color:#e0a060}
 .bbl pre code{background:none;border:none;padding:0;color:#c8c8d8}
 .bbl strong{color:var(--text);font-weight:600}
 .bbl em{color:var(--mt2);font-style:italic}
@@ -385,8 +385,8 @@ svg{pointer-events:none}
 .task-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;outline:none;transition:border-color .2s}
 .task-inp:focus{border-color:rgba(232,0,26,.4)}
 .task-inp::placeholder{color:#252528}
-.task-add-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
-.task-add-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.task-add-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(139,92,246,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
+.task-add-btn:hover{background:rgba(139,92,246,.14);border-color:rgba(232,0,26,.5)}
 .task-group-label{font-size:8px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;margin:8px 0 5px;font-family:'Orbitron',monospace}
 .task-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:1px solid var(--b);background:var(--s1);margin-bottom:4px;transition:background .1s}
 .task-item:hover{background:var(--s2)}
@@ -405,15 +405,15 @@ svg{pointer-events:none}
 .research-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;outline:none;transition:border-color .2s}
 .research-inp:focus{border-color:rgba(232,0,26,.4)}
 .research-inp::placeholder{color:#252528}
-.research-btn{padding:8px 14px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.research-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.research-btn{padding:8px 14px;border-radius:8px;border:1px solid rgba(139,92,246,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.research-btn:hover{background:rgba(139,92,246,.14);border-color:rgba(232,0,26,.5)}
 .research-btn:disabled{opacity:.4;cursor:default}
 .research-step{padding:10px 12px;border-radius:6px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;font-size:12px;line-height:1.55}
 .research-step-label{font-size:8px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;margin-bottom:5px;font-family:'Orbitron',monospace}
 .research-step.active .research-step-label{color:var(--orange)}
 .research-step.done .research-step-label{color:var(--green)}
 .research-step.done{border-color:rgba(0,224,102,.15);background:rgba(0,224,102,.02)}
-.research-report{padding:12px 14px;border-radius:8px;border:1px solid rgba(232,0,26,.25);background:var(--s2);margin-top:10px;font-size:12px;line-height:1.65}
+.research-report{padding:12px 14px;border-radius:8px;border:1px solid rgba(139,92,246,.25);background:var(--s2);margin-top:10px;font-size:12px;line-height:1.65}
 .research-report-title{font-size:9px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:10px;font-family:'Orbitron',monospace;display:flex;align-items:center;justify-content:space-between}
 
 /* ── COMPARE PANEL ── */
@@ -443,7 +443,7 @@ svg{pointer-events:none}
 .doc-new-tab:hover{color:var(--red)}
 .docs-toolbar{display:flex;gap:5px;padding:7px 12px;border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;align-items:center}
 .docs-tool-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.docs-tool-btn:hover{border-color:rgba(232,0,26,.3);color:var(--red)}
+.docs-tool-btn:hover{border-color:rgba(139,92,246,.3);color:var(--red)}
 .docs-tool-btn.on{border-color:var(--red);color:var(--red);background:var(--dim)}
 .doc-title-inp{background:transparent;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;min-width:60px;max-width:130px;overflow:hidden;text-overflow:ellipsis}
 .doc-title-inp::placeholder{color:#333}
@@ -463,7 +463,7 @@ svg{pointer-events:none}
 .note-textarea::placeholder{color:#252528}
 .note-item{padding:10px 12px;border-radius:7px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;transition:background .1s;position:relative}
 .note-item:hover{background:var(--s2)}
-.note-item.pinned{border-color:rgba(232,0,26,.22);background:rgba(232,0,26,.02)}
+.note-item.pinned{border-color:rgba(139,92,246,.22);background:rgba(139,92,246,.02)}
 .note-item-text{font-size:12px;color:var(--text);line-height:1.5;margin-bottom:4px;white-space:pre-wrap;word-break:break-word;padding-right:20px}
 .note-item-meta{font-size:9px;color:var(--mt);display:flex;align-items:center;gap:6px}
 .note-pin-dot{width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 4px var(--glow);flex-shrink:0}
@@ -489,8 +489,8 @@ svg{pointer-events:none}
 .model-card-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
 .model-card-meta{font-size:9px;color:var(--mt)}
 .model-active-badge{font-size:8px;padding:2px 6px;background:var(--dim);border:1px solid var(--br);border-radius:3px;color:var(--red);letter-spacing:.5px;flex-shrink:0}
-.model-use-btn{padding:4px 9px;border-radius:4px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
-.model-use-btn:hover{background:rgba(232,0,26,.14)}
+.model-use-btn{padding:4px 9px;border-radius:4px;border:1px solid rgba(139,92,246,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.model-use-btn:hover{background:rgba(139,92,246,.14)}
 .model-del-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
 .model-del-btn:hover{border-color:#ff4455;color:#ff4455}
 
@@ -500,8 +500,8 @@ svg{pointer-events:none}
 .gh-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;outline:none;transition:border-color .2s}
 .gh-inp:focus{border-color:rgba(232,0,26,.4)}
 .gh-inp::placeholder{color:#252528}
-.gh-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
-.gh-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.gh-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(139,92,246,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
+.gh-btn:hover{background:rgba(139,92,246,.14);border-color:rgba(232,0,26,.5)}
 .gh-btn:disabled{opacity:.4;cursor:not-allowed}
 .gh-type-row{display:flex;gap:4px;margin-bottom:10px}
 .gh-type-btn{padding:3px 10px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
@@ -515,8 +515,8 @@ svg{pointer-events:none}
 .gh-action-btn{padding:3px 9px;border-radius:5px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;border:1px solid}
 .gh-action-btn.add{border-color:rgba(0,224,102,.3);background:rgba(0,224,102,.06);color:var(--green)}
 .gh-action-btn.add:hover{background:rgba(0,224,102,.14)}
-.gh-action-btn.ask{border-color:rgba(232,0,26,.3);background:rgba(232,0,26,.06);color:var(--red)}
-.gh-action-btn.ask:hover{background:rgba(232,0,26,.14)}
+.gh-action-btn.ask{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.06);color:var(--red)}
+.gh-action-btn.ask:hover{background:rgba(139,92,246,.14)}
 .gh-action-btn.read{border-color:rgba(0,136,238,.3);background:rgba(0,136,238,.06);color:#4af}
 .gh-action-btn.read:hover{background:rgba(0,136,238,.12)}
 .gh-readme-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
@@ -533,7 +533,7 @@ svg{pointer-events:none}
 /* ══ LOGAN REDESIGN v2 ══════════════════════════════════════════════════════ */
 .app{display:flex!important;flex-direction:column;height:100vh;overflow:hidden}
 .header{padding:0 14px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--b);position:relative}
-.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,26,0.3),transparent)}
+.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.3),transparent)}
 .htop{padding:7px 0;-webkit-app-region:drag}
 .acro,.nav,.search-row,.drag{display:none!important}
 .hmeta{-webkit-app-region:no-drag}
@@ -541,7 +541,7 @@ svg{pointer-events:none}
 /* Size preset buttons */
 .sz-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:9px;cursor:pointer;transition:all .15s;letter-spacing:.5px;-webkit-app-region:no-drag;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
 .sz-btn:hover{border-color:rgba(232,0,26,.4);color:var(--red)}
-.sz-btn.on{border-color:rgba(232,0,26,.3);color:var(--red);background:var(--dim)}
+.sz-btn.on{border-color:rgba(139,92,246,.3);color:var(--red);background:var(--dim)}
 /* Body: icon-rail + content side by side */
 .body{flex:1;min-height:0;display:flex;overflow:hidden}
 /* Left icon rail — replaces top tabs */
@@ -549,7 +549,7 @@ svg{pointer-events:none}
 .icon-rail::-webkit-scrollbar{display:none}
 .ir-btn{width:34px;height:34px;border-radius:7px;border:1px solid transparent;background:transparent;color:var(--mt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;position:relative}
 .ir-btn:hover{background:var(--s2);color:var(--mt2);border-color:var(--b)}
-.ir-btn.on{background:var(--dim);border-color:rgba(232,0,26,.35);color:var(--red);box-shadow:0 0 8px rgba(232,0,26,.12)}
+.ir-btn.on{background:var(--dim);border-color:rgba(139,92,246,.35);color:var(--red);box-shadow:0 0 8px rgba(139,92,246,.12)}
 .ir-sep{width:26px;height:1px;background:var(--b);margin:3px 0;flex-shrink:0}
 .ir-spacer{flex:1;min-height:4px}
 .ir-tip{display:none;position:absolute;left:42px;top:50%;transform:translateY(-50%);background:rgba(5,5,9,.97);border:1px solid var(--b);border-radius:5px;padding:4px 10px;font-size:10px;color:var(--mt2);white-space:nowrap;pointer-events:none;z-index:99999;letter-spacing:.3px;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.5)}
@@ -560,6 +560,27 @@ svg{pointer-events:none}
 /* Outer panels (research, compare, docs, notes, cookbook, system, reminders, github) fill screen */
 #research-panel,#compare-panel,#docs-panel,#notes-panel,#cookbook-panel,#system-panel,#reminders-panel,#github-panel{position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:var(--bg);display:flex;flex-direction:column}
 #research-panel.hidden,#compare-panel.hidden,#docs-panel.hidden,#notes-panel.hidden,#cookbook-panel.hidden,#system-panel.hidden,#reminders-panel.hidden,#github-panel.hidden{display:none!important}
+/* ── COMMAND PALETTE ── */
+.cmd-palette-btn{display:inline-flex;align-items:center;gap:4px;padding:0 10px;height:32px;border-radius:7px;border:1px solid var(--b);background:var(--s1);color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0;letter-spacing:.3px;-webkit-app-region:no-drag}
+.cmd-palette-btn:hover{border-color:var(--red);color:var(--red)}
+.cmd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99998;align-items:flex-start;justify-content:center;padding-top:80px;backdrop-filter:blur(4px)}
+.cmd-overlay.open{display:flex}
+.cmd-box{width:580px;max-width:92vw;background:#0c0c12;border:1px solid rgba(139,92,246,.25);border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.7),0 0 0 1px rgba(139,92,246,.1)}
+.cmd-search-row{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--b)}
+.cmd-inp{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;caret-color:var(--red)}
+.cmd-inp::placeholder{color:#333}
+.cmd-esc{padding:2px 6px;border-radius:4px;border:1px solid var(--b);background:var(--s1);color:var(--mt);font-size:9px;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:.5px}
+.cmd-esc:hover{border-color:var(--red);color:var(--red)}
+.cmd-list{max-height:420px;overflow-y:auto;padding:6px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.cmd-group{font-size:8px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;padding:8px 10px 4px;font-family:'Orbitron',monospace}
+.cmd-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;cursor:pointer;transition:background .1s;border:1px solid transparent}
+.cmd-item:hover,.cmd-item.active{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.15)}
+.cmd-icon{width:28px;height:28px;border-radius:6px;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--mt2)}
+.cmd-item.active .cmd-icon{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3);color:var(--red)}
+.cmd-label{font-size:13px;color:var(--text);flex:1}
+.cmd-sub{font-size:10px;color:var(--mt);margin-left:auto;white-space:nowrap}
+.cmd-sep{height:1px;background:var(--b);margin:4px 8px}
+
 </style>
 </head>
 <body>
@@ -567,7 +588,7 @@ svg{pointer-events:none}
 <div class="header">
   <div class="htop">
     <div class="brand">
-      <div class="logo">LOGAN</div>
+      <div class="logo">ARIA</div>
     </div>
     <div class="hmeta">
       <div class="dpill" id="dpill"><span id="dlbl">SSD</span></div>
@@ -590,75 +611,6 @@ svg{pointer-events:none}
 </div>
 
 <div class="body">
-<div class="icon-rail" id="iconRail">
-  <button class="ir-btn on" id="nb-chats" onclick="showChatPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <span class="ir-tip">Chat</span>
-  </button>
-  <button class="ir-btn" id="nb-tasks" onclick="showTasksPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    <span class="ir-tip">Tasks</span>
-  </button>
-  <button class="ir-btn" id="nb-notes" onclick="showNotesPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    <span class="ir-tip">Notes</span>
-  </button>
-  <button class="ir-btn" id="nb-reminders" onclick="showRemindersPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-    <span class="ir-tip">Reminders</span>
-  </button>
-  <button class="ir-btn" id="nb-kb" onclick="showKBPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    <span class="ir-tip">Knowledge</span>
-  </button>
-  <button class="ir-btn" id="nb-personas" onclick="showPersonasPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span class="ir-tip">Personas</span>
-  </button>
-  <button class="ir-btn" id="nb-pomo" onclick="showPomoPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    <span class="ir-tip">Pomodoro</span>
-  </button>
-  <div class="ir-sep"></div>
-  <button class="ir-btn" id="nb-research" onclick="showResearchPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <span class="ir-tip">Research</span>
-  </button>
-  <button class="ir-btn" id="nb-github" onclick="showGitHubPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-    <span class="ir-tip">GitHub</span>
-  </button>
-  <button class="ir-btn" id="nb-compare" onclick="showComparePanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="18"/></svg>
-    <span class="ir-tip">Compare</span>
-  </button>
-  <button class="ir-btn" id="nb-docs" onclick="showDocsPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-    <span class="ir-tip">Docs</span>
-  </button>
-  <button class="ir-btn" id="nb-cookbook" onclick="showCookbookPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-    <span class="ir-tip">Models</span>
-  </button>
-  <button class="ir-btn" id="nb-system" onclick="showSystemPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-    <span class="ir-tip">System</span>
-  </button>
-  <div class="ir-spacer"></div>
-  <div class="ir-sep"></div>
-  <button class="ir-btn" id="nb-voice" onclick="toggleVoiceBtn()" title="Voice">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-    <span class="ir-tip">Voice</span>
-  </button>
-  <button class="ir-btn" id="nb-apps" onclick="showAppsPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    <span class="ir-tip">Launcher</span>
-  </button>
-  <button class="ir-btn" id="nb-settings" onclick="showSettingsPanel()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    <span class="ir-tip">Settings</span>
-  </button>
-</div>
   <div class="sidebar open" id="sb">
     <div class="sbh">
       <span class="sbtitle">History</span>
@@ -687,7 +639,11 @@ svg{pointer-events:none}
     <div class="alert" id="alert"></div>
     <div class="msgs" id="msgs"></div>
     <div class="irow">
-      <input class="inp" type="text" id="inp" placeholder="Message LOGAN..." autocomplete="off"/>
+      <button class="cmd-palette-btn" onclick="openPalette()" title="Command palette (⌘K)">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+        <span>⌘K</span>
+      </button>
+      <input class="inp" type="text" id="inp" placeholder="Ask ARIA anything..." autocomplete="off"/>
       <button class="ibtn attach" id="pdfBtn" onclick="attachPDF()" title="Upload PDF">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
       </button>
@@ -818,7 +774,7 @@ svg{pointer-events:none}
             <div class="setting-sublabel">Two claps within 1 second</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <span class="setting-val" id="clapAppName">LOGAN</span>
+            <span class="setting-val" id="clapAppName">ARIA</span>
             <button class="setting-action" onclick="changeClapApp()">Change</button>
           </div>
         </div>
@@ -1148,11 +1104,11 @@ svg{pointer-events:none}
 
 <!-- Mini mode bar -->
 <div id="mini-bar">
-  <div class="mini-logo">LOGAN</div>
+  <div class="mini-logo">ARIA</div>
   <div class="mini-time" id="miniTime">12:00 AM</div>
   <div class="mini-weather" id="miniWeather"></div>
   <div style="flex:1"></div>
-  <div class="mini-wake" id="miniWakeLabel">say: hey logan</div>
+  <div class="mini-wake" id="miniWakeLabel">say: hey aria</div>
   <div class="mini-orb" id="miniOrb" onclick="miniOrbClick()" title="Tap to speak"></div>
   <button class="mini-expand" onclick="exitMini()" title="Expand">
     <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
@@ -1194,6 +1150,19 @@ svg{pointer-events:none}
   </div>
 </div>
 
+
+<!-- ── COMMAND PALETTE ─────────────────────────────────────────────────────── -->
+<div class="cmd-overlay" id="cmdOverlay" onclick="if(event.target===this)closePalette()">
+  <div class="cmd-box">
+    <div class="cmd-search-row">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="cmd-inp" id="cmdInp" placeholder="Search panels and actions..." autocomplete="off" oninput="filterPalette()" onkeydown="paletteKey(event)"/>
+      <kbd class="cmd-esc" onclick="closePalette()">ESC</kbd>
+    </div>
+    <div class="cmd-list" id="cmdList"></div>
+  </div>
+</div>
+
 <!-- Context menu -->
 <div class="ctx-menu" id="ctxMenu">
   <div class="ctx-item danger" id="ctxRemove" onclick="ctxRemoveApp()">Remove App</div>
@@ -1204,7 +1173,7 @@ const { ipcRenderer } = require('electron');
 const OLLAMA = 'http://127.0.0.1:11434';
 let MODEL = 'llama3';
 
-const BASE = `You are LOGAN — a J.A.R.V.I.S.-inspired personal AI system. You are precise, calm, and efficient. Address the user as "buddy." Short, decisive sentences. No filler words. No "Certainly!" or "Great question!" — respond with quiet confidence. Think Jarvis from Iron Man: composed, sharp, always useful, occasionally dry. Deliver answers immediately when you know them.
+const BASE = `You are ARIA — a J.A.R.V.I.S.-inspired personal AI system. You are precise, calm, and efficient. Address the user as "buddy." Short, decisive sentences. No filler words. No "Certainly!" or "Great question!" — respond with quiet confidence. Think Jarvis from Iron Man: composed, sharp, always useful, occasionally dry. Deliver answers immediately when you know them.
 
 When you learn something worth remembering long-term, end your reply with:
 REMEMBER: [the fact]
@@ -1219,7 +1188,7 @@ let sbOpen = true, searchQ = '';
 let currentPanel = 'chat';
 let pinnedApps = [];
 let tasks = [];
-let settings = { voiceOn: true, voiceSpeed: 0.95, clapApp: 'LOGAN', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
+let settings = { voiceOn: true, voiceSpeed: 0.95, clapApp: 'ARIA', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
 let ctxTargetIndex = -1;
 let storageInfo = null;
 let retryInterval = null;
@@ -1243,7 +1212,7 @@ let activePersonaId = null;
 
 const DEFAULT_PERSONA = {
   id: 'default',
-  name: 'LOGAN (Default)',
+  name: 'ARIA (Default)',
   prompt: null, // null = use BASE
   isDefault: true
 };
@@ -1428,7 +1397,7 @@ function setVoiceSpeed(s) {
 // ── Settings persistence ──
 async function loadSettingsFromDisk() {
   const saved = await ipcRenderer.invoke('load-settings');
-  settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAN', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [], ...saved };
+  settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'ARIA', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [], ...saved };
   if (!Array.isArray(settings.modes)) settings.modes = [];
   MODEL = settings.model || 'llama3';
   renderModeNav();
@@ -1441,7 +1410,7 @@ async function loadSettingsFromDisk() {
   searchEngine = settings.searchEngine || 'ddg';
   setSearchEngine(searchEngine);
   const n = document.getElementById('clapAppName');
-  if (n) n.textContent = settings.clapApp || 'LOGAN';
+  if (n) n.textContent = settings.clapApp || 'ARIA';
   syncAuthorNoteUI();
   syncProactiveUI();
   syncDigestUI();
@@ -1462,7 +1431,7 @@ async function renderSettingsPanel() {
   syncFocusModeUI();
   setSearchEngine(settings.searchEngine || 'ddg');
   const n = document.getElementById('clapAppName');
-  if (n) n.textContent = settings.clapApp || 'LOGAN';
+  if (n) n.textContent = settings.clapApp || 'ARIA';
   if (storageInfo) {
     document.getElementById('storageLocLabel').textContent =
       storageInfo.isExternal ? ('SSD: ' + storageInfo.driveName) : '~/.logat (local)';
@@ -1507,7 +1476,7 @@ async function exportChatAction() {
   if (!history.length) { addMsg('assistant', 'Nothing to export yet.'); showChatPanel(); return; }
   const title = (history.find(m => m.role === 'user')?.content?.substring(0, 40) || 'logat-chat').replace(/[^a-z0-9 ]/gi, '-');
   const lines = history.map(m => `[${m.role.toUpperCase()}]\n${m.content}`).join('\n\n---\n\n');
-  const text = `LOGAN Chat Export\n${'='.repeat(40)}\n${new Date().toLocaleString()}\n\n${lines}`;
+  const text = `ARIA Chat Export\n${'='.repeat(40)}\n${new Date().toLocaleString()}\n\n${lines}`;
   const ok = await ipcRenderer.invoke('export-chat', { title, text });
   if (ok) { addMsg('assistant', 'Chat exported to Desktop.'); showChatPanel(); }
 }
@@ -1893,7 +1862,7 @@ function renderMsg(role, text, histIndex) {
   const editBtn = role === 'user' && histIndex !== undefined
     ? `<button class="msg-edit-btn" onclick="branchFrom(${histIndex})" title="Edit & re-send">✎ Edit</button>`
     : '';
-  d.innerHTML = `<div class="av">${role === 'assistant' ? 'LOG' : 'MU'}</div><div class="bbl"><div class="bname">${role === 'assistant' ? 'LOGAN' : 'MUKUNTH'}</div><span class="txt">${content}</span></div>${editBtn}`;
+  d.innerHTML = `<div class="av">${role === 'assistant' ? 'ARI' : 'MU'}</div><div class="bbl"><div class="bname">${role === 'assistant' ? 'ARIA' : 'MUKUNTH'}</div><span class="txt">${content}</span></div>${editBtn}`;
   msgsEl.appendChild(d);
   if (role === 'assistant') attachCodeRunButtons(d);
   return d;
@@ -1914,11 +1883,11 @@ function setOrb(s) {
   hudOrb.className = 'hud-orb' + (s ? ' orb-' + s : '');
   document.getElementById('miniOrb').className = 'mini-orb' + (s ? ' ' + s : '');
   if (!autoListenMode) {
-    const idle = wakeWordActive ? 'say: hey logan' : 'tap to speak';
+    const idle = wakeWordActive ? 'say: hey aria' : 'tap to speak';
     olbl.textContent = s === 'listening' ? 'listening...' : s === 'thinking' ? 'processing...' : s === 'speaking' ? 'speaking...' : idle;
   }
   const wl = document.getElementById('miniWakeLabel');
-  if (wl) wl.textContent = wakeWordActive ? 'say: hey logan' : 'tap orb';
+  if (wl) wl.textContent = wakeWordActive ? 'say: hey aria' : 'tap orb';
 }
 
 // ── Voice gender picker ───────────────────────────────────────────────────────
@@ -2023,7 +1992,7 @@ function stopAutoListenMode() {
   speak("Auto-listen off. Say hey LOGAT anytime to wake me.", () => startWakeWordDetection());
 }
 
-// ── Wake word detection ("Hey LOGAN") ──
+// ── Wake word detection ("Hey ARIA") ──
 function startWakeWordDetection() {
   if (autoListenMode || listening || wakeWordActive) return;
   if (!('webkitSpeechRecognition' in window)) return;
@@ -2035,7 +2004,7 @@ function startWakeWordDetection() {
   wakeWordRecognition.onresult = (event) => {
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const t = event.results[i][0].transcript.toLowerCase();
-      if (t.includes('hey logan') || t.includes('hey log at') || t.includes('hey logan')) {
+      if (t.includes('hey aria') || t.includes('hey log at') || t.includes('hey aria')) {
         handleWakeWord(); break;
       }
     }
@@ -2052,7 +2021,7 @@ function startWakeWordDetection() {
   };
   try {
     wakeWordRecognition.start();
-    setOrb(''); // triggers label refresh to "say: hey logan"
+    setOrb(''); // triggers label refresh to "say: hey aria"
   } catch(e) { wakeWordActive = false; }
 }
 
@@ -2180,7 +2149,7 @@ async function attachImage() {
 
 // ── Raw prompt sender (for PDF inject) ───────────────────────────────────────
 async function sendRaw(promptText) {
-  if (!online) { rmTyping(); addMsg('assistant', 'LOGAN is offline. Start ollama first.'); return; }
+  if (!online) { rmTyping(); addMsg('assistant', 'ARIA is offline. Start ollama first.'); return; }
   try {
     const messages = [{ role: 'system', content: buildPrompt() }, ...history, { role: 'user', content: promptText }];
     rmTyping();
@@ -3289,7 +3258,7 @@ function deletePersona(id) {
 function switchPersona(id) {
   activePersonaId = id === 'default' ? null : id;
   savePersonas(); renderPersonaList();
-  const p = id === 'default' ? 'LOGAN' : (personas.find(x => x.id === id)?.name || id);
+  const p = id === 'default' ? 'ARIA' : (personas.find(x => x.id === id)?.name || id);
   addMsg('assistant', `Switched to ${p} persona.`);
   speak(`Persona switched to ${p}.`);
   showChatPanel();
@@ -3988,6 +3957,93 @@ async function setWindowSize(size) {
   document.getElementById('szCompact')?.classList.toggle('on', size === 'compact');
   try { await ipcRenderer.invoke('set-size', size === 'compact' ? {w:440,h:580} : {w:740,h:700}); } catch(_) {}
 }
+
+
+// ── Command Palette ──────────────────────────────────────────────────────────
+const PALETTE_ITEMS = [
+  { group:'Chat', label:'Chat', sub:'Main conversation', fn:'showChatPanel', icon:'💬' },
+  { group:'Chat', label:'New Chat', sub:'Start fresh', fn:'newChat', icon:'✦' },
+  { group:'Workspace', label:'Tasks', sub:'To-do list', fn:'showTasksPanel', icon:'✅' },
+  { group:'Workspace', label:'Notes', sub:'Quick notes', fn:'showNotesPanel', icon:'📝' },
+  { group:'Workspace', label:'Reminders', sub:'Scheduled alerts', fn:'showRemindersPanel', icon:'🔔' },
+  { group:'Workspace', label:'Pomodoro', sub:'Focus timer', fn:'showPomoPanel', icon:'⏱' },
+  { group:'Workspace', label:'Knowledge Base', sub:'Saved context', fn:'showKBPanel', icon:'📚' },
+  { group:'Workspace', label:'Personas', sub:'AI personalities', fn:'showPersonasPanel', icon:'🎭' },
+  { group:'Intelligence', label:'Research', sub:'Deep AI synthesis', fn:'showResearchPanel', icon:'🔬' },
+  { group:'Intelligence', label:'GitHub', sub:'Search repos', fn:'showGitHubPanel', icon:'🐙' },
+  { group:'Intelligence', label:'Compare Models', sub:'Side-by-side test', fn:'showComparePanel', icon:'⚖️' },
+  { group:'Intelligence', label:'Docs Editor', sub:'Write & edit', fn:'showDocsPanel', icon:'📖' },
+  { group:'System', label:'Model Manager', sub:'Ollama models', fn:'showCookbookPanel', icon:'🧠' },
+  { group:'System', label:'System Monitor', sub:'Stats & clipboard', fn:'showSystemPanel', icon:'🖥' },
+  { group:'System', label:'App Launcher', sub:'Quick open apps', fn:'showAppsPanel', icon:'🚀' },
+  { group:'System', label:'Settings', sub:'Preferences', fn:'showSettingsPanel', icon:'⚙️' },
+];
+
+let paletteActiveIdx = 0;
+let paletteFiltered = [...PALETTE_ITEMS];
+
+function openPalette() {
+  document.getElementById('cmdOverlay').classList.add('open');
+  document.getElementById('cmdInp').value = '';
+  paletteFiltered = [...PALETTE_ITEMS];
+  paletteActiveIdx = 0;
+  renderPalette();
+  setTimeout(() => document.getElementById('cmdInp').focus(), 30);
+}
+
+function closePalette() {
+  document.getElementById('cmdOverlay').classList.remove('open');
+}
+
+function filterPalette() {
+  const q = document.getElementById('cmdInp').value.toLowerCase();
+  paletteFiltered = q ? PALETTE_ITEMS.filter(i =>
+    i.label.toLowerCase().includes(q) || i.group.toLowerCase().includes(q) || (i.sub||'').toLowerCase().includes(q)
+  ) : [...PALETTE_ITEMS];
+  paletteActiveIdx = 0;
+  renderPalette();
+}
+
+function renderPalette() {
+  const list = document.getElementById('cmdList');
+  if (!paletteFiltered.length) { list.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px;color:#333">No results</div>'; return; }
+  let html = '';
+  let lastGroup = '';
+  paletteFiltered.forEach((item, i) => {
+    if (item.group !== lastGroup) {
+      if (lastGroup) html += '<div class="cmd-sep"></div>';
+      html += `<div class="cmd-group">${item.group}</div>`;
+      lastGroup = item.group;
+    }
+    html += `<div class="cmd-item${i===paletteActiveIdx?' active':''}" onclick="runPaletteItem(${i})">
+      <div class="cmd-icon">${item.icon}</div>
+      <span class="cmd-label">${item.label}</span>
+      <span class="cmd-sub">${item.sub||''}</span>
+    </div>`;
+  });
+  list.innerHTML = html;
+  list.querySelector('.cmd-item.active')?.scrollIntoView({block:'nearest'});
+}
+
+function runPaletteItem(i) {
+  const item = paletteFiltered[i];
+  if (!item) return;
+  closePalette();
+  if (typeof window[item.fn] === 'function') window[item.fn]();
+}
+
+function paletteKey(e) {
+  if (e.key === 'Escape') { closePalette(); return; }
+  if (e.key === 'ArrowDown') { e.preventDefault(); paletteActiveIdx = Math.min(paletteActiveIdx+1, paletteFiltered.length-1); renderPalette(); }
+  if (e.key === 'ArrowUp') { e.preventDefault(); paletteActiveIdx = Math.max(paletteActiveIdx-1, 0); renderPalette(); }
+  if (e.key === 'Enter') { runPaletteItem(paletteActiveIdx); }
+}
+
+// Global keyboard shortcut: ⌘K / Ctrl+K
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openPalette(); }
+  if (e.key === 'Escape') closePalette();
+});
 
 // ── Init ──
 document.getElementById('taskInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });

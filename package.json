@@ -1,15 +1,15 @@
 {
-  "name": "logan",
+  "name": "aria",
   "version": "1.0.1",
-  "description": "LOGAT - Mukunth's AI Assistant",
+  "description": "ARIA - Mukunth's AI Assistant",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --mac"
   },
   "build": {
-    "appId": "com.mukunth.logan",
-    "productName": "LOGAN",
+    "appId": "com.mukunth.aria",
+    "productName": "ARIA",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [

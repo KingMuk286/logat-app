@@ -378,9 +378,9 @@ function createWindow() {
 
 function createTray() {
   tray = new Tray(nativeImage.createEmpty());
-  tray.setToolTip('LOGAN');
+  tray.setToolTip('ARIA');
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Open LOGAN', click: () => { mainWindow.show(); mainWindow.focus(); } },
+    { label: 'Open ARIA', click: () => { mainWindow.show(); mainWindow.focus(); } },
     { type: 'separator' },
     { label: 'Quit', click: () => app.exit(0) }
   ]));

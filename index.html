@@ -300,6 +300,57 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .perm-safe{color:#0088ee;border-color:rgba(0,136,238,.3);background:rgba(0,136,238,.06)}
 .perm-medium{color:var(--orange);border-color:rgba(255,102,0,.3);background:rgba(255,102,0,.06)}
 .perm-high{color:#ff4455;border-color:rgba(255,68,85,.3);background:rgba(255,68,85,.06)}
+
+/* ── SYSTEM PANEL ── */
+.system-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.stat-card{padding:12px 14px;border-radius:8px;border:1px solid var(--b);background:var(--s1);margin-bottom:8px}
+.stat-card-title{font-size:8px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;font-family:'Orbitron',monospace;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.stat-row:last-child{margin-bottom:0}
+.stat-label{font-size:10px;color:var(--mt2);width:36px;flex-shrink:0}
+.stat-bar-outer{flex:1;height:5px;background:var(--b);border-radius:3px;overflow:hidden}
+.stat-bar-inner{height:100%;border-radius:3px;transition:width .6s ease}
+.stat-bar-inner.cpu{background:var(--red)}
+.stat-bar-inner.ram{background:var(--orange)}
+.stat-bar-inner.disk{background:#0088ee}
+.stat-val{font-size:10px;color:var(--mt);width:38px;text-align:right;flex-shrink:0}
+.sys-section-title{font-size:8px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;font-family:'Orbitron',monospace;margin:12px 0 7px;display:flex;align-items:center;justify-content:space-between}
+.proc-table{width:100%;border-collapse:collapse;font-size:10px}
+.proc-table th{text-align:left;color:var(--mt);font-weight:400;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:4px 6px;border-bottom:1px solid var(--b)}
+.proc-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text);vertical-align:middle}
+.proc-table tr:hover td{background:var(--s2)}
+.proc-name{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proc-kill{padding:2px 6px;border-radius:3px;border:1px solid var(--b);background:transparent;color:var(--mt);font-size:8px;cursor:pointer;transition:all .12s}
+.proc-kill:hover{border-color:#ff4455;color:#ff4455}
+.clip-item{padding:7px 10px;border-radius:5px;border:1px solid var(--b);background:var(--s1);margin-bottom:4px;font-size:11px;color:var(--text);cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:8px}
+.clip-item:hover{background:var(--s2);border-color:rgba(232,0,26,.2)}
+.clip-item-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clip-copy-lbl{font-size:9px;color:var(--mt);flex-shrink:0;opacity:0;transition:opacity .15s}
+.clip-item:hover .clip-copy-lbl{opacity:1}
+
+/* ── REMINDERS PANEL ── */
+.reminders-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.reminder-add-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.reminder-inp{flex:1;min-width:120px;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;outline:none;transition:border-color .2s}
+.reminder-inp:focus{border-color:rgba(232,0,26,.4)}
+.reminder-inp::placeholder{color:#252528}
+.reminder-time-sel{background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;outline:none;cursor:pointer;-webkit-appearance:none;flex-shrink:0}
+.reminder-item{padding:10px 12px;border-radius:7px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;display:flex;align-items:center;gap:10px;transition:background .1s}
+.reminder-item:hover{background:var(--s2)}
+.reminder-item.fired{border-color:rgba(0,224,102,.15);opacity:.5}
+.reminder-icon{font-size:14px;flex-shrink:0}
+.reminder-info{flex:1;min-width:0}
+.reminder-text{font-size:12px;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reminder-meta{font-size:9px;color:var(--mt)}
+.reminder-del{background:none;border:none;color:#252528;cursor:pointer;font-size:16px;line-height:1;transition:color .15s;flex-shrink:0}
+.reminder-del:hover{color:#ff4455}
+
+/* ── FOCUS MODE OVERLAY ── */
+#focusBanner{display:none;position:fixed;top:0;left:0;right:0;z-index:9500;background:rgba(0,224,102,.07);border-bottom:1px solid rgba(0,224,102,.25);padding:4px 14px;font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;font-family:'Orbitron',monospace;text-align:center}
+#focusBanner.show{display:block}
+
+/* ── SHELL RESULT IN CHAT ── */
+.shell-result{font-family:monospace;font-size:11px;background:var(--bg2);border:1px solid var(--b);border-radius:5px;padding:8px 10px;margin-top:4px;overflow-x:auto;white-space:pre;color:#c8c8d8;max-height:200px}
 svg{pointer-events:none}
 
 /* ── MINI MODE ── */
@@ -347,6 +398,101 @@ svg{pointer-events:none}
 .task-del{background:none;border:none;color:#252528;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;transition:color .15s;flex-shrink:0}
 .task-del:hover{color:#ff4455}
 .task-empty{padding:24px;text-align:center;font-size:11px;color:#333;letter-spacing:.5px}
+
+/* ── RESEARCH PANEL ── */
+.research-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.research-input-row{display:flex;gap:6px;margin-bottom:14px}
+.research-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;outline:none;transition:border-color .2s}
+.research-inp:focus{border-color:rgba(232,0,26,.4)}
+.research-inp::placeholder{color:#252528}
+.research-btn{padding:8px 14px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.research-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.research-btn:disabled{opacity:.4;cursor:default}
+.research-step{padding:10px 12px;border-radius:6px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;font-size:12px;line-height:1.55}
+.research-step-label{font-size:8px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;margin-bottom:5px;font-family:'Orbitron',monospace}
+.research-step.active .research-step-label{color:var(--orange)}
+.research-step.done .research-step-label{color:var(--green)}
+.research-step.done{border-color:rgba(0,224,102,.15);background:rgba(0,224,102,.02)}
+.research-report{padding:12px 14px;border-radius:8px;border:1px solid rgba(232,0,26,.25);background:var(--s2);margin-top:10px;font-size:12px;line-height:1.65}
+.research-report-title{font-size:9px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:10px;font-family:'Orbitron',monospace;display:flex;align-items:center;justify-content:space-between}
+
+/* ── COMPARE PANEL ── */
+.compare-inner{flex:1;overflow-y:auto;padding:14px 16px 0;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent;display:flex;flex-direction:column}
+.compare-model-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.compare-model-select{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 10px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none}
+.compare-prompt-row{display:flex;gap:6px;margin-bottom:10px}
+.compare-prompt-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;outline:none;transition:border-color .2s;resize:none;min-height:50px}
+.compare-prompt-inp:focus{border-color:rgba(232,0,26,.4)}
+.compare-prompt-inp::placeholder{color:#252528}
+.compare-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:200px;padding-bottom:14px}
+.compare-col{background:var(--s1);border:1px solid var(--b);border-radius:8px;padding:10px;overflow-y:auto;font-size:12px;line-height:1.65;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.compare-col-label{font-size:8px;letter-spacing:2px;color:var(--mt2);text-transform:uppercase;margin-bottom:8px;font-family:'Orbitron',monospace;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.compare-timing{font-size:9px;color:var(--mt);font-family:'DM Sans',sans-serif;text-transform:none;letter-spacing:0}
+
+/* ── DOCS PANEL ── */
+.docs-outer{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.docs-tabs{display:flex;gap:2px;padding:8px 12px 0;background:var(--bg2);border-bottom:1px solid var(--b);overflow-x:auto;scrollbar-width:none;flex-shrink:0;align-items:flex-end}
+.docs-tabs::-webkit-scrollbar{display:none}
+.doc-tab{padding:5px 10px;border-radius:5px 5px 0 0;border:1px solid var(--b);border-bottom:none;background:var(--bg2);color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:4px;max-width:140px}
+.doc-tab:hover{color:var(--mt2)}
+.doc-tab.active{background:var(--s1);color:var(--text);border-color:var(--br)}
+.doc-tab-name{overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.doc-tab-close{color:#333;cursor:pointer;font-size:13px;line-height:1;flex-shrink:0;padding:0 1px}
+.doc-tab-close:hover{color:#ff4455}
+.doc-new-tab{padding:4px 8px;border-radius:4px;border:none;background:transparent;color:var(--mt);font-size:16px;cursor:pointer;transition:color .15s;flex-shrink:0;margin-bottom:2px}
+.doc-new-tab:hover{color:var(--red)}
+.docs-toolbar{display:flex;gap:5px;padding:7px 12px;border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;align-items:center}
+.docs-tool-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.docs-tool-btn:hover{border-color:rgba(232,0,26,.3);color:var(--red)}
+.docs-tool-btn.on{border-color:var(--red);color:var(--red);background:var(--dim)}
+.doc-title-inp{background:transparent;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;min-width:60px;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.doc-title-inp::placeholder{color:#333}
+.doc-editor{flex:1;background:var(--s1);border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;padding:12px 14px;outline:none;resize:none;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.doc-preview{flex:1;overflow-y:auto;padding:12px 14px;font-size:13px;line-height:1.7;background:var(--s1);scrollbar-width:thin;scrollbar-color:#1a1a20 transparent;display:none}
+.docs-ai-row{display:flex;gap:6px;padding:7px 12px;border-top:1px solid var(--b);flex-shrink:0;background:var(--bg2)}
+.docs-ai-inp{flex:1;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 10px;outline:none;transition:border-color .2s}
+.docs-ai-inp:focus{border-color:rgba(232,0,26,.4)}
+.docs-ai-inp::placeholder{color:#252528}
+.docs-ai-result{padding:8px 14px;font-size:12px;line-height:1.6;color:var(--text);border-top:1px solid var(--b);background:var(--bg2);flex-shrink:0;max-height:140px;overflow-y:auto;display:none;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+
+/* ── NOTES PANEL ── */
+.notes-inner{flex:1;overflow-y:auto;padding:12px 14px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.note-add-row{display:flex;gap:6px;margin-bottom:12px;align-items:flex-start}
+.note-textarea{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;outline:none;transition:border-color .2s;resize:none;min-height:44px}
+.note-textarea:focus{border-color:rgba(232,0,26,.4)}
+.note-textarea::placeholder{color:#252528}
+.note-item{padding:10px 12px;border-radius:7px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;transition:background .1s;position:relative}
+.note-item:hover{background:var(--s2)}
+.note-item.pinned{border-color:rgba(232,0,26,.22);background:rgba(232,0,26,.02)}
+.note-item-text{font-size:12px;color:var(--text);line-height:1.5;margin-bottom:4px;white-space:pre-wrap;word-break:break-word;padding-right:20px}
+.note-item-meta{font-size:9px;color:var(--mt);display:flex;align-items:center;gap:6px}
+.note-pin-dot{width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 4px var(--glow);flex-shrink:0}
+.note-action{color:var(--mt);cursor:pointer;transition:color .15s;font-size:9px}
+.note-action:hover{color:var(--red)}
+.note-del{position:absolute;right:8px;top:8px;background:none;border:none;color:#1e1e24;cursor:pointer;font-size:15px;line-height:1;transition:color .15s}
+.note-del:hover{color:#ff4455}
+
+/* ── COOKBOOK PANEL ── */
+.cookbook-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.cookbook-pull-row{display:flex;gap:6px;margin-bottom:10px}
+.cookbook-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;outline:none;transition:border-color .2s}
+.cookbook-inp:focus{border-color:rgba(232,0,26,.4)}
+.cookbook-inp::placeholder{color:#252528}
+.pull-progress{margin-bottom:10px;font-size:11px;color:var(--mt2);padding:9px 12px;background:var(--s1);border:1px solid var(--b);border-radius:7px;display:none}
+.pull-progress.show{display:block}
+.pull-bar-outer{height:3px;background:var(--b);border-radius:2px;margin-top:7px;overflow:hidden}
+.pull-bar-inner{height:100%;background:var(--red);border-radius:2px;transition:width .3s;width:0}
+.model-card{padding:10px 12px;border-radius:7px;border:1px solid var(--b);background:var(--s1);margin-bottom:6px;display:flex;align-items:center;gap:10px;transition:background .1s}
+.model-card:hover{background:var(--s2)}
+.model-card-icon{width:34px;height:34px;border-radius:7px;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:700;font-size:10px;color:var(--red);flex-shrink:0}
+.model-card-info{flex:1;min-width:0}
+.model-card-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.model-card-meta{font-size:9px;color:var(--mt)}
+.model-active-badge{font-size:8px;padding:2px 6px;background:var(--dim);border:1px solid var(--br);border-radius:3px;color:var(--red);letter-spacing:.5px;flex-shrink:0}
+.model-use-btn{padding:4px 9px;border-radius:4px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.model-use-btn:hover{background:rgba(232,0,26,.14)}
+.model-del-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.model-del-btn:hover{border-color:#ff4455;color:#ff4455}
 </style>
 </head>
 <body>
@@ -375,6 +521,13 @@ svg{pointer-events:none}
     <button class="nbtn" id="nb-all" onclick="setMode('all')">All</button>
     <div id="modeNav" style="display:flex;gap:3px"></div>
     <button class="nbtn" id="nb-tasks" onclick="showTasksPanel()">Tasks</button>
+    <button class="nbtn" id="nb-notes" onclick="showNotesPanel()">Notes</button>
+    <button class="nbtn" id="nb-research" onclick="showResearchPanel()">Research</button>
+    <button class="nbtn" id="nb-compare" onclick="showComparePanel()">Compare</button>
+    <button class="nbtn" id="nb-docs" onclick="showDocsPanel()">Docs</button>
+    <button class="nbtn" id="nb-cookbook" onclick="showCookbookPanel()">Cookbook</button>
+    <button class="nbtn" id="nb-system" onclick="showSystemPanel()">System</button>
+    <button class="nbtn" id="nb-reminders" onclick="showRemindersPanel()">Reminders</button>
     <button class="nbtn" id="nb-kb" onclick="showKBPanel()">Knowledge</button>
     <button class="nbtn" id="nb-personas" onclick="showPersonasPanel()">Personas</button>
     <button class="nbtn" id="nb-pomo" onclick="showPomoPanel()">Pomodoro</button>
@@ -428,6 +581,15 @@ svg{pointer-events:none}
       </button>
       <button class="ibtn attach" id="imgBtn" onclick="attachImage()" title="Analyze schematic / image">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="ibtn attach" id="screenBtn" onclick="captureScreen()" title="Screenshot → AI analysis">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </button>
+      <button class="ibtn attach" id="stopBtn" onclick="stopSpeech()" title="Stop speaking">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+      </button>
+      <button class="ibtn attach" id="searchBtn" onclick="searchFromInput()" title="Search the web">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <button class="ibtn mic" id="micBtn" onclick="toggleMic()">
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
@@ -487,6 +649,37 @@ svg{pointer-events:none}
             <button class="spd-btn" id="spd-fast" onclick="setVoiceSpeed(1.45)">Fast</button>
           </div>
         </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Voice Persona</div>
+            <div class="setting-sublabel">JARVIS (male) or FRIDAY (female)</div>
+          </div>
+          <div class="speed-group">
+            <button class="spd-btn on" id="vgender-jarvis" onclick="setVoiceGender('jarvis')">JARVIS</button>
+            <button class="spd-btn" id="vgender-friday" onclick="setVoiceGender('friday')">FRIDAY</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Hold-to-Record</div>
+            <div class="setting-sublabel">Hold Space bar to record, release to send</div>
+          </div>
+          <button class="toggle-btn" id="holdRecordToggle" onclick="toggleHoldRecord()">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Idle Timeout</div>
+            <div class="setting-sublabel">Mins of silence before returning to wake-word</div>
+          </div>
+          <div class="speed-group">
+            <button class="spd-btn" id="idle-1" onclick="setIdleTimeout(1)">1m</button>
+            <button class="spd-btn on" id="idle-5" onclick="setIdleTimeout(5)">5m</button>
+            <button class="spd-btn" id="idle-10" onclick="setIdleTimeout(10)">10m</button>
+            <button class="spd-btn" id="idle-off" onclick="setIdleTimeout(0)">Off</button>
+          </div>
+        </div>
       </div>
 
       <div class="settings-section">
@@ -520,6 +713,19 @@ svg{pointer-events:none}
       </div>
 
       <div class="settings-section">
+        <div class="settings-section-title">Focus Mode</div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Focus Mode</div>
+            <div class="setting-sublabel">Block distractions, suppress non-reminder notifications</div>
+          </div>
+          <button class="toggle-btn" id="focusToggle" onclick="toggleFocusMode()">
+            <div class="toggle-knob"></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-section-title">Proactive LOGAT</div>
         <div class="setting-row">
           <div>
@@ -542,6 +748,20 @@ svg{pointer-events:none}
             <input type="time" id="digestTimeInp" value="18:00" onchange="saveDigestTime()" style="background:var(--s1);border:1px solid var(--b);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 8px;outline:none"/>
             <button class="toggle-btn" id="digestToggle" onclick="toggleDailyDigest()"><div class="toggle-knob"></div></button>
           </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Quick Actions</div>
+        <div class="setting-row">
+          <div class="setting-label">Web Search</div>
+          <div class="speed-group">
+            <button class="spd-btn on" id="se-ddg" onclick="setSearchEngine('ddg')">DuckDuckGo</button>
+            <button class="spd-btn" id="se-google" onclick="setSearchEngine('google')">Google</button>
+          </div>
+        </div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:6px">
+          <div class="setting-sublabel" style="color:var(--mt2)">Chat commands: "search for X", "youtube X", "email to X"</div>
         </div>
       </div>
 
@@ -579,10 +799,107 @@ svg{pointer-events:none}
   </div>
 </div>
 
+  <!-- RESEARCH PANEL -->
+  <div class="panel hidden" id="research-panel">
+    <div class="research-inner">
+      <div class="panel-heading" style="margin-bottom:12px">Deep Research
+        <span style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif">AI multi-step synthesis</span>
+      </div>
+      <div class="research-input-row">
+        <input class="research-inp" id="researchInp" placeholder="Enter a topic to research..." autocomplete="off"/>
+        <button class="research-btn" id="researchBtn" onclick="startResearch()">Research</button>
+      </div>
+      <div id="researchProgress"></div>
+      <div id="researchReport"></div>
+    </div>
+  </div>
+
+  <!-- COMPARE PANEL -->
+  <div class="panel hidden" id="compare-panel">
+    <div class="compare-inner">
+      <div class="panel-heading" style="margin-bottom:10px">Model Compare
+        <span style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif">Side-by-side testing</span>
+      </div>
+      <div class="compare-model-row">
+        <select class="compare-model-select" id="compareModelA"></select>
+        <span style="font-size:10px;color:var(--mt);flex-shrink:0">vs</span>
+        <select class="compare-model-select" id="compareModelB"></select>
+      </div>
+      <div class="compare-prompt-row">
+        <textarea class="compare-prompt-inp" id="comparePrompt" placeholder="Enter your prompt here..." rows="2"></textarea>
+        <button class="research-btn" id="compareBtn" onclick="runComparison()" style="align-self:flex-start">Compare</button>
+      </div>
+      <div class="compare-cols">
+        <div class="compare-col">
+          <div class="compare-col-label">MODEL A <span class="compare-timing" id="timingA"></span></div>
+          <div id="compareResA" style="color:var(--mt);font-size:11px">Response will appear here…</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-label">MODEL B <span class="compare-timing" id="timingB"></span></div>
+          <div id="compareResB" style="color:var(--mt);font-size:11px">Response will appear here…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCS PANEL -->
+  <div class="panel hidden" id="docs-panel">
+    <div class="docs-outer">
+      <div class="docs-tabs" id="docsTabs"></div>
+      <div class="docs-toolbar">
+        <input class="doc-title-inp" id="docTitleInp" placeholder="Untitled" oninput="renameCurrentDoc()"/>
+        <div style="flex:1"></div>
+        <button class="docs-tool-btn" id="previewBtn" onclick="toggleDocPreview()">Preview</button>
+        <button class="docs-tool-btn" onclick="exportCurrentDoc()">Export</button>
+      </div>
+      <textarea class="doc-editor" id="docEditor" placeholder="Start writing here..." oninput="autoSaveDoc()"></textarea>
+      <div class="doc-preview" id="docPreview"></div>
+      <div class="docs-ai-result" id="docsAiResult"></div>
+      <div class="docs-ai-row">
+        <input class="docs-ai-inp" id="docsAiInp" placeholder="Ask AI to help with this document..." autocomplete="off"/>
+        <button class="research-btn" onclick="docAIQuery()">Ask AI</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES PANEL -->
+  <div class="panel hidden" id="notes-panel">
+    <div class="notes-inner">
+      <div class="panel-heading" style="margin-bottom:12px">Notes
+        <span id="noteCount" style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif"></span>
+      </div>
+      <div class="note-add-row">
+        <textarea class="note-textarea" id="noteInp" placeholder="Jot something down..." rows="2"></textarea>
+        <button class="task-add-btn" onclick="addNote()" style="align-self:flex-start">+ Add</button>
+      </div>
+      <div id="noteList"></div>
+    </div>
+  </div>
+
+  <!-- COOKBOOK PANEL -->
+  <div class="panel hidden" id="cookbook-panel">
+    <div class="cookbook-inner">
+      <div class="panel-heading" style="margin-bottom:12px">Cookbook
+        <span style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif">Model manager</span>
+      </div>
+      <div class="cookbook-pull-row">
+        <input class="cookbook-inp" id="cookbookInp" placeholder="Model to pull… e.g. mistral, codellama, llama3:8b" autocomplete="off"/>
+        <button class="research-btn" id="pullBtn" onclick="pullModel()">Pull</button>
+      </div>
+      <div class="pull-progress" id="pullProgress">
+        <div id="pullStatus">Pulling model…</div>
+        <div class="pull-bar-outer"><div class="pull-bar-inner" id="pullBar"></div></div>
+      </div>
+      <div id="cookbookModelList"></div>
+    </div>
+  </div>
+
   <!-- SYSTEM PANEL -->
   <div class="panel hidden" id="system-panel">
     <div class="system-inner">
-      <div class="panel-heading" style="margin-bottom:10px">System Monitor</div>
+      <div class="panel-heading" style="margin-bottom:10px">System Monitor
+        <button class="setting-action" onclick="refreshSystemStats()">Refresh</button>
+      </div>
       <div class="stat-card">
         <div class="stat-card-title">Resources</div>
         <div id="statBars"><div style="font-size:10px;color:var(--mt)">Loading…</div></div>
@@ -593,6 +910,10 @@ svg{pointer-events:none}
         <span style="font-size:11px;color:var(--mt2)" id="speedTestResult">Not tested</span>
         <button class="setting-action" onclick="runSpeedTest()">Speed Test</button>
       </div>
+      <div class="sys-section-title">Clipboard History
+        <button class="setting-action" onclick="clearClipHistory()">Clear</button>
+      </div>
+      <div id="clipList"><div style="font-size:11px;color:#333;padding:4px 0">Nothing copied yet.</div></div>
       <div class="sys-section-title">Active Processes
         <button class="setting-action" onclick="refreshProcesses()">Refresh</button>
       </div>
@@ -603,10 +924,29 @@ svg{pointer-events:none}
   <!-- REMINDERS PANEL -->
   <div class="panel hidden" id="reminders-panel">
     <div class="reminders-inner">
-      <div class="panel-heading" style="margin-bottom:12px">Reminders</div>
-      <div id="reminderList"><p style="opacity:.5;text-align:center;padding:20px;font-size:11px">No reminders yet.</p></div>
+      <div class="panel-heading" style="margin-bottom:12px">Reminders
+        <span id="reminderCount" style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif"></span>
+      </div>
+      <div class="reminder-add-row">
+        <input class="reminder-inp" id="reminderInp" placeholder="Remind me to…" autocomplete="off"/>
+        <select class="reminder-time-sel" id="reminderTimeSel">
+          <option value="300000">5 min</option>
+          <option value="600000">10 min</option>
+          <option value="1800000">30 min</option>
+          <option value="3600000">1 hr</option>
+          <option value="7200000">2 hr</option>
+          <option value="14400000">4 hr</option>
+          <option value="28800000">8 hr</option>
+          <option value="86400000">Tomorrow</option>
+        </select>
+        <button class="task-add-btn" onclick="addReminder()">+ Add</button>
+      </div>
+      <div id="reminderList"></div>
     </div>
   </div>
+
+  <!-- Focus mode banner (fixed top) -->
+  <div id="focusBanner">⬡ FOCUS MODE ACTIVE — MINIMIZING DISTRACTIONS</div>
 
   <!-- KNOWLEDGE BASE PANEL -->
   <div class="panel hidden" id="kb-panel">
@@ -782,12 +1122,14 @@ searchInp.addEventListener('input', e => { searchQ = e.target.value.toLowerCase(
 // ── Panel navigation ──
 function hideAllPanels() {
   ['chat-panel','apps-panel','settings-panel','tasks-panel',
+   'research-panel','compare-panel','docs-panel','notes-panel','cookbook-panel',
    'system-panel','reminders-panel','kb-panel','personas-panel','pomo-panel']
     .forEach(id => document.getElementById(id)?.classList.add('hidden'));
 }
 
 function setActiveNav(...ids) {
   ['nb-chats','nb-apps','nb-settings','nb-tasks',
+   'nb-research','nb-compare','nb-docs','nb-notes','nb-cookbook',
    'nb-system','nb-reminders','nb-kb','nb-personas','nb-pomo']
     .forEach(id => document.getElementById(id)?.classList.remove('on'));
   ids.forEach(id => document.getElementById(id)?.classList.add('on'));
@@ -937,12 +1279,19 @@ async function loadSettingsFromDisk() {
   renderModeNav();
   syncVoiceUI();
   setVoiceSpeed(settings.voiceSpeed || 1.15);
+  syncVoiceGenderUI();
+  syncHoldRecordUI();
+  syncIdleTimeoutUI();
+  syncFocusModeUI();
+  searchEngine = settings.searchEngine || 'ddg';
+  setSearchEngine(searchEngine);
   const n = document.getElementById('clapAppName');
   if (n) n.textContent = settings.clapApp || 'LOGAT';
   syncAuthorNoteUI();
   syncProactiveUI();
   syncDigestUI();
   scheduleDigestIfEnabled();
+  if (settings.holdRecord) attachHoldRecord();
 }
 
 async function saveSettings() {
@@ -952,6 +1301,11 @@ async function saveSettings() {
 async function renderSettingsPanel() {
   syncVoiceUI();
   setVoiceSpeed(settings.voiceSpeed || 1.15);
+  syncVoiceGenderUI();
+  syncHoldRecordUI();
+  syncIdleTimeoutUI();
+  syncFocusModeUI();
+  setSearchEngine(settings.searchEngine || 'ddg');
   const n = document.getElementById('clapAppName');
   if (n) n.textContent = settings.clapApp || 'LOGAT';
   if (storageInfo) {
@@ -1344,8 +1698,14 @@ async function checkOllama() {
   try {
     const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(4000) });
     const d = await r.json();
-    const found = (d.models || []).find(m => m.name.includes('llama') || m.name === MODEL);
-    if (!found) throw new Error('no model');
+    const available = (d.models || []).map(m => m.name);
+    if (!available.length) throw new Error('no models installed');
+    // Auto-select a model if the current one isn't available
+    if (!available.includes(MODEL)) {
+      MODEL = available[0];
+      settings.model = MODEL;
+      saveSettings();
+    }
     if (retryInterval) { clearInterval(retryInterval); retryInterval = null; }
     online = true; pip.classList.remove('off'); slbl.textContent = 'online'; alertEl.classList.remove('show');
     if (!hasBriefed) {
@@ -1404,16 +1764,29 @@ function setOrb(s) {
   if (wl) wl.textContent = wakeWordActive ? 'say: hey logat' : 'tap orb';
 }
 
+// ── Voice gender picker ───────────────────────────────────────────────────────
+function pickVoice(voices) {
+  const gender = settings.voiceGender || 'jarvis';
+  const malePrefs   = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
+  const femalePrefs = ['Samantha', 'Victoria', 'Karen', 'Serena', 'Ava', 'Allison', 'Google US English Female'];
+  const prefs = gender === 'friday' ? femalePrefs : malePrefs;
+  for (const name of prefs) { const v = voices.find(x => x.name === name); if (v) return v; }
+  if (gender === 'friday') return voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('male'));
+  return voices.find(v => v.lang === 'en-GB' && v.localService) || voices.find(v => v.lang.startsWith('en'));
+}
+
 // ── Voice ──
+let speakResumeInterval = null;
+
 async function speak(text, onDone) {
   if (!settings.voiceOn) { setOrb(''); if (onDone) onDone(); return; }
   window.speechSynthesis.cancel();
+  if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
 
-  // Wait for voices to be ready (critical on first startup in Electron)
   await waitForVoices();
 
   const clean = text
-    .replace(/<br>/g, ' ')
+    .replace(/<br>/gi, ' ')
     .replace(/<[^>]*>/g, '')
     .replace(/REMEMBER:.*$/m, '')
     .replace(/[*#`▲▼·]/g, '')
@@ -1422,43 +1795,47 @@ async function speak(text, onDone) {
     .trim()
     .substring(0, 900);
 
+  if (!clean) { setOrb(''); if (onDone) onDone(); return; }
+
   const u = new SpeechSynthesisUtterance(clean);
-  u.rate   = settings.voiceSpeed || 0.95;
-  u.pitch  = 0.75;   // deep Jarvis-style
+  u.rate   = settings.voiceSpeed || 1.05;
+  u.pitch  = 0.75;
   u.volume = 1.0;
 
-  // Jarvis voice priority — Daniel (British male) is the best macOS option
-  const preferred = ['Daniel', 'Alex', 'Fred', 'Tom', 'Aaron', 'Rishi', 'Google UK English Male'];
   const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
-  let pick = null;
-  for (const name of preferred) {
-    pick = voices.find(v => v.name === name);
-    if (pick) break;
-  }
-  if (!pick) pick = voices.find(v => v.lang === 'en-GB' && v.localService);
-  if (!pick) pick = voices.find(v => v.lang.startsWith('en') && v.localService);
-  if (!pick) pick = voices.find(v => v.lang.startsWith('en'));
+  const pick = pickVoice(voices);
   if (pick) u.voice = pick;
 
   setOrb('speaking');
   waveStart('rgba(0,200,100,0.65)');
 
-  u.onend = () => {
+  // Electron/Chrome bug: long utterances stall — resume() every 10s prevents freeze
+  speakResumeInterval = setInterval(() => {
+    if (window.speechSynthesis.speaking) window.speechSynthesis.resume();
+    else { clearInterval(speakResumeInterval); speakResumeInterval = null; }
+  }, 10000);
+
+  const finish = () => {
+    if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
     waveStop();
     setOrb('');
     if (onDone) { onDone(); return; }
     if (autoListenMode && !listening) { setTimeout(() => { if (autoListenMode) startMic(); }, 600); return; }
     setTimeout(startWakeWordDetection, 500);
   };
+
+  u.onend = finish;
   u.onerror = (ev) => {
-    // 'interrupted' is normal (cancel called), skip re-triggering
+    if (speakResumeInterval) { clearInterval(speakResumeInterval); speakResumeInterval = null; }
     if (ev.error === 'interrupted') return;
     waveStop();
     setOrb('');
     if (onDone) onDone();
     else setTimeout(startWakeWordDetection, 500);
   };
-  window.speechSynthesis.speak(u);
+
+  // 50ms gap after cancel() prevents dropped-utterance bug in Electron
+  setTimeout(() => window.speechSynthesis.speak(u), 50);
 }
 
 // ── Auto-listen mode (2 min on startup) ──
@@ -1512,7 +1889,9 @@ function startWakeWordDetection() {
   };
   wakeWordRecognition.onerror = (e) => {
     wakeWordActive = false;
-    if (e.error !== 'aborted' && !autoListenMode && !listening) setTimeout(startWakeWordDetection, 2000);
+    if (e.error === 'aborted' || autoListenMode || listening) return;
+    // no-speech is normal silence; restart quickly. Other errors get a longer backoff.
+    setTimeout(startWakeWordDetection, e.error === 'no-speech' ? 500 : 2000);
   };
   try {
     wakeWordRecognition.start();
@@ -1607,29 +1986,15 @@ async function attachImage() {
     addMsg('user', `🖼 <b>${result.name}</b> — analyzing image…`);
     setOrb('thinking'); showTyping();
 
-    // Try llava (vision model) first
-    const visionBody = {
-      model: 'llava',
-      stream: true,
-      messages: [{
-        role: 'user',
-        content: 'You are an expert analyst. Analyze this image in detail — identify all key elements, explain what you see, describe how things connect or relate, and flag anything unusual or worth noting. Be thorough.',
-        images: [result.b64]
-      }]
-    };
-    let res;
+    // Verify llava is installed before streaming
     try {
-      res = await fetch(`${OLLAMA}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(visionBody)
-      });
-      if (!res.ok) throw new Error('llava not available');
+      const check = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(3000) });
+      const d = await check.json();
+      if (!(d.models || []).some(m => m.name.startsWith('llava'))) throw new Error('not installed');
     } catch(_) {
-      // llava not installed — fall back to text description request
       rmTyping();
-      addMsg('assistant', 'I need the llava vision model to analyze schematics.<br>Install it with:<br><b>ollama pull llava</b><br>Then try again.');
-      speak("I need the llava vision model to read schematics. Install it by running ollama pull llava in Terminal, then try again, buddy.");
+      addMsg('assistant', 'I need the llava vision model to analyze images.<br>Install it with:<br><b>ollama pull llava</b><br>Then try again.');
+      speak("I need the llava vision model. Install it by running ollama pull llava in Terminal, then try again, buddy.");
       return;
     }
 
@@ -1637,24 +2002,14 @@ async function attachImage() {
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
     setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
+    const visionMessages = [{
+      role: 'user',
+      content: 'You are an expert analyst. Analyze this image in detail — identify all key elements, explain what you see, describe how things connect or relate, and flag anything unusual or worth noting. Be thorough.',
+      images: [result.b64]
+    }];
+    const fullReply = await streamOllamaChat(visionMessages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    }, 'llava');
     txtEl.innerHTML = md(fullReply);
     setOrb('');
     history.push({ role: 'assistant', content: fullReply });
@@ -1666,56 +2021,62 @@ async function attachImage() {
   }
 }
 
-// ── Raw prompt sender (for PDF / image inject) ────────────────────────────────
+// ── Raw prompt sender (for PDF inject) ───────────────────────────────────────
 async function sendRaw(promptText) {
   if (!online) { rmTyping(); addMsg('assistant', 'LOGAT is offline. Start ollama first.'); return; }
   try {
-    const messages = [
-      { role: 'system', content: buildPrompt() },
-      ...history,
-      { role: 'user', content: promptText }
-    ];
-    const res = await fetch(`${OLLAMA}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, stream: true, messages })
-    });
-    if (!res.ok) throw new Error('status ' + res.status);
+    const messages = [{ role: 'system', content: buildPrompt() }, ...history, { role: 'user', content: promptText }];
     rmTyping();
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
     setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
-    txtEl.innerHTML = md(fullReply);
-    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
-    if (rm) { addFact(rm[1].trim()); fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim(); txtEl.innerHTML = md(fullReply); }
+    let raw = await streamOllamaChat(messages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    });
+    raw = extractMemory(raw, null);
+    txtEl.innerHTML = md(raw);
     setOrb('');
-    history.push({ role: 'assistant', content: fullReply });
+    history.push({ role: 'assistant', content: raw });
     if (history.length > 40) history = history.slice(-40);
     await saveChat();
-    speak(fullReply);
+    speak(raw);
   } catch(err) {
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
     addMsg('assistant', 'Lost connection. Run ollama serve in Terminal.');
     startOfflineRetry();
   }
+}
+
+// ── Shared Ollama chat streaming ──────────────────────────────────────────────
+async function streamOllamaChat(messages, onChunk, model) {
+  const res = await fetch(`${OLLAMA}/api/chat`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: model || MODEL, stream: true, messages })
+  });
+  if (!res.ok) throw new Error('status ' + res.status);
+  const reader = res.body.getReader(); const dec = new TextDecoder();
+  let full = '';
+  while (true) {
+    const { done, value } = await reader.read(); if (done) break;
+    for (const line of dec.decode(value).split('\n').filter(l => l.trim())) {
+      try { const j = JSON.parse(line); if (j.message?.content) { full += j.message.content; if (onChunk) onChunk(full); } } catch(_) {}
+    }
+  }
+  return full;
+}
+
+// Apply a REMEMBER fact from a reply; returns cleaned text
+function extractMemory(fullReply, msgEl) {
+  const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
+  if (!rm) return fullReply;
+  addFact(rm[1].trim());
+  const clean = fullReply.replace(/REMEMBER:\s*.+/im, '').trim();
+  if (msgEl) {
+    const chip = document.createElement('div');
+    chip.className = 'mchip'; chip.textContent = '⬡ REMEMBERED';
+    msgEl.querySelector('.bbl').appendChild(chip);
+  }
+  return clean;
 }
 
 // ── AI ──
@@ -1762,51 +2123,21 @@ async function send(userText) {
   history.push({ role: 'user', content: text });
   addMsg('user', text, history.length - 1);
   setOrb('thinking'); showTyping();
-
   try {
-    const res = await fetch(`${OLLAMA}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, stream: true, messages: [{ role: 'system', content: buildPrompt() }, ...history] })
-    });
-    if (!res.ok) throw new Error('status ' + res.status);
+    const messages = [{ role: 'system', content: buildPrompt() }, ...history];
     rmTyping();
     const msgEl = addMsg('assistant', '');
     const txtEl = msgEl.querySelector('.txt');
-    setOrb('thinking');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullReply = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const lines = decoder.decode(value).split('\n').filter(l => l.trim());
-      for (const line of lines) {
-        try {
-          const j = JSON.parse(line);
-          if (j.message?.content) {
-            fullReply += j.message.content;
-            txtEl.innerHTML = fullReply.replace(/\n/g, '<br>');
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-        } catch(e) {}
-      }
-    }
-    txtEl.innerHTML = md(fullReply);
-    const rm = fullReply.match(/REMEMBER:\s*(.+)/i);
-    if (rm) {
-      addFact(rm[1].trim());
-      fullReply = fullReply.replace(/REMEMBER:\s*.+/im, '').trim();
-      txtEl.innerHTML = md(fullReply);
-      const chip = document.createElement('div');
-      chip.className = 'mchip'; chip.textContent = '⬡ REMEMBERED';
-      msgEl.querySelector('.bbl').appendChild(chip);
-    }
+    let raw = await streamOllamaChat(messages, full => {
+      txtEl.innerHTML = full.replace(/\n/g, '<br>'); msgsEl.scrollTop = msgsEl.scrollHeight;
+    });
+    raw = extractMemory(raw, msgEl);
+    txtEl.innerHTML = md(raw);
     setOrb('');
-    history.push({ role: 'assistant', content: fullReply });
+    history.push({ role: 'assistant', content: raw });
     if (history.length > 40) history = history.slice(-40);
     await saveChat();
-    speak(fullReply);
+    speak(raw);
   } catch(err) {
     history.pop();
     rmTyping(); setOrb(''); online = false; pip.classList.add('off');
@@ -1941,6 +2272,11 @@ inpEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) s
 
 // ── Search Engine ──
 let searchEngine = 'ddg';
+function setSearchEngine(e) {
+  searchEngine = e;
+  ['ddg','google'].forEach(s => document.getElementById('se-' + s)?.classList.toggle('on', s === e));
+  if (settings) { settings.searchEngine = e; saveSettings(); }
+}
 function searchWeb(q) {
   const url = searchEngine === 'google'
     ? 'https://www.google.com/search?q=' + encodeURIComponent(q)
@@ -1974,6 +2310,480 @@ function detectChatIntent(text) {
   return false;
 }
 
+// ── Shell Exec ──
+async function execShellCommand(cmd) {
+  try {
+    const result = await ipcRenderer.invoke('exec-shell', cmd);
+    addMsg('assistant', '<div class="shell-result"><code>' + (result?.output || result || '(no output)') + '</code></div>');
+  } catch (e) { addMsg('assistant', 'Shell error: ' + e.message); }
+}
+
+// ── Shared query helper for Research / Docs AI ────────────────────────────────
+async function queryOllamaCollect(prompt, liveEl) {
+  try {
+    return await streamOllamaChat(
+      [{ role: 'user', content: prompt }],
+      liveEl ? full => { liveEl.innerHTML = md(full); } : null
+    );
+  } catch(e) {
+    const err = `[Error: ${e.message}]`;
+    if (liveEl) liveEl.textContent = err;
+    return err;
+  }
+}
+
+// ── Panel show functions ──────────────────────────────────────────────────────
+function showResearchPanel() {
+  currentPanel = 'research';
+  hideAllPanels();
+  document.getElementById('research-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-research');
+  setTimeout(() => document.getElementById('researchInp')?.focus(), 50);
+}
+
+function showComparePanel() {
+  currentPanel = 'compare';
+  hideAllPanels();
+  document.getElementById('compare-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-compare');
+  loadCompareModels();
+}
+
+function showDocsPanel() {
+  currentPanel = 'docs';
+  hideAllPanels();
+  document.getElementById('docs-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-docs');
+  renderDocTabs();
+  if (!docs.length) newDoc();
+  else if (currentDocId) loadDocContent(currentDocId);
+}
+
+function showNotesPanel() {
+  currentPanel = 'notes';
+  hideAllPanels();
+  document.getElementById('notes-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-notes');
+  renderNoteList();
+  setTimeout(() => document.getElementById('noteInp')?.focus(), 50);
+}
+
+function showCookbookPanel() {
+  currentPanel = 'cookbook';
+  hideAllPanels();
+  document.getElementById('cookbook-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-cookbook');
+  loadCookbookModels();
+}
+
+// ── Deep Research ──────────────────────────────────────────────────────────────
+let researchRunning = false;
+let lastResearchTopic = '', lastResearchContent = '';
+
+async function startResearch() {
+  const topic = document.getElementById('researchInp').value.trim();
+  if (!topic || researchRunning) return;
+  if (!online) { document.getElementById('researchInp').placeholder = 'Ollama must be online first.'; return; }
+  researchRunning = true;
+  const btn = document.getElementById('researchBtn');
+  btn.textContent = 'Running…'; btn.disabled = true;
+  const progress = document.getElementById('researchProgress');
+  const report = document.getElementById('researchReport');
+  progress.innerHTML = ''; report.innerHTML = '';
+
+  // Step 1: generate sub-questions
+  const step1 = makeResearchStep('Generating research questions…');
+  const subQText = await queryOllamaCollect(
+    `Given the research topic "${topic}", generate exactly 4 focused sub-questions that together give a complete understanding. Output ONLY a numbered list like:\n1. Question one\n2. Question two\n3. Question three\n4. Question four`,
+    step1.contentEl
+  );
+  step1.done('Sub-questions');
+  const questions = subQText.split('\n')
+    .filter(l => /^\d+[\.\)]/.test(l))
+    .map(l => l.replace(/^\d+[\.\)]\s*/, '').trim())
+    .filter(Boolean).slice(0, 4);
+  if (!questions.length) questions.push(topic);
+
+  // Step 2: research each question
+  const findings = [];
+  for (let i = 0; i < questions.length; i++) {
+    const step = makeResearchStep(`Researching: ${questions[i]}`);
+    const answer = await queryOllamaCollect(
+      `Answer this research question in 2-3 precise, factual paragraphs:\n\n${questions[i]}\n\nFocus on key facts, nuances, and any important recent context.`,
+      step.contentEl
+    );
+    step.done(`Finding ${i + 1}: ${questions[i].substring(0, 50)}${questions[i].length > 50 ? '…' : ''}`);
+    findings.push({ question: questions[i], answer });
+  }
+
+  // Step 3: synthesize
+  const synthStep = makeResearchStep('Synthesizing final report…');
+  const findingsText = findings.map((f, i) => `Q${i+1}: ${f.question}\nAnswer: ${f.answer}`).join('\n\n');
+  const synthesis = await queryOllamaCollect(
+    `Write a comprehensive research report on "${topic}" based on these findings:\n\n${findingsText}\n\nStructure it as:\n# Executive Summary\n(2-3 sentences)\n\n# Key Findings\n(bullet points)\n\n# Analysis\n(2-3 paragraphs)\n\n# Conclusion\n(1-2 sentences)`,
+    synthStep.contentEl
+  );
+  synthStep.done('Final Report');
+
+  lastResearchTopic = topic;
+  lastResearchContent = synthesis;
+  report.innerHTML = `<div class="research-report">
+    <div class="research-report-title">
+      <span>Report: ${topic}</span>
+      <button class="docs-tool-btn" onclick="saveLastResearchAsDoc()">Save as Doc</button>
+    </div>
+    <div>${md(synthesis)}</div>
+  </div>`;
+
+  researchRunning = false;
+  btn.textContent = 'Research'; btn.disabled = false;
+}
+
+function makeResearchStep(label) {
+  const el = document.createElement('div');
+  el.className = 'research-step active';
+  el.innerHTML = `<div class="research-step-label">${label}</div><div style="font-size:11px;color:var(--mt2);margin-top:3px;line-height:1.55"></div>`;
+  document.getElementById('researchProgress').appendChild(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const contentEl = el.querySelector('div + div');
+  return {
+    contentEl,
+    done(title) {
+      el.className = 'research-step done';
+      el.querySelector('.research-step-label').textContent = title;
+    }
+  };
+}
+
+function saveLastResearchAsDoc() {
+  if (!lastResearchContent) return;
+  newDoc(lastResearchContent, `Research: ${lastResearchTopic}`);
+  showDocsPanel();
+}
+
+document.getElementById('researchInp').addEventListener('keydown', e => { if (e.key === 'Enter') startResearch(); });
+
+// ── Model Compare ─────────────────────────────────────────────────────────────
+let compareRunning = false;
+
+async function loadCompareModels() {
+  const selA = document.getElementById('compareModelA');
+  const selB = document.getElementById('compareModelB');
+  if (!selA || !selB) return;
+  try {
+    const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(4000) });
+    const d = await r.json();
+    const models = (d.models || []).map(m => m.name);
+    if (!models.length) { selA.innerHTML = selB.innerHTML = '<option>No models</option>'; return; }
+    [selA, selB].forEach(sel => {
+      sel.innerHTML = models.map(m => `<option value="${m}">${m}</option>`).join('');
+    });
+    if (models.length > 1) selB.selectedIndex = 1;
+  } catch(_) { selA.innerHTML = selB.innerHTML = '<option>Ollama offline</option>'; }
+}
+
+async function runComparison() {
+  const prompt = document.getElementById('comparePrompt').value.trim();
+  const modelA = document.getElementById('compareModelA').value;
+  const modelB = document.getElementById('compareModelB').value;
+  if (!prompt || compareRunning) return;
+  if (!online) return;
+  compareRunning = true;
+  const btn = document.getElementById('compareBtn');
+  btn.textContent = 'Running…'; btn.disabled = true;
+
+  const resA = document.getElementById('compareResA');
+  const resB = document.getElementById('compareResB');
+  const timA = document.getElementById('timingA');
+  const timB = document.getElementById('timingB');
+  const cols = document.querySelectorAll('.compare-col-label');
+
+  // Update labels before running so the user sees which model is which
+  if (cols[0]) cols[0].childNodes[0].textContent = modelA.split(':')[0].toUpperCase() + ' ';
+  if (cols[1]) cols[1].childNodes[0].textContent = modelB.split(':')[0].toUpperCase() + ' ';
+  timA.textContent = timB.textContent = '';
+  const dots = '<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  resA.innerHTML = resB.innerHTML = dots;
+
+  const runModel = async (model, resEl, timEl) => {
+    const t0 = Date.now(); resEl.innerHTML = '';
+    try {
+      await streamOllamaChat(
+        [{ role: 'user', content: prompt }],
+        full => { resEl.innerHTML = md(full); },
+        model
+      );
+    } catch(e) { resEl.textContent = `Error: ${e.message}`; }
+    timEl.textContent = ((Date.now() - t0) / 1000).toFixed(1) + 's';
+  };
+
+  await Promise.all([
+    runModel(modelA, resA, timA),
+    runModel(modelB, resB, timB)
+  ]);
+
+  compareRunning = false;
+  btn.textContent = 'Compare'; btn.disabled = false;
+}
+
+// ── Document Editor ───────────────────────────────────────────────────────────
+let docs = [], currentDocId = null, docPreviewMode = false, docAutoSaveTimer = null;
+
+async function loadDocs() {
+  const d = await ipcRenderer.invoke('load-docs');
+  docs = d.docs || [];
+}
+
+async function saveDocs() { await ipcRenderer.invoke('save-docs', { docs }); }
+
+function newDoc(content = '', title = 'Untitled') {
+  const id = 'doc_' + Date.now();
+  docs.push({ id, title, content, created: Date.now(), updated: Date.now() });
+  currentDocId = id;
+  saveDocs(); renderDocTabs(); loadDocContent(id);
+}
+
+function openDoc(id) {
+  currentDocId = id; renderDocTabs(); loadDocContent(id);
+}
+
+function closeDoc(id, e) {
+  e.stopPropagation();
+  const idx = docs.findIndex(d => d.id === id);
+  docs.splice(idx, 1);
+  if (currentDocId === id) currentDocId = docs.length ? docs[Math.max(0, idx - 1)].id : null;
+  saveDocs(); renderDocTabs();
+  if (currentDocId) loadDocContent(currentDocId);
+  else { document.getElementById('docEditor').value = ''; document.getElementById('docTitleInp').value = ''; }
+}
+
+function loadDocContent(id) {
+  const doc = docs.find(d => d.id === id); if (!doc) return;
+  document.getElementById('docEditor').value = doc.content;
+  document.getElementById('docTitleInp').value = doc.title;
+  if (docPreviewMode) updateDocPreview();
+}
+
+function autoSaveDoc() {
+  if (docAutoSaveTimer) clearTimeout(docAutoSaveTimer);
+  docAutoSaveTimer = setTimeout(() => {
+    if (!currentDocId) return;
+    const doc = docs.find(d => d.id === currentDocId);
+    if (doc) { doc.content = document.getElementById('docEditor').value; doc.updated = Date.now(); saveDocs(); }
+  }, 1000);
+}
+
+function renameCurrentDoc() {
+  if (!currentDocId) return;
+  const doc = docs.find(d => d.id === currentDocId);
+  if (doc) { doc.title = document.getElementById('docTitleInp').value || 'Untitled'; saveDocs(); renderDocTabs(); }
+}
+
+function renderDocTabs() {
+  const tabs = document.getElementById('docsTabs');
+  tabs.innerHTML = docs.map(d =>
+    `<div class="doc-tab${d.id === currentDocId ? ' active' : ''}" onclick="openDoc('${d.id}')"><span class="doc-tab-name">${d.title}</span><span class="doc-tab-close" onclick="closeDoc('${d.id}',event)">×</span></div>`
+  ).join('') + `<button class="doc-new-tab" onclick="newDoc()" title="New document">+</button>`;
+}
+
+function toggleDocPreview() {
+  docPreviewMode = !docPreviewMode;
+  document.getElementById('docPreview').style.display = docPreviewMode ? 'block' : 'none';
+  document.getElementById('docEditor').style.display = docPreviewMode ? 'none' : '';
+  document.getElementById('previewBtn').classList.toggle('on', docPreviewMode);
+  if (docPreviewMode) updateDocPreview();
+}
+
+function updateDocPreview() {
+  document.getElementById('docPreview').innerHTML = md(document.getElementById('docEditor').value);
+}
+
+function exportCurrentDoc() {
+  if (!currentDocId) return;
+  const doc = docs.find(d => d.id === currentDocId); if (!doc) return;
+  ipcRenderer.invoke('export-chat', { title: doc.title, text: doc.content });
+}
+
+async function docAIQuery() {
+  const q = document.getElementById('docsAiInp').value.trim();
+  if (!q || !online) return;
+  document.getElementById('docsAiInp').value = '';
+  const resultEl = document.getElementById('docsAiResult');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  const doc = docs.find(d => d.id === currentDocId);
+  const ctx = doc ? `\n\nDocument title: "${doc.title}"\nCurrent content:\n${doc.content.substring(0, 3000)}` : '';
+  await queryOllamaCollect(`${q}${ctx}`, resultEl);
+}
+
+document.getElementById('docsAiInp').addEventListener('keydown', e => { if (e.key === 'Enter') docAIQuery(); });
+
+// ── Notes ─────────────────────────────────────────────────────────────────────
+let notes = [];
+
+async function loadNotes() {
+  const d = await ipcRenderer.invoke('load-notes');
+  notes = d.notes || [];
+}
+
+async function saveNotes() { await ipcRenderer.invoke('save-notes', { notes }); }
+
+function addNote() {
+  const inp = document.getElementById('noteInp');
+  const text = inp.value.trim(); if (!text) return;
+  notes.unshift({ id: 'n_' + Date.now(), text, pinned: false, created: Date.now() });
+  inp.value = '';
+  saveNotes(); renderNoteList();
+}
+
+function deleteNote(id) {
+  notes = notes.filter(n => n.id !== id);
+  saveNotes(); renderNoteList();
+}
+
+function togglePinNote(id) {
+  const n = notes.find(x => x.id === id);
+  if (n) { n.pinned = !n.pinned; saveNotes(); renderNoteList(); }
+}
+
+function renderNoteList() {
+  const list = document.getElementById('noteList'); if (!list) return;
+  const nc = document.getElementById('noteCount');
+  if (nc) nc.textContent = notes.length ? `${notes.length} note${notes.length !== 1 ? 's' : ''}` : '';
+  if (!notes.length) { list.innerHTML = '<div class="task-empty">No notes yet.</div>'; return; }
+  const pinned = notes.filter(n => n.pinned);
+  const unpinned = notes.filter(n => !n.pinned);
+  const noteHTML = n => {
+    const date = new Date(n.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const textSafe = n.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<div class="note-item${n.pinned ? ' pinned' : ''}">
+      <button class="note-del" onclick="deleteNote('${n.id}')">×</button>
+      <div class="note-item-text">${textSafe}</div>
+      <div class="note-item-meta">
+        ${n.pinned ? '<span class="note-pin-dot"></span>' : ''}
+        <span>${date}</span>
+        <span class="note-action" onclick="togglePinNote('${n.id}')">${n.pinned ? 'Unpin' : 'Pin'}</span>
+        <span class="note-action" onclick="sendNoteToChat('${n.id}')">Send to chat</span>
+      </div>
+    </div>`;
+  };
+  list.innerHTML =
+    (pinned.length ? '<div class="task-group-label">Pinned</div>' + pinned.map(noteHTML).join('') : '') +
+    (unpinned.length ? (pinned.length ? '<div class="task-group-label" style="margin-top:10px">Notes</div>' : '') + unpinned.map(noteHTML).join('') : '');
+}
+
+function sendNoteToChat(id) {
+  const n = notes.find(x => x.id === id); if (!n) return;
+  showChatPanel();
+  inpEl.value = n.text; inpEl.focus();
+}
+
+document.getElementById('noteInp').addEventListener('keydown', e => { if (e.key === 'Enter' && e.metaKey) addNote(); });
+
+// ── Cookbook (model manager) ──────────────────────────────────────────────────
+let cookbookModels = [];
+
+async function loadCookbookModels() {
+  const list = document.getElementById('cookbookModelList'); if (!list) return;
+  list.innerHTML = '<div style="padding:10px;font-size:11px;color:var(--mt)">Loading…</div>';
+  try {
+    const r = await fetch(`${OLLAMA}/api/tags`, { signal: AbortSignal.timeout(5000) });
+    const d = await r.json();
+    cookbookModels = d.models || [];
+    renderCookbookModelList();
+  } catch(_) {
+    list.innerHTML = '<div style="padding:10px;font-size:11px;color:var(--mt)">Ollama offline — no models available.</div>';
+  }
+}
+
+function renderCookbookModelList() {
+  const list = document.getElementById('cookbookModelList'); if (!list) return;
+  if (!cookbookModels.length) {
+    list.innerHTML = '<div style="padding:10px;font-size:11px;color:var(--mt)">No models installed. Pull one above.</div>';
+    return;
+  }
+  list.innerHTML = cookbookModels.map(m => {
+    const sizeStr = m.size ? (m.size / 1e9).toFixed(1) + ' GB' : '';
+    const family  = m.details?.family || '';
+    const params  = m.details?.parameter_size || '';
+    const meta    = [family, params, sizeStr].filter(Boolean).join(' · ');
+    const isActive = m.name === MODEL;
+    const icon = m.name.substring(0, 2).toUpperCase();
+    return `<div class="model-card">
+      <div class="model-card-icon">${icon}</div>
+      <div class="model-card-info">
+        <div class="model-card-name">${m.name}</div>
+        <div class="model-card-meta">${meta}</div>
+      </div>
+      ${isActive ? '<span class="model-active-badge">ACTIVE</span>' : ''}
+      <button class="model-use-btn" onclick="setCookbookModel('${m.name}')">Use</button>
+      <button class="model-del-btn" onclick="deleteModel('${m.name}')">Delete</button>
+    </div>`;
+  }).join('');
+}
+
+function setCookbookModel(name) {
+  MODEL = name; settings.model = name; saveSettings();
+  renderCookbookModelList();
+  document.querySelectorAll('#modelBtns .spd-btn').forEach(b => b.classList.toggle('on', b.textContent === name));
+}
+
+async function pullModel() {
+  const name = document.getElementById('cookbookInp').value.trim(); if (!name) return;
+  const btn = document.getElementById('pullBtn');
+  const progress = document.getElementById('pullProgress');
+  const status   = document.getElementById('pullStatus');
+  const bar      = document.getElementById('pullBar');
+  btn.disabled = true; btn.textContent = 'Pulling…';
+  progress.classList.add('show'); status.textContent = `Pulling ${name}…`; bar.style.width = '5%';
+  try {
+    const res = await fetch(`${OLLAMA}/api/pull`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, stream: true })
+    });
+    const reader = res.body.getReader(); const dec = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read(); if (done) break;
+      for (const line of dec.decode(value).split('\n').filter(l => l.trim())) {
+        try {
+          const j = JSON.parse(line);
+          if (j.status) status.textContent = j.status;
+          if (j.total && j.completed) bar.style.width = Math.round((j.completed / j.total) * 100) + '%';
+        } catch(_) {}
+      }
+    }
+    status.textContent = `✓ ${name} installed successfully!`; bar.style.width = '100%';
+    document.getElementById('cookbookInp').value = '';
+    await loadCookbookModels();
+  } catch(e) { status.textContent = `Error: ${e.message}`; }
+  btn.disabled = false; btn.textContent = 'Pull';
+  setTimeout(() => { progress.classList.remove('show'); bar.style.width = '0'; }, 5000);
+}
+
+async function deleteModel(name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    await fetch(`${OLLAMA}/api/delete`, {
+      method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    if (MODEL === name) { MODEL = ''; settings.model = ''; saveSettings(); }
+    await loadCookbookModels();
+  } catch(e) { alert('Delete failed: ' + e.message); }
+}
+
+document.getElementById('cookbookInp').addEventListener('keydown', e => { if (e.key === 'Enter') pullModel(); });
+
 // ── Voice pre-loading (Electron starts with empty voice list) ─────────────────
 let cachedVoices = [];
 let voicesReady = false;
@@ -2000,6 +2810,115 @@ window.speechSynthesis.onvoiceschanged = onVoicesLoaded;
 // Trigger early so voices load as fast as possible
 cachedVoices = window.speechSynthesis.getVoices();
 if (cachedVoices.length) voicesReady = true;
+
+// ── Screenshot / Vision ──
+async function captureScreen() {
+  try {
+    const b64result = await ipcRenderer.invoke('take-screenshot');
+    if (!b64result?.ok) { addMsg('assistant', 'Screenshot failed.'); return; }
+    const b64 = b64result.b64;
+    addMsg('user', '[screenshot attached]');
+    const bubble = addMsg('assistant', '…');
+    const payload = {
+      model: settings.model || 'llava',
+      messages: [
+        { role: 'user', content: 'Describe what you see on the screen.', images: [b64] }
+      ]
+    };
+    const res = await fetch(`${OLLAMA}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, stream: true })
+    });
+    let text = '';
+    const reader = res.body.getReader();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = new TextDecoder().decode(value).split('\n').filter(Boolean);
+      for (const line of lines) {
+        try {
+          const j = JSON.parse(line);
+          if (j.message?.content) { text += j.message.content; bubble.querySelector('.txt').innerHTML = md(text); }
+        } catch {}
+      }
+    }
+    speak(text);
+    await saveChat();
+  } catch (e) { addMsg('assistant', 'Screenshot error: ' + e.message); }
+}
+
+// ── Voice Gender ──
+function setVoiceGender(g) {
+  settings.voiceGender = g;
+  syncVoiceGenderUI();
+  saveSettings();
+}
+function syncVoiceGenderUI() {
+  const g = settings.voiceGender || 'jarvis';
+  ['jarvis','female'].forEach(s => document.getElementById('vgender-' + s)?.classList.toggle('on', s === g));
+}
+
+// ── Hold-to-Record ──
+function toggleHoldRecord() {
+  settings.holdRecord = !settings.holdRecord;
+  syncHoldRecordUI();
+  saveSettings();
+  if (settings.holdRecord) attachHoldRecord(); else detachHoldRecord();
+}
+function syncHoldRecordUI() {
+  const tog = document.getElementById('holdRecordToggle');
+  if (tog) tog.classList.toggle('on', !!settings.holdRecord);
+}
+function attachHoldRecord() {
+  document.removeEventListener('keydown', holdKeyDown);
+  document.removeEventListener('keyup', holdKeyUp);
+  document.addEventListener('keydown', holdKeyDown);
+  document.addEventListener('keyup', holdKeyUp);
+}
+function detachHoldRecord() {
+  document.removeEventListener('keydown', holdKeyDown);
+  document.removeEventListener('keyup', holdKeyUp);
+}
+let _holdActive = false;
+function holdKeyDown(e) {
+  if (e.code === 'Space' && !e.repeat && document.activeElement === document.body) {
+    e.preventDefault();
+    if (!_holdActive) { _holdActive = true; startMic(); }
+  }
+}
+function holdKeyUp(e) {
+  if (e.code === 'Space' && _holdActive) {
+    _holdActive = false;
+    stopMic();
+  }
+}
+
+// ── Idle Timeout ──
+function setIdleTimeout(mins) {
+  settings.idleTimeout = mins;
+  syncIdleTimeoutUI();
+  saveSettings();
+  resetIdleTimer();
+}
+function syncIdleTimeoutUI() {
+  const v = String(settings.idleTimeout || 'off');
+  document.querySelectorAll('.idle-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('idle-' + v)?.classList.add('on');
+}
+
+// ── Focus Mode ──
+function toggleFocusMode() {
+  settings.focusMode = !settings.focusMode;
+  syncFocusModeUI();
+  saveSettings();
+}
+function syncFocusModeUI() {
+  const tog = document.getElementById('focusToggle');
+  if (tog) tog.classList.toggle('on', !!settings.focusMode);
+  const banner = document.getElementById('focusBanner');
+  if (banner) banner.classList.toggle('show', !!settings.focusMode);
+}
 
 // ── SiriWave canvas visualizer ────────────────────────────────────────────────
 let waveAnimId = null;
@@ -2520,12 +3439,32 @@ async function showSystemPanel() {
   document.getElementById('searchRow').style.display = 'none';
   sb.classList.remove('open');
   setActiveNav('nb-system');
+  await refreshSystemStats();
+  await refreshProcesses();
+  startClipPolling();
+}
+
+async function refreshSystemStats() {
+  const r = await ipcRenderer.invoke('get-system-stats');
+  const el = document.getElementById('statBars');
+  if (!el || !r?.ok) return;
+  const upH = Math.floor(r.uptime / 3600);
+  const upM = Math.floor((r.uptime % 3600) / 60);
+  el.innerHTML = `
+    <div class="stat-row"><span class="stat-label">CPU</span>
+      <div class="stat-bar-outer"><div class="stat-bar-inner cpu" style="width:${r.cpuPct}%"></div></div>
+      <span class="stat-val">${r.cpuPct}%</span></div>
+    <div class="stat-row"><span class="stat-label">RAM</span>
+      <div class="stat-bar-outer"><div class="stat-bar-inner ram" style="width:${r.ramPct}%"></div></div>
+      <span class="stat-val">${r.ramFreeGB}/${r.ramTotalGB}GB</span></div>
+    <div class="stat-row"><span class="stat-label">Up</span>
+      <span class="stat-val" style="width:auto">${upH}h ${upM}m</span></div>`;
 }
 
 async function refreshProcesses() {
   const r = await ipcRenderer.invoke('get-processes');
   const el = document.getElementById('procList');
-  if (!el || !r.ok) return;
+  if (!el || !r?.ok) return;
   el.innerHTML = '<table class="proc-table"><tr><th>PID</th><th>CPU%</th><th>MEM%</th><th>Command</th><th></th></tr>' +
     r.processes.map(p =>
       `<tr><td>${p.pid}</td><td>${p.cpu}</td><td>${p.mem}</td><td class="proc-name">${p.name}</td>
@@ -2537,9 +3476,127 @@ async function killProc(pid) {
   await ipcRenderer.invoke('kill-process', pid);
   await refreshProcesses();
 }
+// alias for backward compat
+const killProcess = killProc;
+
+// ── Clipboard History ──
+let _clipHistory = [];
+let _clipLast = '';
+let _clipPollTimer = null;
+function startClipPolling() {
+  if (_clipPollTimer) return;
+  _clipPollTimer = setInterval(async () => {
+    const r = await ipcRenderer.invoke('read-clipboard');
+    const txt = r?.text;
+    if (txt && txt !== _clipLast) {
+      _clipLast = txt;
+      _clipHistory.unshift({ text: txt, ts: Date.now() });
+      if (_clipHistory.length > 20) _clipHistory.pop();
+      renderClipHistory();
+    }
+  }, 2000);
+}
+function renderClipHistory() {
+  const el = document.getElementById('clipList');
+  if (!el) return;
+  el.innerHTML = _clipHistory.length
+    ? _clipHistory.map((c, i) =>
+        `<div class="clip-item"><span class="clip-item-text">${c.text.slice(0, 60)}${c.text.length > 60 ? '…' : ''}</span>
+         <small style="font-size:9px;color:var(--mt)">${timeAgo(c.ts)}</small>
+         <button class="setting-action" onclick="copyClipItem(${i})">Copy</button></div>`
+      ).join('')
+    : '<p style="opacity:.5;text-align:center;font-size:11px">No clipboard history yet</p>';
+}
+function copyClipItem(i) {
+  if (_clipHistory[i]) navigator.clipboard.writeText(_clipHistory[i].text);
+}
+function clearClipHistory() { _clipHistory = []; renderClipHistory(); }
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  return Math.floor(s / 3600) + 'h ago';
+}
+
+// ── Reminders ──
+let _reminders = [];
+async function loadReminders() {
+  try {
+    const data = await ipcRenderer.invoke('load-reminders');
+    _reminders = (data?.reminders || []);
+    _reminders.forEach(r => { if (!r.fired) scheduleReminder(r); });
+    renderReminderList();
+  } catch {}
+}
+async function saveReminders() {
+  await ipcRenderer.invoke('save-reminders', { reminders: _reminders });
+}
+function addReminder() {
+  const inp = document.getElementById('reminderInp');
+  const sel = document.getElementById('reminderTimeSel');
+  if (!inp || !sel) return;
+  const text = inp.value.trim();
+  const delay = parseInt(sel.value) || 300000;
+  if (!text) return;
+  const r = { id: Date.now(), text, at: Date.now() + delay, fired: false };
+  _reminders.push(r);
+  scheduleReminder(r);
+  saveReminders();
+  renderReminderList();
+  inp.value = '';
+}
+function deleteReminder(id) {
+  _reminders = _reminders.filter(r => r.id !== id);
+  saveReminders();
+  renderReminderList();
+}
+function scheduleReminder(r) {
+  const delay = r.at - Date.now();
+  if (delay <= 0 || r.fired) return;
+  setTimeout(async () => {
+    r.fired = true;
+    await saveReminders();
+    ipcRenderer.invoke('show-notification', { title: 'LOGAT Reminder', body: r.text });
+    speak('Reminder: ' + r.text);
+    renderReminderList();
+  }, delay);
+}
+function renderReminderList() {
+  const el = document.getElementById('reminderList');
+  if (!el) return;
+  const rc = document.getElementById('reminderCount');
+  const pending = _reminders.filter(r => !r.fired);
+  if (rc) rc.textContent = pending.length ? `${pending.length} pending` : '';
+  el.innerHTML = pending.length
+    ? pending.map(r =>
+        `<div class="reminder-item">
+          <div class="reminder-info"><div class="reminder-text">${r.text.replace(/</g,'&lt;')}</div>
+          <div class="reminder-meta">${timeUntil(r.at)}</div></div>
+          <button class="reminder-del" onclick="deleteReminder(${r.id})">×</button>
+        </div>`
+      ).join('')
+    : '<p style="opacity:.5;text-align:center;padding:20px;font-size:11px">No pending reminders</p>';
+}
+function timeUntil(ts) {
+  const s = Math.floor((ts - Date.now()) / 1000);
+  if (s <= 0) return 'now';
+  if (s < 60) return 'in ' + s + 's';
+  if (s < 3600) return 'in ' + Math.floor(s / 60) + 'm';
+  return 'in ' + Math.floor(s / 3600) + 'h';
+}
+function showRemindersPanel() {
+  currentPanel = 'reminders';
+  hideAllPanels();
+  document.getElementById('reminders-panel')?.classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-reminders');
+  renderReminderList();
+}
 
 // ── Init ──
 document.getElementById('taskInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+document.getElementById('reminderInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addReminder(); });
 document.getElementById('kbNameInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('kbContentInp')?.focus(); });
 document.getElementById('kbKeysInp')?.addEventListener('keydown', e => { if (e.key === 'Enter') addKBEntry(); });
 
@@ -2548,6 +3605,9 @@ setTimeout(async () => {
   await loadSettingsFromDisk();
   await loadAppsFromDisk();
   await loadTasks();
+  await loadNotes();
+  await loadDocs();
+  await loadReminders();
   await loadKnowledge();
   await loadPersonas();
   await checkStorage();
@@ -2558,6 +3618,7 @@ setTimeout(async () => {
   startWakeWordDetection();     // active from launch; auto-listen will pause it when it starts
   initWave();
   scheduleProactiveTimer();
+  startClipPolling();
   setInterval(checkStorage, 30000);
 }, 800);
 </script>

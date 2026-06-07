@@ -388,6 +388,115 @@ function createTray() {
   );
 }
 
+// ── IPC: PDF export ───────────────────────────────────────────────────────────
+ipcMain.handle('export-pdf', async () => {
+  try {
+    const data = await mainWindow.webContents.printToPDF({
+      printBackground: true, pageSize: 'A4'
+    });
+    const res = await dialog.showSaveDialog(mainWindow, {
+      title: 'Export Chat as PDF',
+      defaultPath: path.join(os.homedir(), 'Desktop', `logat-chat-${Date.now()}.pdf`),
+      filters: [{ name: 'PDF', extensions: ['pdf'] }]
+    });
+    if (res.canceled || !res.filePath) return false;
+    fs.writeFileSync(res.filePath, data);
+    return true;
+  } catch(e) { return false; }
+});
+
+// ── IPC: iMessage ─────────────────────────────────────────────────────────────
+ipcMain.handle('send-imessage', async (_, { to, text }) => {
+  if (process.platform !== 'darwin') return { ok: false, error: 'macOS only' };
+  const safe = text.replace(/"/g, '\\"').replace(/'/g, "\\'");
+  const script = `tell application "Messages"\nset targetService to 1st service whose service type = iMessage\nset targetBuddy to buddy "${to}" of targetService\nsend "${safe}" to targetBuddy\nend tell`;
+  return new Promise(resolve => {
+    exec(`osascript -e '${script}'`, err =>
+      err ? resolve({ ok: false, error: err.message }) : resolve({ ok: true })
+    );
+  });
+});
+
+// ── IPC: Network speed test ───────────────────────────────────────────────────
+ipcMain.handle('speed-test', () => new Promise(resolve => {
+  const https = require('https');
+  const start = Date.now();
+  let bytes = 0;
+  const req = https.get('https://speed.cloudflare.com/__down?bytes=1000000', res => {
+    res.on('data', d => { bytes += d.length; });
+    res.on('end', () => {
+      const ms = Date.now() - start;
+      const mbps = ((bytes * 8) / (ms / 1000) / 1e6).toFixed(2);
+      resolve({ ok: true, mbps, ms, bytes });
+    });
+  });
+  req.on('error', e => resolve({ ok: false, error: e.message }));
+  req.setTimeout(15000, () => { req.destroy(); resolve({ ok: false, error: 'Timeout' }); });
+}));
+
+// ── IPC: Generate HTML file ───────────────────────────────────────────────────
+ipcMain.handle('save-and-open-html', async (_, { html, name }) => {
+  try {
+    const f = path.join(os.tmpdir(), `logat_${name || 'page'}_${Date.now()}.html`);
+    fs.writeFileSync(f, html, 'utf8');
+    await shell.openExternal(`file://${f}`);
+    return { ok: true, path: f };
+  } catch(e) { return { ok: false, error: e.message }; }
+});
+
+// ── IPC: Execute code snippet ─────────────────────────────────────────────────
+ipcMain.handle('exec-code', async (_, { code, lang }) => {
+  const choice = await dialog.showMessageBox(mainWindow, {
+    type: 'warning', buttons: ['Run', 'Cancel'], defaultId: 1,
+    title: `Run ${lang || 'code'} snippet`,
+    message: 'Execute this code snippet?',
+    detail: code.substring(0, 300)
+  });
+  if (choice.response !== 0) return { ok: false, error: 'Cancelled' };
+  return new Promise(resolve => {
+    let cmd, ext;
+    if (lang === 'python' || lang === 'python3') { ext = '.py'; cmd = 'python3'; }
+    else if (lang === 'javascript' || lang === 'js' || lang === 'node') { ext = '.js'; cmd = 'node'; }
+    else if (lang === 'bash' || lang === 'sh') { ext = '.sh'; cmd = 'bash'; }
+    else { resolve({ ok: false, error: `Unsupported language: ${lang}` }); return; }
+    const tmpFile = path.join(os.tmpdir(), `logat_snippet_${Date.now()}${ext}`);
+    fs.writeFileSync(tmpFile, code, 'utf8');
+    exec(`${cmd} "${tmpFile}"`, { timeout: 30000 }, (err, stdout, stderr) => {
+      try { fs.unlinkSync(tmpFile); } catch(_) {}
+      if (err && !stdout) resolve({ ok: false, error: stderr || err.message });
+      else resolve({ ok: true, output: (stdout + (stderr ? '\n[stderr]\n' + stderr : '')).trim().substring(0, 3000) });
+    });
+  });
+});
+
+// ── IPC: Knowledge Base ───────────────────────────────────────────────────────
+ipcMain.handle('load-knowledge', () => {
+  try {
+    const f = path.join(LOCAL_DIR, 'knowledge.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (_) {}
+  return { entries: [] };
+});
+
+ipcMain.handle('save-knowledge', (_, data) => {
+  try { fs.writeFileSync(path.join(LOCAL_DIR, 'knowledge.json'), JSON.stringify(data, null, 2)); return true; }
+  catch (_) { return false; }
+});
+
+// ── IPC: Personas ─────────────────────────────────────────────────────────────
+ipcMain.handle('load-personas', () => {
+  try {
+    const f = path.join(LOCAL_DIR, 'personas.json');
+    if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch (_) {}
+  return { personas: [], activeId: null };
+});
+
+ipcMain.handle('save-personas', (_, data) => {
+  try { fs.writeFileSync(path.join(LOCAL_DIR, 'personas.json'), JSON.stringify(data, null, 2)); return true; }
+  catch (_) { return false; }
+});
+
 // ── App lifecycle ─────────────────────────────────────────────────────────────
 app.whenReady().then(async () => {
   await requestMic();

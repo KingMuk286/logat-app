@@ -1,5 +1,5 @@
 {
-  "name": "logat",
+  "name": "logan",
   "version": "1.0.1",
   "description": "LOGAT - Mukunth's AI Assistant",
   "main": "main.js",
@@ -8,8 +8,8 @@
     "build": "electron-builder --mac"
   },
   "build": {
-    "appId": "com.mukunth.logat",
-    "productName": "LOGAT",
+    "appId": "com.mukunth.logan",
+    "productName": "LOGAN",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [

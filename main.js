@@ -142,8 +142,8 @@ ipcMain.handle('save-memory', (_, data) => {
 // ── IPC: Audio transcription ──────────────────────────────────────────────────
 ipcMain.handle('transcribe-audio', (_, b64) => new Promise(resolve => {
   try {
-    const webm = path.join(os.tmpdir(), `logat_${Date.now()}.webm`);
-    const wav  = path.join(os.tmpdir(), `logat_${Date.now()}.wav`);
+    const webm = path.join(os.tmpdir(), `logan_${Date.now()}.webm`);
+    const wav  = path.join(os.tmpdir(), `logan_${Date.now()}.wav`);
     fs.writeFileSync(webm, Buffer.from(b64, 'base64'));
     const cleanup = () => {
       try { fs.unlinkSync(webm); } catch (_) {}
@@ -288,7 +288,7 @@ ipcMain.handle('save-tasks', (_, data) => {
 ipcMain.handle('export-chat', async (_, { title, text }) => {
   const res = await dialog.showSaveDialog(mainWindow, {
     title: 'Export Chat',
-    defaultPath: path.join(os.homedir(), 'Desktop', (title || 'logat-chat') + '.txt'),
+    defaultPath: path.join(os.homedir(), 'Desktop', (title || 'logan-chat') + '.txt'),
     filters: [{ name: 'Text Files', extensions: ['txt'] }]
   });
   if (res.canceled || !res.filePath) return false;
@@ -363,7 +363,7 @@ async function requestMic() {
 // ── Window + Tray ─────────────────────────────────────────────────────────────
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 520, height: 860, minWidth: 420, minHeight: 600,
+    width: 740, height: 700, minWidth: 360, minHeight: 480, resizable: true,
     frame: false, transparent: true,
     titleBarStyle: 'hidden', trafficLightPosition: { x: 14, y: 14 },
     webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false },
@@ -378,9 +378,9 @@ function createWindow() {
 
 function createTray() {
   tray = new Tray(nativeImage.createEmpty());
-  tray.setToolTip('LOGAT');
+  tray.setToolTip('LOGAN');
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Open LOGAT', click: () => { mainWindow.show(); mainWindow.focus(); } },
+    { label: 'Open LOGAN', click: () => { mainWindow.show(); mainWindow.focus(); } },
     { type: 'separator' },
     { label: 'Quit', click: () => app.exit(0) }
   ]));
@@ -397,7 +397,7 @@ ipcMain.handle('export-pdf', async () => {
     });
     const res = await dialog.showSaveDialog(mainWindow, {
       title: 'Export Chat as PDF',
-      defaultPath: path.join(os.homedir(), 'Desktop', `logat-chat-${Date.now()}.pdf`),
+      defaultPath: path.join(os.homedir(), 'Desktop', `logan-chat-${Date.now()}.pdf`),
       filters: [{ name: 'PDF', extensions: ['pdf'] }]
     });
     if (res.canceled || !res.filePath) return false;
@@ -438,7 +438,7 @@ ipcMain.handle('speed-test', () => new Promise(resolve => {
 // ── IPC: Generate HTML file ───────────────────────────────────────────────────
 ipcMain.handle('save-and-open-html', async (_, { html, name }) => {
   try {
-    const f = path.join(os.tmpdir(), `logat_${name || 'page'}_${Date.now()}.html`);
+    const f = path.join(os.tmpdir(), `logan_${name || 'page'}_${Date.now()}.html`);
     fs.writeFileSync(f, html, 'utf8');
     await shell.openExternal(`file://${f}`);
     return { ok: true, path: f };
@@ -633,6 +633,12 @@ ipcMain.handle('show-notification', (_, { title, body }) => {
 // ── IPC: Open external URL ────────────────────────────────────────────────────
 ipcMain.handle('open-url', (_, url) => {
   try { shell.openExternal(url); return true; } catch(_) { return false; }
+});
+
+// ── IPC: Set window size ──────────────────────────────────────────────────────
+ipcMain.handle('set-size', (_, { w, h }) => {
+  if (mainWindow) mainWindow.setSize(w, h, true);
+  return true;
 });
 
 // ── App lifecycle ─────────────────────────────────────────────────────────────

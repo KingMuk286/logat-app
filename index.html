@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LOGAT</title>
+<title>LOGAN</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -529,61 +529,136 @@ svg{pointer-events:none}
 .gh-empty{padding:32px;text-align:center;font-size:11px;color:#333;letter-spacing:.5px}
 .gh-stars{color:#ffcc44}
 .gh-badge{padding:2px 6px;border-radius:3px;font-size:9px;border:1px solid rgba(255,204,68,.2);color:#ffcc44;background:rgba(255,204,68,.06)}
+
+/* ══ LOGAN REDESIGN v2 ══════════════════════════════════════════════════════ */
+.app{display:flex!important;flex-direction:column;height:100vh;overflow:hidden}
+.header{padding:0 14px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--b);position:relative}
+.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,26,0.3),transparent)}
+.htop{padding:7px 0;-webkit-app-region:drag}
+.acro,.nav,.search-row,.drag{display:none!important}
+.hmeta{-webkit-app-region:no-drag}
+.brand{-webkit-app-region:no-drag}
+/* Size preset buttons */
+.sz-btn{padding:3px 8px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:9px;cursor:pointer;transition:all .15s;letter-spacing:.5px;-webkit-app-region:no-drag;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.sz-btn:hover{border-color:rgba(232,0,26,.4);color:var(--red)}
+.sz-btn.on{border-color:rgba(232,0,26,.3);color:var(--red);background:var(--dim)}
+/* Body: icon-rail + content side by side */
+.body{flex:1;min-height:0;display:flex;overflow:hidden}
+/* Left icon rail — replaces top tabs */
+.icon-rail{width:46px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--b);display:flex;flex-direction:column;align-items:center;padding:6px 0;gap:2px;overflow-y:auto;scrollbar-width:none;-webkit-app-region:no-drag}
+.icon-rail::-webkit-scrollbar{display:none}
+.ir-btn{width:34px;height:34px;border-radius:7px;border:1px solid transparent;background:transparent;color:var(--mt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;position:relative}
+.ir-btn:hover{background:var(--s2);color:var(--mt2);border-color:var(--b)}
+.ir-btn.on{background:var(--dim);border-color:rgba(232,0,26,.35);color:var(--red);box-shadow:0 0 8px rgba(232,0,26,.12)}
+.ir-sep{width:26px;height:1px;background:var(--b);margin:3px 0;flex-shrink:0}
+.ir-spacer{flex:1;min-height:4px}
+.ir-tip{display:none;position:absolute;left:42px;top:50%;transform:translateY(-50%);background:rgba(5,5,9,.97);border:1px solid var(--b);border-radius:5px;padding:4px 10px;font-size:10px;color:var(--mt2);white-space:nowrap;pointer-events:none;z-index:99999;letter-spacing:.3px;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.ir-btn:hover .ir-tip{display:block}
+/* Compact mode */
+.app.compact .icon-rail{display:none!important}
+.app.compact .sidebar{display:none!important;width:0!important}
+/* Outer panels (research, compare, docs, notes, cookbook, system, reminders, github) fill screen */
+#research-panel,#compare-panel,#docs-panel,#notes-panel,#cookbook-panel,#system-panel,#reminders-panel,#github-panel{position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;background:var(--bg);display:flex;flex-direction:column}
+#research-panel.hidden,#compare-panel.hidden,#docs-panel.hidden,#notes-panel.hidden,#cookbook-panel.hidden,#system-panel.hidden,#reminders-panel.hidden,#github-panel.hidden{display:none!important}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="drag"></div>
 <div class="header">
   <div class="htop">
     <div class="brand">
-      <div class="logo">LOGAT</div>
-      <div class="acro"><b>M</b>ukunth's <b>O</b>bviously <b>G</b>reat <b>A</b>t <b>T</b>hings</div>
+      <div class="logo">LOGAN</div>
     </div>
     <div class="hmeta">
       <div class="dpill" id="dpill"><span id="dlbl">SSD</span></div>
       <div class="spill"><div class="spip off" id="pip"></div><span id="slbl">offline</span></div>
+      <div style="display:flex;gap:3px;margin-left:6px">
+        <button class="sz-btn on" id="szFull" onclick="setWindowSize('full')">
+          <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Full
+        </button>
+        <button class="sz-btn" id="szCompact" onclick="setWindowSize('compact')">
+          <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>Compact
+        </button>
+      </div>
+      <button class="winbtn" onclick="enterMini()" title="Float mode">
+        <svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </button>
       <button class="winbtn" onclick="ipc('minimize')">—</button>
       <button class="winbtn" onclick="ipc('hide')">✕</button>
     </div>
   </div>
-  <div class="search-row" id="searchRow">
-    <input class="search-inp" id="searchInp" placeholder="Search chats... (Cmd+K)" autocomplete="off"/>
-  </div>
-  <div class="nav">
-    <button class="nbtn on" id="nb-chats" onclick="showChatPanel()">
-      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chats
-    </button>
-    <button class="nbtn" id="nb-all" onclick="setMode('all')">All</button>
-    <div id="modeNav" style="display:flex;gap:3px"></div>
-    <button class="nbtn" id="nb-tasks" onclick="showTasksPanel()">Tasks</button>
-    <button class="nbtn" id="nb-notes" onclick="showNotesPanel()">Notes</button>
-    <button class="nbtn" id="nb-research" onclick="showResearchPanel()">Research</button>
-    <button class="nbtn" id="nb-compare" onclick="showComparePanel()">Compare</button>
-    <button class="nbtn" id="nb-docs" onclick="showDocsPanel()">Docs</button>
-    <button class="nbtn" id="nb-cookbook" onclick="showCookbookPanel()">Cookbook</button>
-    <button class="nbtn" id="nb-system" onclick="showSystemPanel()">System</button>
-    <button class="nbtn" id="nb-reminders" onclick="showRemindersPanel()">Reminders</button>
-    <button class="nbtn" id="nb-github" onclick="showGitHubPanel()">GitHub</button>
-    <button class="nbtn" id="nb-kb" onclick="showKBPanel()">Knowledge</button>
-    <button class="nbtn" id="nb-personas" onclick="showPersonasPanel()">Personas</button>
-    <button class="nbtn" id="nb-pomo" onclick="showPomoPanel()">Pomodoro</button>
-    <div class="nav-sep"></div>
-    <button class="nbtn icon-btn" id="nb-apps" onclick="showAppsPanel()" title="App Launcher">
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    </button>
-    <button class="nbtn icon-btn" id="nb-settings" onclick="showSettingsPanel()" title="Settings">
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </button>
-    <div class="nav-sep"></div>
-    <button class="nbtn icon-btn" onclick="enterMini()" title="Mini mode">
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
-    </button>
-    <button class="nbtn on" id="nb-voice" onclick="toggleVoiceBtn()">Voice</button>
-  </div>
 </div>
 
 <div class="body">
+<div class="icon-rail" id="iconRail">
+  <button class="ir-btn on" id="nb-chats" onclick="showChatPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="ir-tip">Chat</span>
+  </button>
+  <button class="ir-btn" id="nb-tasks" onclick="showTasksPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <span class="ir-tip">Tasks</span>
+  </button>
+  <button class="ir-btn" id="nb-notes" onclick="showNotesPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    <span class="ir-tip">Notes</span>
+  </button>
+  <button class="ir-btn" id="nb-reminders" onclick="showRemindersPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <span class="ir-tip">Reminders</span>
+  </button>
+  <button class="ir-btn" id="nb-kb" onclick="showKBPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span class="ir-tip">Knowledge</span>
+  </button>
+  <button class="ir-btn" id="nb-personas" onclick="showPersonasPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="ir-tip">Personas</span>
+  </button>
+  <button class="ir-btn" id="nb-pomo" onclick="showPomoPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span class="ir-tip">Pomodoro</span>
+  </button>
+  <div class="ir-sep"></div>
+  <button class="ir-btn" id="nb-research" onclick="showResearchPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span class="ir-tip">Research</span>
+  </button>
+  <button class="ir-btn" id="nb-github" onclick="showGitHubPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    <span class="ir-tip">GitHub</span>
+  </button>
+  <button class="ir-btn" id="nb-compare" onclick="showComparePanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="18"/></svg>
+    <span class="ir-tip">Compare</span>
+  </button>
+  <button class="ir-btn" id="nb-docs" onclick="showDocsPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span class="ir-tip">Docs</span>
+  </button>
+  <button class="ir-btn" id="nb-cookbook" onclick="showCookbookPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+    <span class="ir-tip">Models</span>
+  </button>
+  <button class="ir-btn" id="nb-system" onclick="showSystemPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    <span class="ir-tip">System</span>
+  </button>
+  <div class="ir-spacer"></div>
+  <div class="ir-sep"></div>
+  <button class="ir-btn" id="nb-voice" onclick="toggleVoiceBtn()" title="Voice">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    <span class="ir-tip">Voice</span>
+  </button>
+  <button class="ir-btn" id="nb-apps" onclick="showAppsPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span class="ir-tip">Launcher</span>
+  </button>
+  <button class="ir-btn" id="nb-settings" onclick="showSettingsPanel()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span class="ir-tip">Settings</span>
+  </button>
+</div>
   <div class="sidebar open" id="sb">
     <div class="sbh">
       <span class="sbtitle">History</span>
@@ -612,7 +687,7 @@ svg{pointer-events:none}
     <div class="alert" id="alert"></div>
     <div class="msgs" id="msgs"></div>
     <div class="irow">
-      <input class="inp" type="text" id="inp" placeholder="Message LOGAT..." autocomplete="off"/>
+      <input class="inp" type="text" id="inp" placeholder="Message LOGAN..." autocomplete="off"/>
       <button class="ibtn attach" id="pdfBtn" onclick="attachPDF()" title="Upload PDF">
         <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
       </button>
@@ -743,7 +818,7 @@ svg{pointer-events:none}
             <div class="setting-sublabel">Two claps within 1 second</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <span class="setting-val" id="clapAppName">LOGAT</span>
+            <span class="setting-val" id="clapAppName">LOGAN</span>
             <button class="setting-action" onclick="changeClapApp()">Change</button>
           </div>
         </div>
@@ -1073,11 +1148,11 @@ svg{pointer-events:none}
 
 <!-- Mini mode bar -->
 <div id="mini-bar">
-  <div class="mini-logo">LOG</div>
+  <div class="mini-logo">LOGAN</div>
   <div class="mini-time" id="miniTime">12:00 AM</div>
   <div class="mini-weather" id="miniWeather"></div>
   <div style="flex:1"></div>
-  <div class="mini-wake" id="miniWakeLabel">say: hey logat</div>
+  <div class="mini-wake" id="miniWakeLabel">say: hey logan</div>
   <div class="mini-orb" id="miniOrb" onclick="miniOrbClick()" title="Tap to speak"></div>
   <button class="mini-expand" onclick="exitMini()" title="Expand">
     <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
@@ -1129,7 +1204,7 @@ const { ipcRenderer } = require('electron');
 const OLLAMA = 'http://127.0.0.1:11434';
 let MODEL = 'llama3';
 
-const BASE = `You are LOGAT — a J.A.R.V.I.S.-inspired personal AI system. You are precise, calm, and efficient. Address the user as "buddy." Short, decisive sentences. No filler words. No "Certainly!" or "Great question!" — respond with quiet confidence. Think Jarvis from Iron Man: composed, sharp, always useful, occasionally dry. Deliver answers immediately when you know them.
+const BASE = `You are LOGAN — a J.A.R.V.I.S.-inspired personal AI system. You are precise, calm, and efficient. Address the user as "buddy." Short, decisive sentences. No filler words. No "Certainly!" or "Great question!" — respond with quiet confidence. Think Jarvis from Iron Man: composed, sharp, always useful, occasionally dry. Deliver answers immediately when you know them.
 
 When you learn something worth remembering long-term, end your reply with:
 REMEMBER: [the fact]
@@ -1144,7 +1219,7 @@ let sbOpen = true, searchQ = '';
 let currentPanel = 'chat';
 let pinnedApps = [];
 let tasks = [];
-let settings = { voiceOn: true, voiceSpeed: 0.95, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
+let settings = { voiceOn: true, voiceSpeed: 0.95, clapApp: 'LOGAN', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [] };
 let ctxTargetIndex = -1;
 let storageInfo = null;
 let retryInterval = null;
@@ -1168,7 +1243,7 @@ let activePersonaId = null;
 
 const DEFAULT_PERSONA = {
   id: 'default',
-  name: 'LOGAT (Default)',
+  name: 'LOGAN (Default)',
   prompt: null, // null = use BASE
   isDefault: true
 };
@@ -1353,7 +1428,7 @@ function setVoiceSpeed(s) {
 // ── Settings persistence ──
 async function loadSettingsFromDisk() {
   const saved = await ipcRenderer.invoke('load-settings');
-  settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAT', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [], ...saved };
+  settings = { voiceOn: true, voiceSpeed: 1.05, clapApp: 'LOGAN', clapAppPath: '', customGreeting: '', model: 'llama3', modes: [], ...saved };
   if (!Array.isArray(settings.modes)) settings.modes = [];
   MODEL = settings.model || 'llama3';
   renderModeNav();
@@ -1366,7 +1441,7 @@ async function loadSettingsFromDisk() {
   searchEngine = settings.searchEngine || 'ddg';
   setSearchEngine(searchEngine);
   const n = document.getElementById('clapAppName');
-  if (n) n.textContent = settings.clapApp || 'LOGAT';
+  if (n) n.textContent = settings.clapApp || 'LOGAN';
   syncAuthorNoteUI();
   syncProactiveUI();
   syncDigestUI();
@@ -1387,7 +1462,7 @@ async function renderSettingsPanel() {
   syncFocusModeUI();
   setSearchEngine(settings.searchEngine || 'ddg');
   const n = document.getElementById('clapAppName');
-  if (n) n.textContent = settings.clapApp || 'LOGAT';
+  if (n) n.textContent = settings.clapApp || 'LOGAN';
   if (storageInfo) {
     document.getElementById('storageLocLabel').textContent =
       storageInfo.isExternal ? ('SSD: ' + storageInfo.driveName) : '~/.logat (local)';
@@ -1432,7 +1507,7 @@ async function exportChatAction() {
   if (!history.length) { addMsg('assistant', 'Nothing to export yet.'); showChatPanel(); return; }
   const title = (history.find(m => m.role === 'user')?.content?.substring(0, 40) || 'logat-chat').replace(/[^a-z0-9 ]/gi, '-');
   const lines = history.map(m => `[${m.role.toUpperCase()}]\n${m.content}`).join('\n\n---\n\n');
-  const text = `LOGAT Chat Export\n${'='.repeat(40)}\n${new Date().toLocaleString()}\n\n${lines}`;
+  const text = `LOGAN Chat Export\n${'='.repeat(40)}\n${new Date().toLocaleString()}\n\n${lines}`;
   const ok = await ipcRenderer.invoke('export-chat', { title, text });
   if (ok) { addMsg('assistant', 'Chat exported to Desktop.'); showChatPanel(); }
 }
@@ -1818,7 +1893,7 @@ function renderMsg(role, text, histIndex) {
   const editBtn = role === 'user' && histIndex !== undefined
     ? `<button class="msg-edit-btn" onclick="branchFrom(${histIndex})" title="Edit & re-send">✎ Edit</button>`
     : '';
-  d.innerHTML = `<div class="av">${role === 'assistant' ? 'LOG' : 'MU'}</div><div class="bbl"><div class="bname">${role === 'assistant' ? 'LOGAT' : 'MUKUNTH'}</div><span class="txt">${content}</span></div>${editBtn}`;
+  d.innerHTML = `<div class="av">${role === 'assistant' ? 'LOG' : 'MU'}</div><div class="bbl"><div class="bname">${role === 'assistant' ? 'LOGAN' : 'MUKUNTH'}</div><span class="txt">${content}</span></div>${editBtn}`;
   msgsEl.appendChild(d);
   if (role === 'assistant') attachCodeRunButtons(d);
   return d;
@@ -1839,11 +1914,11 @@ function setOrb(s) {
   hudOrb.className = 'hud-orb' + (s ? ' orb-' + s : '');
   document.getElementById('miniOrb').className = 'mini-orb' + (s ? ' ' + s : '');
   if (!autoListenMode) {
-    const idle = wakeWordActive ? 'say: hey logat' : 'tap to speak';
+    const idle = wakeWordActive ? 'say: hey logan' : 'tap to speak';
     olbl.textContent = s === 'listening' ? 'listening...' : s === 'thinking' ? 'processing...' : s === 'speaking' ? 'speaking...' : idle;
   }
   const wl = document.getElementById('miniWakeLabel');
-  if (wl) wl.textContent = wakeWordActive ? 'say: hey logat' : 'tap orb';
+  if (wl) wl.textContent = wakeWordActive ? 'say: hey logan' : 'tap orb';
 }
 
 // ── Voice gender picker ───────────────────────────────────────────────────────
@@ -1948,7 +2023,7 @@ function stopAutoListenMode() {
   speak("Auto-listen off. Say hey LOGAT anytime to wake me.", () => startWakeWordDetection());
 }
 
-// ── Wake word detection ("Hey LOGAT") ──
+// ── Wake word detection ("Hey LOGAN") ──
 function startWakeWordDetection() {
   if (autoListenMode || listening || wakeWordActive) return;
   if (!('webkitSpeechRecognition' in window)) return;
@@ -1960,7 +2035,7 @@ function startWakeWordDetection() {
   wakeWordRecognition.onresult = (event) => {
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const t = event.results[i][0].transcript.toLowerCase();
-      if (t.includes('hey logat') || t.includes('hey log at')) {
+      if (t.includes('hey logan') || t.includes('hey log at') || t.includes('hey logan')) {
         handleWakeWord(); break;
       }
     }
@@ -1977,7 +2052,7 @@ function startWakeWordDetection() {
   };
   try {
     wakeWordRecognition.start();
-    setOrb(''); // triggers label refresh to "say: hey logat"
+    setOrb(''); // triggers label refresh to "say: hey logan"
   } catch(e) { wakeWordActive = false; }
 }
 
@@ -2105,7 +2180,7 @@ async function attachImage() {
 
 // ── Raw prompt sender (for PDF inject) ───────────────────────────────────────
 async function sendRaw(promptText) {
-  if (!online) { rmTyping(); addMsg('assistant', 'LOGAT is offline. Start ollama first.'); return; }
+  if (!online) { rmTyping(); addMsg('assistant', 'LOGAN is offline. Start ollama first.'); return; }
   try {
     const messages = [{ role: 'system', content: buildPrompt() }, ...history, { role: 'user', content: promptText }];
     rmTyping();
@@ -3214,7 +3289,7 @@ function deletePersona(id) {
 function switchPersona(id) {
   activePersonaId = id === 'default' ? null : id;
   savePersonas(); renderPersonaList();
-  const p = id === 'default' ? 'LOGAT' : (personas.find(x => x.id === id)?.name || id);
+  const p = id === 'default' ? 'LOGAN' : (personas.find(x => x.id === id)?.name || id);
   addMsg('assistant', `Switched to ${p} persona.`);
   speak(`Persona switched to ${p}.`);
   showChatPanel();
@@ -3901,6 +3976,17 @@ function appendTempContext(context, question) {
   inp.value = question;
   history.push({ role: 'system', content: `[GitHub context injected by user:]\n${context}` });
   send();
+}
+
+
+// ── Window size presets ──
+let currentSize = 'full';
+async function setWindowSize(size) {
+  currentSize = size;
+  document.querySelector('.app').classList.toggle('compact', size === 'compact');
+  document.getElementById('szFull')?.classList.toggle('on', size === 'full');
+  document.getElementById('szCompact')?.classList.toggle('on', size === 'compact');
+  try { await ipcRenderer.invoke('set-size', size === 'compact' ? {w:440,h:580} : {w:740,h:700}); } catch(_) {}
 }
 
 // ── Init ──

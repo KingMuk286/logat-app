@@ -412,6 +412,42 @@ svg{pointer-events:none}
 .model-use-btn:hover{background:rgba(232,0,26,.14)}
 .model-del-btn{padding:4px 9px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;flex-shrink:0}
 .model-del-btn:hover{border-color:#ff4455;color:#ff4455}
+
+/* ── GITHUB SECOND BRAIN ── */
+.gh-inner{flex:1;overflow-y:auto;padding:14px 16px;scrollbar-width:thin;scrollbar-color:#1a1a20 transparent}
+.gh-search-row{display:flex;gap:6px;margin-bottom:10px}
+.gh-inp{flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;outline:none;transition:border-color .2s}
+.gh-inp:focus{border-color:rgba(232,0,26,.4)}
+.gh-inp::placeholder{color:#252528}
+.gh-btn{padding:6px 12px;border-radius:8px;border:1px solid rgba(232,0,26,.3);background:var(--dim);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;flex-shrink:0;white-space:nowrap}
+.gh-btn:hover{background:rgba(232,0,26,.14);border-color:rgba(232,0,26,.5)}
+.gh-btn:disabled{opacity:.4;cursor:not-allowed}
+.gh-type-row{display:flex;gap:4px;margin-bottom:10px}
+.gh-type-btn{padding:3px 10px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--mt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.gh-type-btn.on{background:var(--dim);border-color:rgba(232,0,26,.4);color:var(--red)}
+.gh-repo-card{padding:11px 13px;border-radius:8px;border:1px solid var(--b);background:var(--s1);margin-bottom:7px;transition:background .15s}
+.gh-repo-card:hover{background:var(--s2)}
+.gh-repo-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.gh-repo-desc{font-size:11px;color:var(--mt2);line-height:1.45;margin-bottom:7px}
+.gh-repo-meta{display:flex;gap:10px;font-size:10px;color:var(--mt);margin-bottom:8px}
+.gh-repo-actions{display:flex;gap:5px}
+.gh-action-btn{padding:3px 9px;border-radius:5px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;border:1px solid}
+.gh-action-btn.add{border-color:rgba(0,224,102,.3);background:rgba(0,224,102,.06);color:var(--green)}
+.gh-action-btn.add:hover{background:rgba(0,224,102,.14)}
+.gh-action-btn.ask{border-color:rgba(232,0,26,.3);background:rgba(232,0,26,.06);color:var(--red)}
+.gh-action-btn.ask:hover{background:rgba(232,0,26,.14)}
+.gh-action-btn.read{border-color:rgba(0,136,238,.3);background:rgba(0,136,238,.06);color:#4af}
+.gh-action-btn.read:hover{background:rgba(0,136,238,.12)}
+.gh-readme-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
+.gh-readme-overlay.show{display:flex}
+.gh-readme-box{width:720px;max-width:95vw;max-height:80vh;background:var(--bg2);border:1px solid var(--b);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
+.gh-readme-header{padding:12px 16px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.gh-readme-title{font-size:12px;font-weight:600;color:var(--text);font-family:'Orbitron',monospace;letter-spacing:.5px}
+.gh-readme-content{flex:1;overflow-y:auto;padding:16px;font-size:12px;color:var(--mt2);line-height:1.65;white-space:pre-wrap;word-break:break-word;scrollbar-width:thin}
+.gh-readme-footer{padding:10px 16px;border-top:1px solid var(--b);display:flex;gap:8px;flex-shrink:0}
+.gh-empty{padding:32px;text-align:center;font-size:11px;color:#333;letter-spacing:.5px}
+.gh-stars{color:#ffcc44}
+.gh-badge{padding:2px 6px;border-radius:3px;font-size:9px;border:1px solid rgba(255,204,68,.2);color:#ffcc44;background:rgba(255,204,68,.06)}
 </style>
 </head>
 <body>
@@ -447,6 +483,7 @@ svg{pointer-events:none}
     <button class="nbtn" id="nb-cookbook" onclick="showCookbookPanel()">Cookbook</button>
     <button class="nbtn" id="nb-system" onclick="showSystemPanel()">System</button>
     <button class="nbtn" id="nb-reminders" onclick="showRemindersPanel()">Reminders</button>
+    <button class="nbtn" id="nb-github" onclick="showGitHubPanel()">GitHub</button>
     <div class="nav-sep"></div>
     <button class="nbtn icon-btn" id="nb-apps" onclick="showAppsPanel()" title="App Launcher">
       <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -659,6 +696,14 @@ svg{pointer-events:none}
       </div>
 
       <div class="settings-section">
+        <div class="settings-section-title">GitHub Second Brain</div>
+        <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <div class="setting-sublabel" style="color:var(--mt2)">Optional: GitHub Personal Access Token for higher rate limits (60→5000 req/hr). Stored locally only.</div>
+          <input class="gh-inp" id="ghTokenInp" type="password" placeholder="ghp_xxxxxxxxxxxx (optional)" autocomplete="off" oninput="saveGHToken()"/>
+        </div>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-section-title">Storage</div>
         <div class="setting-row">
           <div class="setting-label">Location</div>
@@ -834,6 +879,41 @@ svg{pointer-events:none}
   </button>
 </div>
 
+<!-- GitHub Second Brain Panel -->
+<div class="panel hidden" id="github-panel">
+  <div class="gh-inner">
+    <div class="panel-heading" style="margin-bottom:12px">GitHub Second Brain
+      <span style="font-size:9px;color:var(--mt);letter-spacing:0;font-family:'DM Sans',sans-serif">search → save to KB → ask AI</span>
+    </div>
+    <div class="gh-type-row">
+      <button class="gh-type-btn on" id="ghTypeRepos" onclick="setGHType('repositories')">Repos</button>
+      <button class="gh-type-btn" id="ghTypeCode" onclick="setGHType('code')">Code</button>
+      <button class="gh-type-btn" id="ghTypeTopics" onclick="setGHType('topics')">Topics</button>
+    </div>
+    <div class="gh-search-row">
+      <input class="gh-inp" id="ghInp" placeholder="Search GitHub..." autocomplete="off" onkeydown="if(event.key==='Enter')githubSearch()"/>
+      <button class="gh-btn" id="ghSearchBtn" onclick="githubSearch()">Search</button>
+    </div>
+    <div id="ghResults"><div class="gh-empty">Search GitHub repos, code, or topics.<br>Save anything to your Knowledge Base.</div></div>
+  </div>
+</div>
+
+<!-- GitHub README overlay -->
+<div class="gh-readme-overlay" id="ghReadmeOverlay">
+  <div class="gh-readme-box">
+    <div class="gh-readme-header">
+      <span class="gh-readme-title" id="ghReadmeTitle">README</span>
+      <button class="nbtn" onclick="closeReadme()" style="padding:3px 8px;font-size:10px">✕ Close</button>
+    </div>
+    <div class="gh-readme-content" id="ghReadmeContent">Loading...</div>
+    <div class="gh-readme-footer">
+      <button class="gh-btn" id="ghReadmeAddKB" onclick="addReadmeToKB()">+ Add to Knowledge Base</button>
+      <button class="gh-btn" id="ghReadmeAsk" onclick="askAboutReadme()" style="border-color:rgba(0,224,102,.3);color:var(--green)">Ask LOGAT about this</button>
+      <button class="gh-btn" onclick="closeReadme()" style="margin-left:auto;border-color:var(--b);color:var(--mt)">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Context menu -->
 <div class="ctx-menu" id="ctxMenu">
   <div class="ctx-item danger" id="ctxRemove" onclick="ctxRemoveApp()">Remove App</div>
@@ -907,14 +987,14 @@ searchInp.addEventListener('input', e => { searchQ = e.target.value.toLowerCase(
 function hideAllPanels() {
   ['chat-panel','apps-panel','settings-panel','tasks-panel',
    'research-panel','compare-panel','docs-panel','notes-panel','cookbook-panel',
-   'system-panel','reminders-panel']
+   'system-panel','reminders-panel','github-panel']
     .forEach(id => document.getElementById(id)?.classList.add('hidden'));
 }
 
 function setActiveNav(...ids) {
   ['nb-chats','nb-apps','nb-settings','nb-tasks',
    'nb-research','nb-compare','nb-docs','nb-notes','nb-cookbook',
-   'nb-system','nb-reminders']
+   'nb-system','nb-reminders','nb-github']
     .forEach(id => document.getElementById(id)?.classList.remove('on'));
   ids.forEach(id => document.getElementById(id)?.classList.add('on'));
 }
@@ -1094,6 +1174,8 @@ async function renderSettingsPanel() {
   }
   const ta = document.getElementById('customGreetingTA');
   if (ta) ta.value = settings.customGreeting || '';
+  const ghTok = document.getElementById('ghTokenInp');
+  if (ghTok) ghTok.value = settings.ghToken || '';
   renderModesSettings();
   renderModelSelector();
 }
@@ -2843,6 +2925,233 @@ function showRemindersPanel() {
   document.getElementById('reminders-panel')?.classList.remove('hidden');
   setActiveNav('nb-reminders');
   renderReminderList();
+}
+
+// ── GitHub Second Brain ──
+let ghType = 'repositories';
+let ghCurrentRepo = null; // { owner, name, desc, stars, lang }
+let ghCurrentReadme = '';
+
+function showGitHubPanel() {
+  hideAllPanels();
+  document.getElementById('github-panel').classList.remove('hidden');
+  document.getElementById('searchRow').style.display = 'none';
+  sb.classList.remove('open');
+  setActiveNav('nb-github');
+  const tok = settings.ghToken || '';
+  const inp = document.getElementById('ghTokenInp');
+  if (inp && !inp.value) inp.value = tok;
+  setTimeout(() => document.getElementById('ghInp')?.focus(), 50);
+}
+
+function setGHType(type) {
+  ghType = type;
+  document.querySelectorAll('.gh-type-btn').forEach(b => b.classList.remove('on'));
+  const map = { repositories:'ghTypeRepos', code:'ghTypeCode', topics:'ghTypeTopics' };
+  document.getElementById(map[type])?.classList.add('on');
+  document.getElementById('ghResults').innerHTML = '<div class="gh-empty">Press Search.</div>';
+}
+
+function saveGHToken() {
+  settings.ghToken = document.getElementById('ghTokenInp').value.trim();
+  saveSettings();
+}
+
+async function githubSearch() {
+  const q = document.getElementById('ghInp').value.trim();
+  if (!q) return;
+  const btn = document.getElementById('ghSearchBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  document.getElementById('ghResults').innerHTML = '<div class="gh-empty">Searching...</div>';
+  try {
+    const headers = { 'Accept': 'application/vnd.github+json' };
+    if (settings.ghToken) headers['Authorization'] = `Bearer ${settings.ghToken}`;
+    const url = `https://api.github.com/search/${ghType}?q=${encodeURIComponent(q)}&sort=stars&order=desc&per_page=20`;
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      document.getElementById('ghResults').innerHTML = `<div class="gh-empty" style="color:#ff4455">Error ${res.status}: ${err.message || res.statusText}</div>`;
+      return;
+    }
+    const data = await res.json();
+    renderGHResults(data.items || []);
+  } catch(e) {
+    document.getElementById('ghResults').innerHTML = `<div class="gh-empty" style="color:#ff4455">Network error: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Search';
+  }
+}
+
+function renderGHResults(items) {
+  if (!items.length) {
+    document.getElementById('ghResults').innerHTML = '<div class="gh-empty">No results found.</div>';
+    return;
+  }
+  if (ghType === 'repositories') {
+    document.getElementById('ghResults').innerHTML = items.map((r, i) => `
+      <div class="gh-repo-card">
+        <div class="gh-repo-name">
+          <span>${escHtml(r.full_name)}</span>
+          ${r.language ? `<span class="gh-badge">${escHtml(r.language)}</span>` : ''}
+        </div>
+        <div class="gh-repo-desc">${escHtml(r.description || 'No description')}</div>
+        <div class="gh-repo-meta">
+          <span class="gh-stars">★ ${fmtNum(r.stargazers_count)}</span>
+          <span>🍴 ${fmtNum(r.forks_count)}</span>
+          ${r.license ? `<span>📄 ${escHtml(r.license.spdx_id || r.license.name)}</span>` : ''}
+          <span style="color:var(--mt)">Updated ${new Date(r.updated_at).toLocaleDateString()}</span>
+        </div>
+        <div class="gh-repo-actions">
+          <button class="gh-action-btn read" onclick="showReadme(${i})">README</button>
+          <button class="gh-action-btn add" onclick="addRepoToKB(${i})">+ Add to KB</button>
+          <button class="gh-action-btn ask" onclick="askAboutRepo(${i})">Ask LOGAT</button>
+        </div>
+      </div>`).join('');
+    window._ghItems = items;
+  } else if (ghType === 'code') {
+    document.getElementById('ghResults').innerHTML = items.map((r, i) => `
+      <div class="gh-repo-card">
+        <div class="gh-repo-name">${escHtml(r.repository.full_name)} — <span style="color:var(--mt2);font-weight:400">${escHtml(r.path)}</span></div>
+        <div class="gh-repo-desc" style="font-family:monospace;font-size:10px;color:var(--mt)">${escHtml(r.name)}</div>
+        <div class="gh-repo-actions">
+          <button class="gh-action-btn add" onclick="addCodeResultToKB(${i})">+ Add to KB</button>
+          <button class="gh-action-btn ask" onclick="askAboutCode(${i})">Ask LOGAT</button>
+        </div>
+      </div>`).join('');
+    window._ghItems = items;
+  } else {
+    document.getElementById('ghResults').innerHTML = items.map((r, i) => `
+      <div class="gh-repo-card">
+        <div class="gh-repo-name">${escHtml(r.display_name || r.name)}</div>
+        <div class="gh-repo-desc">${escHtml(r.short_description || '')}</div>
+        <div class="gh-repo-meta"><span class="gh-stars">★ featured: ${r.featured ? 'yes' : 'no'}</span></div>
+        <div class="gh-repo-actions">
+          <button class="gh-action-btn ask" onclick="askAboutTopic(${i})">Ask LOGAT</button>
+        </div>
+      </div>`).join('');
+    window._ghItems = items;
+  }
+}
+
+function fmtNum(n) {
+  if (n >= 1000) return (n/1000).toFixed(1) + 'k';
+  return String(n);
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function showReadme(i) {
+  const repo = window._ghItems[i];
+  ghCurrentRepo = { owner: repo.owner.login, name: repo.name, desc: repo.description || '', stars: repo.stargazers_count, lang: repo.language || '' };
+  const overlay = document.getElementById('ghReadmeOverlay');
+  document.getElementById('ghReadmeTitle').textContent = repo.full_name + ' — README';
+  document.getElementById('ghReadmeContent').textContent = 'Loading...';
+  overlay.classList.add('show');
+  try {
+    const headers = { 'Accept': 'application/vnd.github+json' };
+    if (settings.ghToken) headers['Authorization'] = `Bearer ${settings.ghToken}`;
+    const res = await fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/readme`, { headers });
+    if (!res.ok) { document.getElementById('ghReadmeContent').textContent = 'No README found.'; return; }
+    const data = await res.json();
+    ghCurrentReadme = atob(data.content.replace(/\n/g, ''));
+    document.getElementById('ghReadmeContent').textContent = ghCurrentReadme;
+  } catch(e) {
+    document.getElementById('ghReadmeContent').textContent = 'Failed to load: ' + e.message;
+  }
+}
+
+function closeReadme() {
+  document.getElementById('ghReadmeOverlay').classList.remove('show');
+}
+
+function addReadmeToKB() {
+  if (!ghCurrentRepo || !ghCurrentReadme) return;
+  const entry = {
+    id: 'gh_' + Date.now(),
+    name: `GitHub: ${ghCurrentRepo.owner}/${ghCurrentRepo.name}`,
+    keywords: [ghCurrentRepo.name, ghCurrentRepo.owner, ...(ghCurrentRepo.lang ? [ghCurrentRepo.lang] : [])],
+    content: `Repository: ${ghCurrentRepo.owner}/${ghCurrentRepo.name}\nStars: ${ghCurrentRepo.stars}\nLanguage: ${ghCurrentRepo.lang}\nDescription: ${ghCurrentRepo.desc}\n\n${ghCurrentReadme.slice(0, 3000)}`
+  };
+  if (typeof knowledge !== 'undefined') {
+    knowledge.push(entry);
+    ipcRenderer.invoke('save-knowledge', knowledge).catch(()=>{});
+    speak(`Added ${ghCurrentRepo.name} README to your knowledge base.`);
+  } else {
+    speak('Knowledge base not available. Please enable it in settings.');
+  }
+  closeReadme();
+}
+
+function askAboutReadme() {
+  if (!ghCurrentRepo || !ghCurrentReadme) return;
+  const ctx = `Repository: ${ghCurrentRepo.owner}/${ghCurrentRepo.name}\nDescription: ${ghCurrentRepo.desc}\n\nREADME (excerpt):\n${ghCurrentReadme.slice(0, 2000)}`;
+  closeReadme();
+  showChatPanel();
+  appendTempContext(ctx, `Tell me about the ${ghCurrentRepo.name} repository`);
+}
+
+function addRepoToKB(i) {
+  const repo = window._ghItems[i];
+  const entry = {
+    id: 'gh_' + Date.now(),
+    name: `GitHub: ${repo.full_name}`,
+    keywords: [repo.name, repo.owner.login, ...(repo.language ? [repo.language] : []), ...(repo.topics || []).slice(0,3)],
+    content: `Repository: ${repo.full_name}\nStars: ${repo.stargazers_count} | Forks: ${repo.forks_count}\nLanguage: ${repo.language || 'unknown'}\nDescription: ${repo.description || 'none'}\nURL: ${repo.html_url}`
+  };
+  if (typeof knowledge !== 'undefined') {
+    knowledge.push(entry);
+    ipcRenderer.invoke('save-knowledge', knowledge).catch(()=>{});
+    speak(`${repo.name} added to knowledge base.`);
+  }
+}
+
+function askAboutRepo(i) {
+  const repo = window._ghItems[i];
+  const q = `Tell me about the GitHub repository "${repo.full_name}". It has ${repo.stargazers_count} stars and is described as: ${repo.description || 'no description'}. Language: ${repo.language || 'unknown'}.`;
+  showChatPanel();
+  inp.value = q;
+  send();
+}
+
+function addCodeResultToKB(i) {
+  const item = window._ghItems[i];
+  const entry = {
+    id: 'ghcode_' + Date.now(),
+    name: `GitHub Code: ${item.repository.full_name}/${item.path}`,
+    keywords: [item.name, item.repository.name, item.repository.owner.login],
+    content: `File: ${item.path}\nRepo: ${item.repository.full_name}\nURL: ${item.html_url}`
+  };
+  if (typeof knowledge !== 'undefined') {
+    knowledge.push(entry);
+    ipcRenderer.invoke('save-knowledge', knowledge).catch(()=>{});
+    speak('Code result added to knowledge base.');
+  }
+}
+
+function askAboutCode(i) {
+  const item = window._ghItems[i];
+  const q = `Tell me about this code file on GitHub: ${item.path} in the repository ${item.repository.full_name}.`;
+  showChatPanel();
+  inp.value = q;
+  send();
+}
+
+function askAboutTopic(i) {
+  const item = window._ghItems[i];
+  const q = `Tell me about the GitHub topic "${item.display_name || item.name}": ${item.short_description || ''}`;
+  showChatPanel();
+  inp.value = q;
+  send();
+}
+
+function appendTempContext(context, question) {
+  inp.value = question;
+  history.push({ role: 'system', content: `[GitHub context injected by user:]\n${context}` });
+  send();
 }
 
 // ── Init ──
